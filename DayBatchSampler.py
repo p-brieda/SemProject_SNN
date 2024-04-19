@@ -13,12 +13,27 @@ class DayBatchSampler(Sampler):
 
 
     def __iter__(self):
-        day_order = torch.randperm(len(self.Idx_perDay))
-        for day in day_order:
-            day_idx = self.Idx_perDay[day]
-            np.random.shuffle(day_idx)
-            for i in range(0, len(day_idx), self.batch_size):
-                yield day_idx[i:i+self.batch_size]
+        # Shuffle indices for each day once before starting batch generation
+        shuffled_indices_per_day = [np.random.permutation(indices) for indices in self.Idx_perDay]
+        start_indices = [0] * len(self.Idx_perDay)  # Start index for each day's batch generation
+
+        # Continue until all indices have been yielded
+        while any(start < len(indices) for start, indices in zip(start_indices, shuffled_indices_per_day)):
+            # Randomly choose a day with remaining indices
+            available_days = [i for i, start in enumerate(start_indices) if start < len(shuffled_indices_per_day[i])]
+            day = np.random.choice(available_days)
+            start = start_indices[day]
+            day_indices = shuffled_indices_per_day[day]
+
+            # Determine the end index for the current batch
+            end = min(start + self.batch_size, len(day_indices))
+
+            # Yield the current batch
+            yield day_indices[start:end]
+
+            # Update the start index for the next batch from this day
+            start_indices[day] += self.batch_size
+
 
     def __len__(self):
         # the last batch may have fewer trials but it is taken into account intio the lenght of the sampler

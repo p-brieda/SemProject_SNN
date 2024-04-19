@@ -16,7 +16,7 @@ from DayBatchSampler import DayBatchSampler
 if __name__ == '__main__':
 
     args = getDefaultArgs()
-    args['batchSize'] = 20
+    args['batchSize'] = 15
 
     # loading the training dataset and creating a DataLoader
     train_data = DataProcessing(args, mode='training')
@@ -40,18 +40,7 @@ if __name__ == '__main__':
     #test_loader = DataLoader(test_data, batch_size=args['batchSize'], shuffle=True, num_workers=0)
 
     iterator = iter(train_loader)
-    
-
-    #for k in range(7):
-    #    trial_iter = next(iterator)
-    #    print(trial_iter['neuralData'].shape)
-    #    print(trial_iter['dayIdx'])
-
-    print(type(train_loader))
-    iterator2 = list(trainDayBatch_Sampler)
-    iterator2 = random.shuffle(iterator2)
     for k in range(7):
-        trial_iter = iterator2[k]
+        trial_iter = next(iterator)
         print(trial_iter['neuralData'].shape)
         print(trial_iter['dayIdx'])
-
