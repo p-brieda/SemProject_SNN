@@ -10,6 +10,9 @@ class DayBatchSampler(Sampler):
     def __init__(self, Idx_perDay, batch_size):
         self.Idx_perDay = Idx_perDay
         self.batch_size = batch_size
+        self.total_trials = sum(len(indices) for indices in self.Idx_perDay)
+        # Calculate the probability for each day based on the number of trials
+        self.probabilities = [len(indices) / self.total_trials for indices in Idx_perDay]
 
 
     def __iter__(self):
@@ -21,6 +24,9 @@ class DayBatchSampler(Sampler):
         while any(start < len(indices) for start, indices in zip(start_indices, shuffled_indices_per_day)):
             # Randomly choose a day with remaining indices
             available_days = [i for i, start in enumerate(start_indices) if start < len(shuffled_indices_per_day[i])]
+
+            # Choose a random day with probability proportional to the number of trials
+            day = np.random.choice(available_days, p=self.probabilities)
             day = np.random.choice(available_days)
             start = start_indices[day]
             day_indices = shuffled_indices_per_day[day]
