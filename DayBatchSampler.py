@@ -27,7 +27,6 @@ class DayBatchSampler(Sampler):
 
             # Choose a random day with probability proportional to the number of trials
             day = np.random.choice(available_days, p=self.probabilities)
-            day = np.random.choice(available_days)
             start = start_indices[day]
             day_indices = shuffled_indices_per_day[day]
 
