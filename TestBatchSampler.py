@@ -20,6 +20,10 @@ class DayBatchSampler(Sampler):
                 start = end
 
             start = 0
+
+    def __len__(self):
+        total_batches = sum( (math.ceil(len(indices)/self.batch_size) for indices in self.Idx_perDay) )
+        return total_batches
             
 
 
