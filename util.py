@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 
+
 def prepareDataCubesForRNN(sentenceFile, singleLetterFile, labelFile, cvPartitionFile, sessionName, rnnBinSize, nTimeSteps, isTraining):
     """
     Loads raw data & HMM labels and returns training and validation data cubes for RNN training (or inference). 
@@ -168,6 +169,7 @@ def binTensor(data, binSize):
         binIdx += binSize;
     
     return binnedTensor
+
 
 
 

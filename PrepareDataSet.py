@@ -9,15 +9,20 @@ from torch.utils.data import Dataset
 
 
 class PrepareDataSet:
-    def __init__(self, args):
+    def __init__(self, args, days=None):
         self.args = args
 
-        #count how many days of data are specified
-        self.nDays = 0
-        for t in range(30):
-            if 'labelsFile_'+str(t) not in self.args.keys():
-                self.nDays = t
-                break
+        # if not specified count how many days of data
+        if days == None:
+            nDays = 0
+            for t in range(30):
+                if 'labelsFile_'+str(t) not in self.args.keys():
+                    nDays = t
+                    break
+            self.Days = np.arange(nDays)
+        else:
+            self.Days = days
+
 
         self.trials_train, self.trials_val, self.trainIdx_perDay, self.valIdx_perDay = self._loadAllDatasets('trainval')
         _ , self.trials_test, _ , self.testIdx_perDay = self._loadAllDatasets('testing')
@@ -26,6 +31,12 @@ class PrepareDataSet:
 
 
     def _loadAllDatasets(self, mode):
+
+        # selecting different amount of time steps for training/validation and testing
+        if mode == 'trainval':
+            timeSteps = self.args['train_val_timeSteps']
+        else: # self.mode == 'testing'
+            timeSteps = self.args['test_timeSteps']
 
         trials_train = {'neuralData':[],'targets':[],'errWeights':[],'binsPerTrial':[],'dayIdx':[]}
         trainIdx_perDay = []
@@ -36,7 +47,7 @@ class PrepareDataSet:
         tot_val_trials = 0
 
     
-        for dayIdx in range(self.nDays):
+        for dayIdx in self.Days:
             # preprocessing the data cubes
             neuralData, targets, errWeights, binsPerTrial, cvIdx = prepareDataCubesForRNN(self.args['sentencesFile_'+str(dayIdx)],
                                                                                         self.args['singleLettersFile_'+str(dayIdx)],
@@ -44,7 +55,7 @@ class PrepareDataSet:
                                                                                         self.args['cvPartitionFile_'+str(dayIdx)],
                                                                                         self.args['sessionName_'+str(dayIdx)],
                                                                                         self.args['rnnBinSize'],
-                                                                                        self.timeSteps,
+                                                                                        timeSteps,
                                                                                         mode == 'trainval')
             
             num_trainTrials = len(cvIdx['trainIdx']) # number of training trials of the day
@@ -78,10 +89,12 @@ class PrepareDataSet:
 
 
 
-    def getDaysIdx(self):
-        if self.mode == 'training':
+    def getDaysIdx(self, mode):
+        if mode == 'training':
             return self.trainIdx_perDay
-        elif self.mode == 'validation':
+        elif mode == 'validation':
             return self.valIdx_perDay
-        else:
+        elif mode == 'testing':
             return self.testIdx_perDay
+        else:
+            raise ValueError('Mode not recognized')
