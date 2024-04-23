@@ -30,7 +30,7 @@ def extractSentenceSnippet(trial, nSteps, directionality='unidirectional'):
 
     def atLeastOneLetter():
         firstChar = charStarts[0][0].item()
-        lastChar = charStarts[-1][0].item()
+        lastChar = charStarts[0][-1].item()
         
         if directionality=='unidirectional':
             #if uni-directional, only need to blank out the first part because it's causal with a delay
@@ -46,7 +46,7 @@ def extractSentenceSnippet(trial, nSteps, directionality='unidirectional'):
             
         return ews
     # applies either noLetters or atLeastOneLetter function based on the absence or presence of characters in the snippet
-    if len(charStarts)==0:
+    if charStarts[0].shape[0]==0:
         errWeightSnippet = noLetters()
     else:
         errWeightSnippet = atLeastOneLetter()

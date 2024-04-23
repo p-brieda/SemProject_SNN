@@ -8,12 +8,12 @@ import torch
 from torch.utils.data import Dataset
 
 
-
-
-class DataProcessing(Dataset):
-    def __init__(self, args, mode='training'):
+class DayDataProcessing(Dataset):
+    def __init__(self, args, day, mode='training'):
         self.args = args
+        self.dayIdx = day
         self.mode = mode
+        
         # selecting different amount of time steps for training/validation and testing
         if self.mode == 'training' or self.mode =='validation':
             self.timeSteps = self.args['train_val_timeSteps']
@@ -21,15 +21,7 @@ class DataProcessing(Dataset):
             self.timeSteps = self.args['test_timeSteps']
 
 
-        #count how many days of data are specified
-        self.nDays = 0
-        for t in range(30):
-            if 'labelsFile_'+str(t) not in self.args.keys():
-                self.nDays = t
-                break
-
-        # load all datasets, both for training and validation/test and the full dataset
-        self.trials_train, self.trials_val, self.trainIdx_perDay, self.valIdx_perDay = self._loadAllDatasets()
+        self.trials_train, self.trials_val = self._loadAllDatasets()
 
 
         # setting random seed with argument or randomly, both for numpy and pytorch
@@ -38,20 +30,14 @@ class DataProcessing(Dataset):
         np.random.seed(self.args['seed'])
         torch.manual_seed(self.args['seed'])
 
+    
 
 
-    # method fro retreiving the indices of the trials for each day to be used in the DayBatchSampler
-    def getDaysIdx(self):
-        if self.mode == 'training':
-            return self.trainIdx_perDay
-        else: # validation or testing
-            return self.valIdx_perDay
-        
-
-
-        
     def setMode(self, mode):
         self.mode = mode
+
+    def isViableDay(self):
+        return [len(self.trials_train['neuralData']) > 0, len(self.trials_val['neuralData']) > 0]
 
 
 
@@ -61,7 +47,7 @@ class DataProcessing(Dataset):
             return len(self.trials_train['neuralData'])
         else: # validation or testing
             return len(self.trials_val['neuralData'])
-        
+    
 
 
         
@@ -112,40 +98,24 @@ class DataProcessing(Dataset):
         # initilaising the dictionaries and lists
 
         trials_train = {'neuralData':[],'targets':[],'errWeights':[],'binsPerTrial':[],'dayIdx':[]}
-        trainIdx_perDay = []
-        tot_train_trials = 0
-
         trials_val = {'neuralData':[],'targets':[],'errWeights':[],'binsPerTrial':[],'dayIdx':[]}
-        valIdx_perDay = []
-        tot_val_trials = 0
-
     
-        for dayIdx in range(self.nDays):
-            # preprocessing the data cubes
-            neuralData, targets, errWeights, binsPerTrial, cvIdx = prepareDataCubesForRNN(self.args['sentencesFile_'+str(dayIdx)],
-                                                                                        self.args['singleLettersFile_'+str(dayIdx)],
-                                                                                        self.args['labelsFile_'+str(dayIdx)],
-                                                                                        self.args['cvPartitionFile_'+str(dayIdx)],
-                                                                                        self.args['sessionName_'+str(dayIdx)],
-                                                                                        self.args['rnnBinSize'],
-                                                                                        self.timeSteps,
-                                                                                        self.mode == 'training' or self.mode == 'validation')
+        neuralData, targets, errWeights, binsPerTrial, cvIdx = prepareDataCubesForRNN(self.args['sentencesFile_'+str(self.dayIdx)],
+                                                                                    self.args['singleLettersFile_'+str(self.dayIdx)],
+                                                                                    self.args['labelsFile_'+str(self.dayIdx)],
+                                                                                    self.args['cvPartitionFile_'+str(self.dayIdx)],
+                                                                                    self.args['sessionName_'+str(self.dayIdx)],
+                                                                                    self.args['rnnBinSize'],
+                                                                                    self.timeSteps,
+                                                                                    self.mode == 'training' or self.mode == 'validation')
             
-            num_trainTrials = len(cvIdx['trainIdx']) # number of training trials of the day
-            num_valTrials = len(cvIdx['testIdx']) # number of validation trials of the day
             
-            # adding the indexes of the training trials of the day to the list
-            trainIdx_perDay.append(np.arange(tot_train_trials, tot_train_trials+num_trainTrials))
-            tot_train_trials += num_trainTrials
+        # unfoling the data cubes and adding the trials data to the dictionaries
+        unfoldDataCube(trials_train, trials_val, neuralData, targets, errWeights, binsPerTrial, cvIdx, self.dayIdx)
 
-            # adding the indexes of the validation trials of the day to the list
-            valIdx_perDay.append(np.arange(tot_val_trials, tot_val_trials+num_valTrials))
-            tot_val_trials += num_valTrials
-            
-            # unfoling the data cubes and adding the trials data to the dictionaries
-            unfoldDataCube(trials_train, trials_val, neuralData, targets, errWeights, binsPerTrial, cvIdx, dayIdx)
-
-        return trials_train, trials_val, trainIdx_perDay, valIdx_perDay
+        return trials_train, trials_val
         
 
+        
 
+    

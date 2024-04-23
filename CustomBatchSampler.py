@@ -3,10 +3,16 @@ from torch.utils.data import Sampler
 import numpy as np
 import math
 
+# TRAINING AND VALIDATION SAMPLER
 # DayBatchSampler is a custom sampler that samples batches of trials from the dataset in order to have
-# trials from the same day in the same batch. Ff the number of trials is not divisible by the batch size,
-# the last batch will have fewer trials.
-class DayBatchSampler(Sampler):
+# trials from the same day in the same batch. If the number of trials is not divisible by the batch size, the last
+# batch will have fewer trials. The trials for each day are shuffled once before starting batch generation.
+#
+# For every batch creation a random day is selected with a probability proportional to its number of trials (relative
+# to the total number of trials across all days). The sampler keeps track of the start index for each day and generates batches 
+# until all trials have been used. If all trials of a day have been used, the sampler removes that day from the list of available days.
+
+class CustomBatchSampler(Sampler):
     def __init__(self, Idx_perDay, batch_size):
         self.Idx_perDay = Idx_perDay
         self.batch_size = batch_size
@@ -26,7 +32,8 @@ class DayBatchSampler(Sampler):
             available_days = [i for i, start in enumerate(start_indices) if start < len(shuffled_indices_per_day[i])]
 
             # Choose a random day with probability proportional to the number of trials
-            day = np.random.choice(available_days, p=self.probabilities[available_days])
+            probs = self.probabilities[available_days] / np.sum(self.probabilities[available_days]) # normalization of remaining probabilities
+            day = np.random.choice(available_days, p=probs)
             start = start_indices[day]
             day_indices = shuffled_indices_per_day[day]
 
@@ -41,6 +48,6 @@ class DayBatchSampler(Sampler):
 
 
     def __len__(self):
-        # the last batch may have fewer trials but it is taken into account intio the lenght of the sampler
+        # the last batch may have fewer trials but it is taken into account into the length of the sampler
         total_batches = sum( (math.ceil(len(indices)/self.batch_size) for indices in self.Idx_perDay) )
         return total_batches
