@@ -1,0 +1,89 @@
+---
+#Training
+ batch_size: 64
+#  epochs: 80
+ epochs: 17
+ bin_per_sample: 3
+ rpr_epochs: 0 #how many epochs to use rpr in
+ quantize_weights_epochs: 0 #How many epochs to use qat in.  0 : no QAT for Static or none at all, n : n epochs of QAT  
+ 
+ early_stopping_patience: -1
+ loss: L2
+ learning_rate: 0.0001
+#  learning_rate_qat: 2e-3
+ learning_rate_decay: 0.1
+ learning_rate_decay_step: 100 #Set it to a very large number to prevent this to be used
+ dropout: 0.5
+ var_dropout_s: 0
+ var_dropout_t: 0
+ zoneout: False
+ weight_decay: 0.1
+ 
+ noisy_threshold: 0
+
+ data_augmentation_noise: 0.00001
+ data_augmentation_noise_div_std: False
+ data_augment_eval: 0.0
+
+ steps: 3
+ warmup_steps: 0
+ network_type: 'default'
+
+ reset_by_subtraction: True
+ surrogate_gradient: 'square'
+
+ init_u: 'zero'
+
+#Dataset
+ output_type: 'vel'
+ 
+#Network
+#  batchnorm: 'tdBN'
+ neuron_count: 256
+ use_bias: True
+
+#  static_quantisation: False
+#  quantize_weight: 4 #False or bitcount (4,8,16)
+#  quantize_bias: 6
+#  quantize_accumulation: False #only used if weights are quantized
+#  quantize_activation: False #tau quantisation
+#  quantize_membrane_pot: False #membrane potential bitwidth and quantisation
+#  quantize_input: 8
+#  quantize_input_scaling: 3
+
+ static_quantisation: False
+ quantize_weight: False #False or bitcount (4,8,16)
+ quantize_bias: False
+ quantize_accumulation: False #only used if weights are quantized
+ quantize_activation: False #tau quantisation
+ quantize_membrane_pot: False #membrane potential bitwidth and quantisation
+ quantize_input: False
+ quantize_input_scaling: False
+
+ quantisation_scaling: 'max' #'max' or 'mean' for 2.5*mean scaling
+
+
+ rpr_start_fraction: 0.9
+ rpr_step_epochs: 3
+
+#Reporting
+ experiment_name: 'baseline_fp_run'
+ loss_steps: 100 #how often to report the loss
+ output_report: Report.txt
+ output_plots: ./
+ output_csv: ./
+ results_dir: ./
+
+#General
+ seed: 'random' #use 'random' for a non-deterministic seed
+ device: cuda:0
+ trials: 1
+ 5-fold: False
+ early_stopping: False
+ dataset_file: /home/liaoj/Work/BMI/SNN_decoder/datasets/dataset_2020.mat
+
+#save and load model
+ save_model: False
+ save_model_dir: ./
+ load_model: False 
+ load_model_dir: model/model_trial_0_fold_0_epoch_42_id_993906.pt

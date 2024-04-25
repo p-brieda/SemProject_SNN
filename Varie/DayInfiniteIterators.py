@@ -2,6 +2,9 @@ import torch
 import numpy as np
 import scipy.io
 
+# SINGLE-DAY DATALOADER APPROACH
+# Class for creating the infinite iterators for the dataloaders (one for each day)
+
 class DayInfiniteIterators:
 
     def __init__(self, dataloaders):

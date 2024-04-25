@@ -3,13 +3,14 @@ from torch.utils.data import Sampler
 import numpy as np
 import math
 
+# ALL-DAYS DATALOADER APPROACH
 # TESTING SAMPLER
 # TestBatchSampler is a custom sampler that samples batches of trials from the validation dataset for inference.
 # The days to be tested are specified in the 'days' argument. The sampler generates batches of trials from the specified days
 # in a sequential manner, without shuffling the trials. If the number of trials is not divisible by the batch size, the last
 # batch will have fewer trials.
 
-class DayBatchSampler(Sampler):
+class TestBatchSampler(Sampler):
     def __init__(self, Idx_perDay, days, batch_size):
         self.Idx_perDay = Idx_perDay
         self.batch_size = batch_size

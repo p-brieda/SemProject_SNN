@@ -3,6 +3,7 @@ from torch.utils.data import Sampler
 import numpy as np
 import math
 
+# ALL-DAYS DATALOADER APPROACH
 # TRAINING AND VALIDATION SAMPLER
 # DayBatchSampler is a custom sampler that samples batches of trials from the dataset in order to have
 # trials from the same day in the same batch. If the number of trials is not divisible by the batch size, the last

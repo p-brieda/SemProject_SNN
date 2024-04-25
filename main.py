@@ -8,12 +8,10 @@ import logging
 import sys
 import time
 from util import getDefaultArgs
-from DataProcessing import DataProcessing
-from torch.utils.data import DataLoader
-from CustomBatchSampler import CustomBatchSampler
-from DayInfiniteIterators import DayInfiniteIterators
-from create_Dataloaders import create_Dataloaders
+from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
+from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareDataSet import PrepareDataSet
+from torch.utils.data import DataLoader
 
 
 
@@ -22,7 +20,6 @@ if __name__ == '__main__':
     args = getDefaultArgs()
     args['batchSize'] = 20
 
-    '''
     prepared_dataset = PrepareDataSet(args)
     
     # loading the training dataset and creating a DataLoader
@@ -49,8 +46,6 @@ if __name__ == '__main__':
     print('Strategy 1 time: ', strategy1_end - strategy1_start)
     print('Total batches: ', tot_batches)
 
-    '''
-
 
 
 
@@ -59,14 +54,14 @@ if __name__ == '__main__':
     Finite_loader = create_Dataloaders(args, days=np.arange(10), mode='training')
     train_loaders = Finite_loader.getDataloaders()
     viable_train_days = Finite_loader.getViableDays()
-    train_InfIterator = DayInfiniteIterators(train_loaders)
+    train_InfIterators = DayInfiniteIterators(train_loaders)
 
     strategy2_start = time.time()
     
     tot_batches = 30
     for k in range(tot_batches):
         dayIdx = np.random.choice(viable_train_days)
-        next_iter = train_InfIterator.getNextIter(dayIdx)
+        next_iter = train_InfIterators.getNextIter(dayIdx)
         #print(k)
         print(next_iter['neuralData'].shape)
         print(next_iter['dayIdx'])

@@ -1,6 +1,9 @@
 from PrepareDataSet import PrepareDataSet
-from DayDataProcessing import DayDataProcessing
+from Varie.DayDataProcessing import DayDataProcessing
 from torch.utils.data import DataLoader
+
+# SINGLE-DAY DATALOADER APPROACH
+# Class for creating the dataloaders for the training, validation and testing datasets for all the days
 
 class create_Dataloaders:
     def __init__(self, args, days, mode):

@@ -1,10 +1,11 @@
-import os
-from datetime import datetime
-import random
-import numpy as np
+# SINGLE-DAY DATALOADER APPROACH
+
+from PrepareDataSet import PrepareDataSet
 from transforms import extractSentenceSnippet, addMeanNoise, addWhiteNoise
 from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
 
+# Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
 class DayDataProcessing(Dataset):
     def __init__(self, args, prepared_dataset, mode='training'):
@@ -60,6 +61,61 @@ class DayDataProcessing(Dataset):
             trial = {key: data[idx] for key, data in self.trials.items()}
 
         return trial
+    
+
+
+
+# Class for creating the infinite iterators for the dataloaders (one for each day)
+
+class DayInfiniteIterators:
+
+    def __init__(self, dataloaders):
+
+        self.dataloaders = dataloaders
+        self.iterators = []
+
+        for day in range(len(dataloaders)):
+            self.iterators.append(iter(self.dataloaders[day]))
+
+
+
+    def getNextIter(self, dayIdx):
+        try:
+            return next(self.iterators[dayIdx])
+        except StopIteration:
+            self.iterators[dayIdx] = iter(self.dataloaders[dayIdx])
+            return next(self.iterators[dayIdx])
         
 
+
+
+# Class for creating the dataloaders for the training, validation and testing datasets for all the days
+
+class create_Dataloaders:
+    def __init__(self, args, days, mode):
+        self.datasets = []
+        self.dataloaders = []
+        self.viabledays = []
+
+        if mode == 'training' or mode == 'validation':
+            Shuffle = True
+        else: Shuffle = False
+
+        for day in days:
+            prepared_dataset = PrepareDataSet(args, days=[day])
+            self.datasets.append(DayDataProcessing(args, prepared_dataset, mode))
+
+            if self.datasets[-1].isViableDay():
+                self.viabledays.append(day)
+                self.dataloaders.append(DataLoader(self.datasets[-1], batch_size=args['batchSize'], shuffle=Shuffle, num_workers=0))
+
     
+    def getDataloaders(self):
+        return self.dataloaders
+    
+    def getViableDays(self):
+        return self.viabledays
+    
+    
+        
+        
