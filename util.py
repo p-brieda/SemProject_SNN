@@ -4,6 +4,8 @@ import scipy.io
 import copy
 import os
 from datetime import datetime
+import yaml
+from yaml.loader import SafeLoader
 
 
 
@@ -174,10 +176,12 @@ def binTensor(data, binSize):
 
 
 # function for the creation of the arguments dictionary
-def getDefaultArgs():
-    args = {}
+def getDefaultHyperparams():
 
-    args['gpuNumber'] = '0'
+    current_dir = os.getcwd()
+    hyperparam_file = current_dir + 'hyperparams.yaml'
+    with open(hyperparam_file) as file:
+        hyperparams = yaml.load(file, Loader=SafeLoader)
 
     rootDir = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/handwritingBCIData/'
 
@@ -187,50 +191,21 @@ def getDefaultArgs():
     cvPart = 'HeldOutBlocks'
 
     for x in range(len(dataDirs)):
-        args['sentencesFile_'+str(x)] = rootDir+'Datasets/'+dataDirs[x]+'/sentences.mat'
-        args['singleLettersFile_'+str(x)] = rootDir+'Datasets/'+dataDirs[x]+'/singleLetters.mat'
-        args['labelsFile_'+str(x)] = rootDir+'RNNTrainingSteps/Step2_HMMLabels/'+cvPart+'/'+dataDirs[x]+'_timeSeriesLabels.mat'
-        args['syntheticDatasetDir_'+str(x)] = rootDir+'RNNTrainingSteps/Step3_SyntheticSentences/'+cvPart+'/'+dataDirs[x]+'_syntheticSentences/'
-        args['cvPartitionFile_'+str(x)] = rootDir+'RNNTrainingSteps/trainTestPartitions_'+cvPart+'.mat'
-        args['sessionName_'+str(x)] = dataDirs[x]
+        hyperparams['sentencesFile_'+str(x)] = rootDir+'Datasets/'+dataDirs[x]+'/sentences.mat'
+        hyperparams['singleLettersFile_'+str(x)] = rootDir+'Datasets/'+dataDirs[x]+'/singleLetters.mat'
+        hyperparams['labelsFile_'+str(x)] = rootDir+'RNNTrainingSteps/Step2_HMMLabels/'+cvPart+'/'+dataDirs[x]+'_timeSeriesLabels.mat'
+        hyperparams['syntheticDatasetDir_'+str(x)] = rootDir+'RNNTrainingSteps/Step3_SyntheticSentences/'+cvPart+'/'+dataDirs[x]+'_syntheticSentences/'
+        hyperparams['cvPartitionFile_'+str(x)] = rootDir+'RNNTrainingSteps/trainTestPartitions_'+cvPart+'.mat'
+        hyperparams['sessionName_'+str(x)] = dataDirs[x]
 
-    #Specifies how many 10 ms time steps to combine a single bin for RNN processing                              
-    args['rnnBinSize'] = 2
-
-    #Applies Gaussian smoothing if equal to 1                             
-    args['smoothInputs'] = 1
-
-    #How many bins to delay the output. Some delay is needed in order to give the RNN enough time to see the entire character
-    #before deciding on its identity. Default is 1 second (50 bins).
-    args['outputDelay'] = 50
-
-    #Can be 'unidrectional' (causal) or 'bidirectional' (acausal)                              
-    args['directionality'] = 'unidirectional'
-
-    #standard deivation of the constant-offset firing rate drift noise                             
-    args['constantOffsetSD'] = 0.6
-
-    #standard deviation of the random walk firing rate drift noise                             
-    args['randomWalkSD'] = 0.02
-
-    #standard deivation of the white noise added to the inputs during training                            
-    args['whiteNoiseSD'] = 1.2
-
+  
     #this seed is set for numpy and tensorflow when the class is initialized                             
-    args['seed'] = datetime.now().microsecond
+    hyperparams['seed'] = datetime.now().microsecond
 
-    #number of time steps to use in the minibatch (1200 = 24 seconds) in training/validation mode                        
-    args['train_val_timeSteps'] = 1200
 
-    #number of time steps to use in the minibatch (1200 = 24 seconds) in test mode
-    args['test_timeSteps'] = 7500
+    print("Please set:", "/n","hyperparams['outputDir']")
 
-    #number of sentence snippets to include in the minibatch                             
-    args['batchSize'] = 64
-
-    print("Please set:", "/n","args['outputDir']")
-
-    return args
+    return hyperparams
 
 
 

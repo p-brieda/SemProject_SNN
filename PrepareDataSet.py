@@ -10,14 +10,14 @@ from torch.utils.data import Dataset
 # will be used to create the datasets and dataloaders
 
 class PrepareDataSet:
-    def __init__(self, args, days=None):
-        self.args = args
+    def __init__(self, hyperparams, days=None):
+        self.hyperparams = hyperparams
 
         # if not specified count how many days of data
         if days == None:
             nDays = 0
             for t in range(30):
-                if 'labelsFile_'+str(t) not in self.args.keys():
+                if 'labelsFile_'+str(t) not in self.hyperparams.keys():
                     nDays = t
                     break
             self.Days = np.arange(nDays)
@@ -35,9 +35,9 @@ class PrepareDataSet:
 
         # selecting different amount of time steps for training/validation and testing
         if mode == 'trainval':
-            timeSteps = self.args['train_val_timeSteps']
+            timeSteps = self.hyperparams['train_val_timeSteps']
         else: # self.mode == 'testing'
-            timeSteps = self.args['test_timeSteps']
+            timeSteps = self.hyperparams['test_timeSteps']
 
         trials_train = {'neuralData':[],'targets':[],'errWeights':[],'binsPerTrial':[],'dayIdx':[]}
         trainIdx_perDay = []
@@ -50,12 +50,12 @@ class PrepareDataSet:
     
         for dayIdx in self.Days:
             # preprocessing the data cubes
-            neuralData, targets, errWeights, binsPerTrial, cvIdx = prepareDataCubesForRNN(self.args['sentencesFile_'+str(dayIdx)],
-                                                                                        self.args['singleLettersFile_'+str(dayIdx)],
-                                                                                        self.args['labelsFile_'+str(dayIdx)],
-                                                                                        self.args['cvPartitionFile_'+str(dayIdx)],
-                                                                                        self.args['sessionName_'+str(dayIdx)],
-                                                                                        self.args['rnnBinSize'],
+            neuralData, targets, errWeights, binsPerTrial, cvIdx = prepareDataCubesForRNN(self.hyperparams['sentencesFile_'+str(dayIdx)],
+                                                                                        self.hyperparams['singleLettersFile_'+str(dayIdx)],
+                                                                                        self.hyperparams['labelsFile_'+str(dayIdx)],
+                                                                                        self.hyperparams['cvPartitionFile_'+str(dayIdx)],
+                                                                                        self.hyperparams['sessionName_'+str(dayIdx)],
+                                                                                        self.hyperparams['rnnBinSize'],
                                                                                         timeSteps,
                                                                                         mode == 'trainval')
             

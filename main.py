@@ -7,7 +7,7 @@ import os
 import logging
 import sys
 import time
-from util import getDefaultArgs
+from util import getDefaultHyperparams
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareDataSet import PrepareDataSet
@@ -17,14 +17,14 @@ from torch.utils.data import DataLoader
 
 if __name__ == '__main__':
 
-    args = getDefaultArgs()
-    args['batchSize'] = 20
+    hyperparams = getDefaultHyperparams()
+    hyperparams['batchSize'] = 20
 
-    prepared_dataset = PrepareDataSet(args)
+    prepared_dataset = PrepareDataSet(hyperparams)
     
     # loading the training dataset and creating a DataLoader
-    Train_dataset = DataProcessing(args, prepared_dataset, mode='training')
-    trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), args['batchSize'])
+    Train_dataset = DataProcessing(hyperparams, prepared_dataset, mode='training')
+    trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), hyperparams['batchSize'])
     train_loader = DataLoader(Train_dataset, batch_sampler = trainDayBatch_Sampler , num_workers=0)
 
     
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     
     # INFINITE ITERATOR VERSION
-    Finite_loader = create_Dataloaders(args, days=np.arange(10), mode='training')
+    Finite_loader = create_Dataloaders(hyperparams, days=np.arange(10), mode='training')
     train_loaders = Finite_loader.getDataloaders()
     viable_train_days = Finite_loader.getViableDays()
     train_InfIterators = DayInfiniteIterators(train_loaders)
