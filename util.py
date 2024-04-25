@@ -173,13 +173,29 @@ def binTensor(data, binSize):
     return binnedTensor
 
 
+def extractBatch(trial_iter, device):
+
+    neural_data = trial_iter['neuralData']
+    neural_data = neural_data.permute(0, 2, 1)
+    neural_data = neural_data.to(device)
+
+    targets = trial_iter['targets']
+    targets = targets.permute(0, 2, 1)
+    targets = targets.to(device)
+
+    errWeights = trial_iter['errWeights']
+    errWeights = errWeights.to(device)
+
+    return neural_data, targets, errWeights
+
+
 
 
 # function for the creation of the arguments dictionary
 def getDefaultHyperparams():
 
     current_dir = os.getcwd()
-    hyperparam_file = current_dir + 'hyperparams.yaml'
+    hyperparam_file = current_dir + '\hyperparams.yaml'
     with open(hyperparam_file) as file:
         hyperparams = yaml.load(file, Loader=SafeLoader)
 

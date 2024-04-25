@@ -13,7 +13,7 @@ class Net(nn.Module):
         init_surrogate_gradient(hyperparam)
         super(Net, self).__init__()
 
-        self.fc1 = tdLayer(nn.Linear(hyperparam['n_channels'], hyperparam['neuron_count'], bias = hyperparam['use_bias']), hyperparam = hyperparam)  # 5*5 from image dimension
+        self.fc1 = tdLayer(nn.Linear(hyperparam['n_channels'], hyperparam['neuron_count'], bias = hyperparam['use_bias']), hyperparam = hyperparam)
         if(hyperparam['batchnorm'] == 'none'):
             self.dr1 = tdLayer(nn.Dropout(p=hyperparam['dropout']), hyperparam = hyperparam)
         elif(hyperparam['batchnorm'] == 'tdBN'):
@@ -34,8 +34,8 @@ class Net(nn.Module):
             self.dr3 = tdLayer(nn.Dropout(p=hyperparam['dropout']), tdBatchNorm0d(hyperparam['neuron_count'], Vth = hyperparam['Vth']), hyperparam = hyperparam)
         self.sp3 = LIFSpike([hyperparam['neuron_count']], hyperparam = hyperparam)
         
-        self.fc4 = tdLayer(nn.Linear(hyperparam['neuron_count'], 2, bias = hyperparam['use_bias']), hyperparam = hyperparam)
-        self.nospike = LI_no_Spike([2], hyperparam = hyperparam)
+        self.fc4 = tdLayer(nn.Linear(hyperparam['neuron_count'], hyperparam['n_outputs'], bias = hyperparam['use_bias']), hyperparam = hyperparam)
+        self.nospike = LI_no_Spike([hyperparam['n_outputs']], hyperparam = hyperparam)
         self.dequant = torch.quantization.DeQuantStub()
 
 

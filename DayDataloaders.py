@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader
 # Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
 class DayDataProcessing(Dataset):
-    def __init__(self, hyperparams, prepared_dataset, mode='training'):
-        self.hyperparams = hyperparams
+    def __init__(self, hyperparam, prepared_dataset, mode='training'):
+        self.hyperparams = hyperparam
         self.mode = mode
         self.prepared_dataset = prepared_dataset
         
@@ -92,7 +92,7 @@ class DayInfiniteIterators:
 # Class for creating the dataloaders for the training, validation and testing datasets for all the days
 
 class create_Dataloaders:
-    def __init__(self, hyperparams, days, mode):
+    def __init__(self, hyperparam, days, mode):
         self.datasets = []
         self.dataloaders = []
         self.viabledays = []
@@ -102,12 +102,12 @@ class create_Dataloaders:
         else: Shuffle = False
 
         for day in days:
-            prepared_dataset = PrepareDataSet(hyperparams, days=[day])
-            self.datasets.append(DayDataProcessing(hyperparams, prepared_dataset, mode))
+            prepared_dataset = PrepareDataSet(hyperparam, days=[day])
+            self.datasets.append(DayDataProcessing(hyperparam, prepared_dataset, mode))
 
             if self.datasets[-1].isViableDay():
                 self.viabledays.append(day)
-                self.dataloaders.append(DataLoader(self.datasets[-1], batch_size=hyperparams['batchSize'], shuffle=Shuffle, num_workers=0))
+                self.dataloaders.append(DataLoader(self.datasets[-1], batch_size=hyperparam['batch_size'], shuffle=Shuffle, num_workers=0))
 
     
     def getDataloaders(self):

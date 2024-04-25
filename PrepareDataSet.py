@@ -10,8 +10,8 @@ from torch.utils.data import Dataset
 # will be used to create the datasets and dataloaders
 
 class PrepareDataSet:
-    def __init__(self, hyperparams, days=None):
-        self.hyperparams = hyperparams
+    def __init__(self, hyperparam, days=None):
+        self.hyperparams = hyperparam
 
         # if not specified count how many days of data
         if days == None:
@@ -27,6 +27,12 @@ class PrepareDataSet:
 
         self.trials_train, self.trials_val, self.trainIdx_perDay, self.valIdx_perDay = self._loadAllDatasets('trainval')
         _ , self.trials_test, _ , self.testIdx_perDay = self._loadAllDatasets('testing')
+
+        N_input = self.trials_train['neuralData'][0].shape[1]
+        N_output = self.trials_train['targets'][0].shape[1]
+
+        hyperparam['n_channels'] = N_input
+        hyperparam['n_outputs'] = N_output
 
 
 

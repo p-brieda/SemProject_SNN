@@ -19,14 +19,13 @@
  noisy_threshold: 0
 
 # Data augmentation
- constantoffsetSD: 0.6
+ constantOffsetSD: 0.6
  randomWalkSD: 0.02
  whiteNoiseSD: 0.02
  train_val_timeSteps: 1200
  test_timeSteps: 7500
 
 # Network
- n_channels: 192
  batchnorm: 'tdBN'
  neuron_count: 256
  use_bias: True
@@ -39,6 +38,7 @@
 
 #Neuron
  Vth: 0.4
+ Vth_init_range: 0.1
  Vth_trainable: False
 
  tau: 0.6 # also mean of distribution if tau_init_range > 0

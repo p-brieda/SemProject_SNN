@@ -11,8 +11,8 @@ import math
 
 # Class for preparing the dataset for one of the three modes: training, validation or testing
 class DataProcessing(Dataset):
-    def __init__(self, hyperparams, prepared_dataset, mode='training'):
-        self.hyperparams = hyperparams
+    def __init__(self, hyperparam, prepared_dataset, mode='training'):
+        self.hyperparams = hyperparam
         self.mode = mode
         self.prepared_dataset = prepared_dataset
 
