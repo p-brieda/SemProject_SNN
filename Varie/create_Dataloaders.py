@@ -1,4 +1,4 @@
-from PrepareDataSet import PrepareDataSet
+from PrepareData import PrepareData
 from Varie.DayDataProcessing import DayDataProcessing
 from torch.utils.data import DataLoader
 
@@ -16,7 +16,7 @@ class create_Dataloaders:
         else: Shuffle = False
 
         for day in days:
-            prepared_dataset = PrepareDataSet(args, days=[day])
+            prepared_dataset = PrepareData(args, days=[day])
             self.datasets.append(DayDataProcessing(args, prepared_dataset, mode))
 
             if self.datasets[-1].isViableDay():

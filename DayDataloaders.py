@@ -1,6 +1,6 @@
 # SINGLE-DAY DATALOADER APPROACH
 
-from PrepareDataSet import PrepareDataSet
+from PrepareData import PrepareData
 from transforms import extractSentenceSnippet, addMeanNoise, addWhiteNoise
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
@@ -8,10 +8,10 @@ from torch.utils.data import DataLoader
 # Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
 class DayDataProcessing(Dataset):
-    def __init__(self, hyperparam, prepared_dataset, mode='training'):
+    def __init__(self, hyperparam, prepared_data, mode='training'):
         self.hyperparams = hyperparam
         self.mode = mode
-        self.prepared_dataset = prepared_dataset
+        self.prepared_data = prepared_data
         
         # selecting different amount of time steps for training/validation and testing
         if self.mode == 'training' or self.mode =='validation':
@@ -19,7 +19,7 @@ class DayDataProcessing(Dataset):
         else: # self.mode == 'testing'
             self.timeSteps = self.hyperparams['test_timeSteps']
 
-        self.trials = self.prepared_dataset.getDatasets(mode=self.mode)
+        self.trials = self.prepared_data.getDatasets(mode=self.mode)
 
 
 
@@ -102,8 +102,8 @@ class create_Dataloaders:
         else: Shuffle = False
 
         for day in days:
-            prepared_dataset = PrepareDataSet(hyperparam, days=[day])
-            self.datasets.append(DayDataProcessing(hyperparam, prepared_dataset, mode))
+            prepared_data = PrepareData(hyperparam, days=[day])
+            self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
 
             if self.datasets[-1].isViableDay():
                 self.viabledays.append(day)

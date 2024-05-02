@@ -117,8 +117,8 @@ class RSNNet(nn.Module):
                 self.bn3.alpha = 0.5
         self.sp3 = RLIFSpike([hyperparam['neuron_count']], hyperparam = hyperparam)
         
-        self.fc4 = nn.Linear(hyperparam['neuron_count'], 2, bias = hyperparam['use_bias'])
-        self.nospike = RLI_no_Spike([2], hyperparam = hyperparam)
+        self.fc4 = nn.Linear(hyperparam['neuron_count'], hyperparam['n_outputs'], bias = hyperparam['use_bias'])
+        self.nospike = RLI_no_Spike([hyperparam['n_outputs']], hyperparam = hyperparam)
         self.dequant = torch.quantization.DeQuantStub()
         
                 

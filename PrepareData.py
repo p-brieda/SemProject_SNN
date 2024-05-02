@@ -9,7 +9,7 @@ from torch.utils.data import Dataset
 # Class for preparing the trials and corrresponding indexes for training, validation and testing. The trials and inexes
 # will be used to create the datasets and dataloaders
 
-class PrepareDataSet:
+class PrepareData:
     def __init__(self, hyperparam, days=None):
         self.hyperparams = hyperparam
 

@@ -11,10 +11,10 @@ import math
 
 # Class for preparing the dataset for one of the three modes: training, validation or testing
 class DataProcessing(Dataset):
-    def __init__(self, hyperparam, prepared_dataset, mode='training'):
+    def __init__(self, hyperparam, prepared_data, mode='training'):
         self.hyperparams = hyperparam
         self.mode = mode
-        self.prepared_dataset = prepared_dataset
+        self.prepared_data = prepared_data
 
         if self.mode == 'training' or self.mode == 'validation':
             self.timeSteps = self.hyperparams['train_val_timeSteps']
@@ -22,8 +22,8 @@ class DataProcessing(Dataset):
             self.timeSteps = self.hyperparams['test_timeSteps']
 
 
-        self.trials = self.prepared_dataset.getDatasets(mode=self.mode)
-        self.Idx_perDay = self.prepared_dataset.getDaysIdx(mode=self.mode)
+        self.trials = self.prepared_data.getDatasets(mode=self.mode)
+        self.Idx_perDay = self.prepared_data.getDaysIdx(mode=self.mode)
 
 
 
