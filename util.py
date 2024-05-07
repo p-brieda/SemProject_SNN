@@ -47,6 +47,49 @@ def getDefaultHyperparams():
 
 
 
+def getHandwritingCharacterDefinitions():
+    """
+    Returns a dictionary with entries that define the names of each character, its length, and where the pen tip begins.
+    
+    Returns:
+        charDef (dict)
+    """
+        
+    charDef = {}
+    
+    #Define the list of all 31 characters and their names.
+    charDef['charList'] = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+                'greaterThan','comma','apostrophe','tilde','questionMark']
+    charDef['charListAbbr'] = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+                '>',',',"'",'~','?']
+
+    #Define the length of each character (in # of 10 ms bins) to use for each template.
+    #These were hand-defined based on visual inspection of the reconstructed pen trajectories.
+    charDef['charLen'] = np.array([99, 91, 70, 104, 98, 125, 110, 104, 79, 92, 127, 68, 132, 90, 
+                        84, 113, 104, 74, 86, 110, 86, 83, 110, 103, 115, 100, 82, 77, 116, 71, 110]).astype(np.int32)
+    
+    #For each character, this defines the starting location of the pen tip (0 = bottom of the line, 1 = top)
+    charDef['penStart'] = [0.25, 1, 0.5, 0.5, 0.25, 1.0, 0.25, 1.0, 0.5, 0.5, 1, 1, 0.5, 0.5, 0.25, 0.5, 0.25, 0.5, 0.5, 1, 
+           0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 1, 0.5, 1]
+    
+    #dictionary to convert string representation to character index
+    charDef['strToCharIdx'] = {}
+    for x in range(len(charDef['charListAbbr'])):
+        charDef['strToCharIdx'][charDef['charListAbbr'][x]] = x
+        
+    #ordering of characters that kaldi (i.e., the language model) expects
+    charDef['kaldiOrder'] = ['<ctc>','>',"'",',','.','?','a','b','c','d','e','f','g','h','i','j',
+                             'k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    
+    #re-indexing to match kaldi order (e.g., outputs[:,:,charDef['idxToKaldi']] places the output in kald-order)
+    charDef['idxToKaldi'] = np.array([31,26,28,27,29,30,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+                                     21,22,23,24,25]).astype(np.int32)
+    
+    return charDef
+
+
+
+
 def prepareDataCubesForRNN(sentenceFile, singleLetterFile, labelFile, cvPartitionFile, sessionName, rnnBinSize, nTimeSteps, isTraining):
     """
     Loads raw data & HMM labels and returns training and validation data cubes for RNN training (or inference). 
@@ -246,26 +289,30 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
-def trainModel(model, optimizer, train_loader, hyperparams, device):
+def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams, device):
     model.train()
     num_batches = len(train_loader)
 
     running_loss = 0.0
     train_progress = "Train progress: |"
+    update_freq = 10 # fraction of batches before updating the progress bar
 
     for i, trial_iter in enumerate(train_loader):
 
         data, targets, errWeights = extractBatch(trial_iter, device)
         optimizer.zero_grad()
-        output = model(data)
-        loss = model.loss(output, targets, errWeights)
+        output, spikecounts = model(data)
+        loss = criterion(output, targets, errWeights)
         loss.backward()
         optimizer.step()
+        scheduler.step()
+        print(optimizer.param_groups[0]['lr'])
         running_loss += loss.item()
 
-        if i%(np.ceil(num_batches/100))==0:
-                train_progress += "#"
-                print(f"{train_progress} {loss.item():.3f}", end='\r')
+        #if i%(np.ceil(num_batches/update_freq))==0:
+        train_progress += "#"
+        print(f"{train_progress} {loss.item():.3f}", end='\r')
+
     print("")
 
     return running_loss/num_batches
@@ -283,27 +330,29 @@ def tensors_to_numpy(data, targets, errWeights):
 
 
 
-def validateModel(model, val_loader, hyperparams, device):
+def validateModel(model, val_loader, criterion, hyperparams, device):
     model.eval()
     num_batches = len(val_loader)
 
     running_loss = 0.0
     running_acc = 0.0
     val_progress = "Validation progress: |"
+    update_freq = 10 # fraction of batches before updating the progress bar
 
     for i, trial_iter in enumerate(val_loader):
 
         data, targets, errWeights = extractBatch(trial_iter, device)
-        output = model(data)
-        loss = model.loss(output, targets, errWeights)
+        output, spikecounts = model(data)
+        loss = criterion(output, targets, errWeights)
         running_loss += loss.item()
         output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
         acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
         running_acc += acc
 
-        if i%(np.ceil(num_batches/100))==0:
-                val_progress += "#"
-                print(f"{val_progress} {loss.item():.3f}", end='\r')
+        #if i%(np.ceil(num_batches/update_freq))==0:
+        val_progress += "#"
+        print(f"{val_progress} {loss.item():.3f}", end='\r')
+
     print("")
 
     return running_loss/num_batches, running_acc/num_batches
@@ -312,6 +361,10 @@ def validateModel(model, val_loader, hyperparams, device):
 
 
 def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
+
+    charDef = getHandwritingCharacterDefinitions()
+    allErrCounts = []
+    predictions = {}
 
     model.eval()
 
@@ -332,7 +385,7 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
 
             trial_iter = next(test_loader)
             data, targets, errWeights = extractBatch(trial_iter, device)
-            output = model(data)
+            output, spikecounts = model(data)
             loss = model.loss(output, targets, errWeights)
             running_loss += loss.item()
             output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
@@ -345,14 +398,69 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
 
             outputs = np.append(output)
         
+
         outputs = np.concatenate(outputs, axis=0)
+        num_sentences = outputs.shape[0]
+        predictions[hyperparams['dataDirs'][viable_test_days[idx_loader]]] = outputs
         
 
         # Character error rate and Word error rate computation
         dayIdx = viable_test_days[idx_loader]
+        cvPartFile = scipy.io.loadmat(hyperparams['cvPartitionFile_'+str(dayIdx)])
+        testIdx = cvPartFile[hyperparams['dataDirs'][dayIdx]+'_test']
+                                                
         sentenceDat = scipy.io.loadmat(hyperparams['sentencesFile_'+str(dayIdx)])
 
-        #errCounts = 
+        errCounts, decSentences = evaluateSNNOutput(outputs, sentenceDat['numTimeBinsPerSentence'][testIdx] / hyperparams['rnnBinSize'] + hyperparams['outputDelay'],
+                                                    sentenceDat['sentencePrompt'][testIdx],
+                                                    charDef,
+                                                    charStartThresh=0.3,
+                                                    charsStartDelay=15)
+        
+        #save decoded sentences, character error rates and word error rates for later summarization
+        saveDict = {}
+        saveDict['decSentences'] = decSentences
+        saveDict['trueSentences'] = sentenceDat['sentencePrompt'][testIdx]
+        saveDict.update(errCounts)
+                
+        valAcc = 100*(1 - np.sum(errCounts['charErrors']) / np.sum(errCounts['charCounts']))
+
+        print('Character error rate for this session: %1.2f%%' % float(100-valAcc))
+        print('Below is the decoder output for all validation sentences in this session:')
+        print(' ')
+        
+        for v in np.arange(num_sentences):
+            trueText = sentenceDat['sentencePrompt'][testIdx][v,0][0]
+            trueText = trueText.replace('>',' ')
+            trueText = trueText.replace('~','.')
+            trueText = trueText.replace('#','')
+            
+            print('#' + str(v) + ':')
+            print('True:    ' + trueText)
+            print('Decoded: ' + decSentences[v])
+            print(' ')
+    
+        #put together all the error counts from all sessions so we can compute overall error rates below
+        allErrCounts.append(np.stack([errCounts['charCounts'],
+                                errCounts['charErrors'],
+                                errCounts['wordCounts'],
+                                errCounts['wordErrors']],axis=0).T)
+        
+    
+    # Save predicitons
+    predictions_file = hyperparams['outputDir'] + 'predictions.mat'
+    scipy.io.savemat(predictions_file, predictions)
+
+    # Summarize character error rate and word error rate across all sessions
+    concatErrCounts = np.squeeze(np.concatenate(allErrCounts, axis=0))
+    cer = 100*(np.sum(concatErrCounts[:,1]) / np.sum(concatErrCounts[:,0]))
+    wer = 100*(np.sum(concatErrCounts[:,3]) / np.sum(concatErrCounts[:,2]))
+
+    print('Character error rate: %1.2f%%' % float(cer))
+    print('Word error rate: %1.2f%%' % float(wer))
+
+
+
 
         
 

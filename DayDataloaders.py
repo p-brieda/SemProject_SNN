@@ -4,6 +4,9 @@ from PrepareData import PrepareData
 from transforms import extractSentenceSnippet, addMeanNoise, addWhiteNoise
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
+import os
+import torch
+import time
 
 # Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
@@ -92,8 +95,21 @@ class DayInfiniteIterators:
 # Class for creating the dataloaders for the training, validation and testing datasets for all the days
 
 class create_Dataloaders:
-    def __init__(self, hyperparam, days, mode):
-        self.datasets = []
+    def __init__(self, manual, hyperparam, days, mode):
+        if not os.path.exists('Datasets\\Test_datasets.pth') or (manual and input('Do you want to recompute the testing data? (y/n) ') == 'y'):
+            self.datasets = []
+            testing_datasets_start = time.time()
+            for day in days:
+                prepared_data = PrepareData(hyperparam, days=[day])
+                self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
+            testing_datasets_end = time.time()
+            print(f'Testing datasets preparation time: {testing_datasets_end - testing_datasets_start:.2f} s')
+            torch.save(self.datasets, 'Datasets\\Test_datasets.pth')
+            print('Testing datasets saved')
+        else:
+            self.datasets = torch.load('Datasets\\Test_datasets.pth')
+            print('Testing datasets loaded')
+
         self.dataloaders = []
         self.viabledays = []
 
@@ -102,12 +118,9 @@ class create_Dataloaders:
         else: Shuffle = False
 
         for day in days:
-            prepared_data = PrepareData(hyperparam, days=[day])
-            self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
-
-            if self.datasets[-1].isViableDay():
+            if self.datasets[day].isViableDay():
                 self.viabledays.append(day)
-                self.dataloaders.append(DataLoader(self.datasets[-1], batch_size=hyperparam['batch_size'], shuffle=Shuffle, num_workers=0))
+                self.dataloaders.append(DataLoader(self.datasets[day], batch_size=hyperparam['batch_size'], shuffle=Shuffle, num_workers=0))
 
     
     def getDataloaders(self):

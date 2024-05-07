@@ -7,26 +7,24 @@ import torch.nn.functional as F
 # L2 regularization is not included in the loss class since it will be added in the optimizer
 
 class SequenceLoss(nn.Module):
-    def __init__(self, hyperparam, weightVars):
+    def __init__(self, hyperparam):
         super().__init__()
         self.hyperparams = hyperparam
-        self.weightVars = nn.ParameterList(weightVars)
 
     def forward(self, logitOutput, batchTargets, batchWeight):
         # Handling the output delay
-        labels = batchTargets[:, :,  0:-(self.hyperparams['outputDelay'])]
-        logits = logitOutput[:, :, (self.hyperparams['outputDelay']):]
-        bw = batchWeight[:, 0:-(self.hyperparams['outputDelay'])]
+        labels = batchTargets[:, :,  0:-self.hyperparams['outputDelay']]
+        logits = logitOutput[:, :, self.hyperparams['outputDelay']:]
+        bw = batchWeight[:, 0:-self.hyperparams['outputDelay']]
 
         transOut = logits[:,-1,:]
         transLabel = labels[:,-1,:]
-
         logits = logits[:,0:-1,:]
         labels = labels[:,0:-1,:]
 
         # Cross-entropy character probability loss
         ceLoss = F.cross_entropy(logits, labels, reduction='none')
-        totalErr = torch.mean(torch.sum(bw * ceLoss, dim=2) / self.hyperparams['train_val_timeSteps'])
+        totalErr = torch.mean(torch.sum(bw * ceLoss, dim=1) / self.hyperparams['train_val_timeSteps'])
 
         # Character start signal loss
         sqErrLoss = torch.square(torch.sigmoid(transOut)-transLabel)

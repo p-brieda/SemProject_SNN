@@ -8,14 +8,12 @@
  outputDelay: 50
  directionality: 'unidirectional'
  loss: crossentropy
- learning_rate: 0.0001
- learning_rate_decay: 0.1
- learning_rate_decay_step: 100 #Set it to a very large number to prevent this to be used
+ learning_rate: 0.01
  dropout: 0.2
  var_dropout_s: 0
  var_dropout_t: 0
  zoneout: False
- weight_decay: 0.1
+ weight_decay: 0.01
  noisy_threshold: 0
 
 # Data augmentation

@@ -3,8 +3,9 @@ import numpy as np
 
 def evaluateSNNOutput(snnOutput, numBinsPerSentence, trueText, charDef, charStartThresh=0.3, charStartDelay=15):
     """
-    Converts the rnn output (character probabilities & a character start signal) into a discrete sentence and computes
+    Converts the snn output (character probabilities & a character start signal) into a discrete sentence and computes
     char/word error rates. Returns error counts and the decoded sentences.
+    Relatively to the original code here the dimensions are swapped: (B x T x C) -> (B x C x T)
     """  
     lgit = snnOutput[:,0:-1,:]
     charStart = snnOutput[:,-1,:]
@@ -50,7 +51,7 @@ def evaluateSNNOutput(snnOutput, numBinsPerSentence, trueText, charDef, charStar
 
 def decodeCharStr(logitMatrix, transSignal, transThresh, transDelay, numBinsPerTrial, charList):
     """
-    Converts the rnn output (character probabilities & a character start signal) into a discrete sentence.
+    Converts the snn output (character probabilities & a character start signal) into a discrete sentence.
     """
     decWords = []
     for v in range(logitMatrix.shape[0]):
