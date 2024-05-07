@@ -96,22 +96,24 @@ class DayInfiniteIterators:
 
 class create_Dataloaders:
     def __init__(self, manual, hyperparam, days, mode):
-        if not os.path.exists('Datasets\\Test_datasets.pth') or (manual and input('Do you want to recompute the testing data? (y/n) ') == 'y'):
-            self.datasets = []
-            testing_datasets_start = time.time()
+        self.datasets = []
+        if not os.path.exists('dataset\\prepared_test_data.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+            self.prepared_datasets = []
             for day in days:
                 prepared_data = PrepareData(hyperparam, days=[day])
+                self.prepared_datasets.append(prepared_data)
                 self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
-            testing_datasets_end = time.time()
-            print(f'Testing datasets preparation time: {testing_datasets_end - testing_datasets_start:.2f} s')
-            torch.save(self.datasets, 'Datasets\\Test_datasets.pth')
-            print('Testing datasets saved')
+            torch.save(self.prepared_datasets, 'dataset\\prepared_test_data.pth')
+            print('Testing data saved')
         else:
-            self.datasets = torch.load('Datasets\\Test_datasets.pth')
-            print('Testing datasets loaded')
+            self.prepared_datasets = torch.load('dataset\\prepared_test_data.pth')
+            for day in days:
+                self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
+            print('Testing data loaded')
 
         self.dataloaders = []
         self.viabledays = []
+        
 
         if mode == 'training' or mode == 'validation':
             Shuffle = True

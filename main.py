@@ -41,58 +41,26 @@ if __name__ == '__main__':
         print('Data loaded')
 
 
-
-    if not os.path.exists('Datasets\\Train_dataset.pth') or (manual_prep and input('Do you want to recompute the training data? (y/n) ') == 'y'):   
-        # loading the training dataset and creating a DataLoader
-        train_dataset_start = time.time()
-        Train_dataset = DataProcessing(hyperparams, prepared_data, mode='training')
-        train_dataset_end = time.time()
-        print(f'Training dataset preparation time: {train_dataset_end - train_dataset_start:.2f} s')
-        trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), hyperparams['batch_size'])
-        train_loader = DataLoader(Train_dataset, batch_sampler = trainDayBatch_Sampler , num_workers=2)
-        
-        # save the dataset
-        torch.save(Train_dataset, 'Datasets\\Train_dataset.pth')
-        print('Training dataset saved')
-
-    else:
-        Train_dataset = torch.load('Datasets\\Train_dataset.pth')
-        trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), hyperparams['batch_size'])
-        train_loader = DataLoader(Train_dataset, batch_sampler = trainDayBatch_Sampler , num_workers=2)
-        print('Training dataloader ready')
+  
+    # loading the training dataset and creating a DataLoader
+    Train_dataset = DataProcessing(hyperparams, prepared_data, mode='training')
+    trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), hyperparams['batch_size'])
+    train_loader = DataLoader(Train_dataset, batch_sampler = trainDayBatch_Sampler , num_workers=2)
+    print('Training dataloader ready')
 
 
-
-    if not os.path.exists('Datasets\\Val_dataset.pth') or (manual_prep and input('Do you want to recompute the validation data? (y/n) ') == 'y'):
-        # loading the validation dataset and creating a DataLoader
-        validation_dataset_start = time.time()
-        Val_dataset = DataProcessing(hyperparams, prepared_data, mode='validation')
-        validation_dataset_end = time.time()
-        print(f'Validation dataset preparation time: {validation_dataset_end - validation_dataset_start:.2f} s')
-        valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'])
-        val_loader = DataLoader(Val_dataset, batch_sampler = valDayBatch_Sampler, num_workers=2)
-        
-        # save the dataset
-        torch.save(Val_dataset, 'Datasets\\Val_dataset.pth')
-        print('Validation dataset saved')
-    else:
-        Val_dataset = torch.load('Datasets\\Val_dataset.pth')
-        valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'])
-        print('Validation dataloader ready')
+    # loading the validation dataset and creating a DataLoader
+    Val_dataset = DataProcessing(hyperparams, prepared_data, mode='validation')
+    valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'])
+    val_loader = DataLoader(Val_dataset, batch_sampler = valDayBatch_Sampler, num_workers=2)
+    print('Validation dataloader ready')
 
 
-
-    
     # loading the testing dataset and creating a DataLoader for each day
     Test_finite_loader = create_Dataloaders(manual_prep, hyperparams, days=np.arange(10), mode='testing')
     test_loaders = Test_finite_loader.getDataloaders()
     viable_test_days = Test_finite_loader.getViableDays()
-    
-    # save the dataloaders
-    torch.save(test_loaders, 'Dataloaders\\test_loaders.pth')
-    torch.save(viable_test_days, 'Dataloaders\\viable_test_days.pth')
     print('Testing dataloaders ready')
-
 
 
 
@@ -128,7 +96,7 @@ if __name__ == '__main__':
     # ---------- TRAINING AND VALIDATION ----------
     # Start timer
     training_start = time.time()
-    print(f"Number of training batches / epoch: {num_batches_per_epoch}")
+    print(f"Number of training batches/epoch: {num_batches_per_epoch}")
 
     for epoch in range(epochs):
         # Start epoch timer
