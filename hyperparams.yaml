@@ -1,8 +1,9 @@
 ---
 #Training
  batch_size: 30
- epochs: 10
+ epochs: 100
  rnnBinSize: 2
+ skipLen: 5
  smoothInputs: 1
  cvPart: 'HeldOutBlocks'
  outputDelay: 50

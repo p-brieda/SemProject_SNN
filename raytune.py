@@ -2,9 +2,12 @@ import torch
 import numpy as np
 import scipy.io
 import os
-import logging
 import sys
 import time
+from datetime import datetime
+import logging
+
+# Custom imports and torch imports
 from util import getDefaultHyperparams, extractBatch, trainModel, validateModel
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
@@ -14,15 +17,55 @@ from network import Net, RSNNet
 from SequenceLoss import SequenceLoss
 import torch.nn as nn
 
+# RayTune imports
+from ray import tune
+from ray.tune.schedulers import ASHAScheduler
+from ray.tune.search.optuna import OptunaSearch
+from ray_config import ray_config_dict
 
 
-if __name__ == '__main__':
+def main():
+
+    # SET AN EXPERIMENT NAME
+    EXPERIMENT_NAME = 'ANN_JL_new_params_6'
     hyperparams = getDefaultHyperparams()
-    hyperparams['batch_size'] = 50
+    hyperparams['batch_size'] = 20
     hyperparams['train_val_timeSteps'] = 1200
     
     hyperparams['n_channels'] = 192
     hyperparams['n_outputs'] = 32
+
+    # torch.set_num_threads = 3
+    config_name = "baseline"
+    ray_config = ray_config_dict(hyperparams, EXPERIMENT_NAME, config_name)
+
+    optuna_search = OptunaSearch()
+    ashas_scheduler = ASHAScheduler(grace_period=5, reduction_factor=5)
+
+    # CONFIGURE RAY TUNE
+    # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
+    #              When there is only random function for tune.choice, it indicates the samples into the space.
+    analysis = tune.run(train_tune_parallel,
+                        config=ray_config,
+                        resources_per_trial={'cpu': 1, 'gpu':1}, 
+                        # resources_per_trial={'cpu': 1, 'gpu':0.5},  # This is default setup
+                        max_concurrent_trials = 1,
+                        num_samples = 1,
+                        # search_alg=optuna_search,
+                        #scheduler=ashas_scheduler, 
+                        metric='eval_corr_mean',
+                        local_dir = '/usr/scratch2/sassauna3/liaoj/snn/log',
+                        mode='max',
+                        name=EXPERIMENT_NAME + '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
+                        )
+
+
+
+def train_tune_parallel(config):
+
+    hyperparams = config.pop('hyperparam')
+    for key, value in config.items():
+        hyperparams[key] = value
 
     #prepare logger
     logging.basicConfig(filename=hyperparams['output_report'],
@@ -123,14 +166,13 @@ if __name__ == '__main__':
     num_batches_per_epoch_train = len(train_loader)
     num_batches_per_epoch_val = len(val_loader)
     epochs = hyperparams['epochs']
-    tot_train_batches = num_batches_per_epoch_train * epochs
     logging.info(f"Number of training batches: {num_batches_per_epoch_train}")
     logging.info(f"Number of validation batches: {num_batches_per_epoch_val}")
     logging.info(f"Number of epochs: {epochs}")
 
     # Scheduler 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/100000))
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+    #scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/epochs))
+    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
     logging.info(f"Scheduler: StepLR(step_size=10, gamma=0.1)")
     logging.info(' ')
     
@@ -198,3 +240,7 @@ if __name__ == '__main__':
                 'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
                 'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
     torch.save(metrics, 'Model/metrics.pth')
+
+
+if __name__ == '__main__':
+    main()

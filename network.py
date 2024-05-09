@@ -47,17 +47,32 @@ class Net(nn.Module):
 
  
     def forward(self, x):
+
+        # x shape is [batch, neurons, timesteps]
+
         x = self.fc1(x)
         x = self.sp1(self.dr1(x))
         spikeCount1 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
+
         #x = self.fc2(x)
         #x = self.sp2(self.dr2(x))
         #spikeCount2 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
-        x = self.fc3(x)
+
+        # subsampling
+        timeSteps = x.shape[2] # number of time steps of the original data
+        x = self.fc3(x[:,:,0::self.hyperparam['skipLen']])
         x = self.sp3(self.dr3(x))
         spikeCount3 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
+
         x = self.fc4(x)
         x = self.nospike(x)
+
+        #Up-sample the outputs to the original time-resolution (needed b/c layer 2 is slower).
+        num_downsampled_steps = timeSteps // self.hyperparam['skipLen']
+        expIdx = torch.arange(num_downsampled_steps, device=self.hyperparam['device'])
+        expIdx = torch.repeat_interleave(expIdx, self.hyperparam['skipLen'])
+        x = torch.index_select(x, 2, expIdx)
+        
 
         return x,(spikeCount1,spikeCount3)
     

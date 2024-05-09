@@ -17,8 +17,14 @@ def getDefaultHyperparams():
     hyperparam_file = current_dir + '/hyperparams.yaml'
     with open(hyperparam_file) as file:
         hyperparams = yaml.load(file, Loader=SafeLoader)
-
+    
+    
     rootDir = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/handwritingBCIData/'
+    hyperparams['system'] = 'Windows'
+    # Handle different OS (Linux and Windows)
+    if not os.path.exists(rootDir): 
+        rootDir = os.path.expanduser('~') + '/Semester_project/handwritingBCIData/'
+        hyperparams['system'] = 'Linux'
 
     dataDirs = ['t5.2019.05.08','t5.2019.11.25','t5.2019.12.09','t5.2019.12.11','t5.2019.12.18',
             't5.2019.12.20','t5.2020.01.06','t5.2020.01.08','t5.2020.01.13','t5.2020.01.15']
@@ -305,13 +311,13 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         loss = criterion(output, targets, errWeights)
         loss.backward()
         optimizer.step()
+        scheduler.step()
         running_loss.append(loss.item())
 
         #if i%(np.ceil(num_batches/update_freq))==0:
         train_progress += "#"
         print(f"{train_progress} {loss.item():.3f}", end='\r')
 
-    scheduler.step()
     print("")
 
     return running_loss

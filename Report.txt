@@ -90,3 +90,120 @@
 16:10:30,249 --- Training time: 56.28 mins
 16:10:30,297 --- Model saved
 09:48:57,226 ---  
+16:23:10,751 ---  
+16:23:10,751 --- =========================================================================
+16:23:10,751 --- New run started with id 451123
+16:23:10,751 ---  
+16:27:01,613 ---  
+16:27:01,613 --- =========================================================================
+16:27:01,613 --- New run started with id 915640
+16:27:01,613 ---  
+16:27:12,968 --- Loading prepared data from dir
+16:27:12,968 --- Training dataloaders ready
+16:27:12,968 --- Validation dataloaders ready
+16:27:22,928 --- Testing dataloaders ready
+16:27:22,928 ---  
+16:27:23,0 --- Using cuda:0
+16:27:24,356 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+16:27:24,356 --- Number of training batches: 30
+16:27:24,356 --- Number of validation batches: 14
+16:27:24,356 --- Number of epochs: 10
+16:27:24,356 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+16:27:24,356 ---  
+16:27:24,356 --- Epoch: 1
+16:32:17,482 ---  
+16:32:17,482 --- =========================================================================
+16:32:17,482 --- New run started with id 434948
+16:32:17,482 ---  
+16:32:28,469 --- Loading prepared data from dir
+16:32:28,470 --- Training dataloaders ready
+16:32:28,471 --- Validation dataloaders ready
+16:32:37,397 --- Testing dataloaders ready
+16:32:37,397 ---  
+16:32:37,445 --- Using cuda:0
+16:32:38,362 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+16:32:38,362 --- Number of training batches: 30
+16:32:38,362 --- Number of validation batches: 14
+16:32:38,362 --- Number of epochs: 10
+16:32:38,362 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+16:32:38,362 ---  
+16:32:38,362 --- Epoch: 1
+16:41:59,731 ---  
+16:41:59,731 --- =========================================================================
+16:41:59,731 --- New run started with id 452988
+16:41:59,731 ---  
+16:42:09,147 --- Loading prepared data from dir
+16:42:09,147 --- Training dataloaders ready
+16:42:09,147 --- Validation dataloaders ready
+16:42:18,596 --- Testing dataloaders ready
+16:42:18,596 ---  
+16:42:18,641 --- Using cuda:0
+16:42:19,577 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+16:42:19,577 --- Number of training batches: 30
+16:42:19,577 --- Number of validation batches: 14
+16:42:19,577 --- Number of epochs: 10
+16:42:19,577 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+16:42:19,577 ---  
+16:42:19,577 --- Epoch: 1
+16:44:04,278 ---  
+16:44:04,278 --- =========================================================================
+16:44:04,278 --- New run started with id 538834
+16:44:04,278 ---  
+16:44:13,707 --- Loading prepared data from dir
+16:44:13,722 --- Training dataloaders ready
+16:44:13,722 --- Validation dataloaders ready
+16:44:22,723 --- Testing dataloaders ready
+16:44:22,723 ---  
+16:44:22,769 --- Using cuda:0
+16:44:23,680 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+16:44:23,680 --- Number of training batches: 30
+16:44:23,680 --- Number of validation batches: 14
+16:44:23,680 --- Number of epochs: 10
+16:44:23,680 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+16:44:23,680 ---  
+16:44:23,680 --- Epoch: 1
+16:45:03,155 ---  
+16:45:03,155 --- =========================================================================
+16:45:03,155 --- New run started with id 664905
+16:45:03,155 ---  
+16:45:12,355 --- Loading prepared data from dir
+16:45:12,355 --- Training dataloaders ready
+16:45:12,355 --- Validation dataloaders ready
+16:45:21,282 --- Testing dataloaders ready
+16:45:21,282 ---  
+16:45:21,315 --- Using cuda:0
+16:45:22,255 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+16:45:22,255 --- Number of training batches: 30
+16:45:22,255 --- Number of validation batches: 14
+16:45:22,255 --- Number of epochs: 10
+16:45:22,255 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+16:45:22,255 ---  
+16:45:22,255 --- Epoch: 1
+16:47:51,692 --- Epoch time: 149.44 s
+16:47:51,702 --- Train loss: 2.8342 | Validation loss: 2.8011 | Validation accuracy: 0.1502
+16:47:51,702 ---  
+16:47:51,702 --- Epoch: 2
+16:50:26,657 --- Epoch time: 154.95 s
+16:50:26,657 --- Train loss: 2.7936 | Validation loss: 2.6426 | Validation accuracy: 0.1682
+16:50:26,657 ---  
+16:50:26,657 --- Epoch: 3
+16:52:55,468 --- Epoch time: 148.81 s
+16:52:55,469 --- Train loss: 2.6431 | Validation loss: 2.8104 | Validation accuracy: 0.1678
+16:52:55,469 ---  
+16:52:55,469 --- Epoch: 4
+16:55:20,883 --- Epoch time: 145.41 s
+16:55:20,883 --- Train loss: 2.6178 | Validation loss: 2.7072 | Validation accuracy: 0.1640
+16:55:20,884 ---  
+16:55:20,884 --- Epoch: 5
+16:57:47,952 --- Epoch time: 147.07 s
+16:57:47,954 --- Train loss: 2.6719 | Validation loss: 2.7374 | Validation accuracy: 0.1568
+16:57:47,955 ---  
+16:57:47,955 --- Epoch: 6
+17:00:15,5 --- Epoch time: 147.05 s
+17:00:15,6 --- Train loss: 2.6401 | Validation loss: 2.8167 | Validation accuracy: 0.1636
+17:00:15,6 ---  
+17:00:15,7 --- Epoch: 7
+17:02:41,359 --- Epoch time: 146.35 s
+17:02:41,361 --- Train loss: 2.7423 | Validation loss: 2.6569 | Validation accuracy: 0.1498
+17:02:41,361 ---  
+17:02:41,361 --- Epoch: 8
