@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 30
- epochs: 1
+ epochs: 10
  rnnBinSize: 2
  smoothInputs: 1
  cvPart: 'HeldOutBlocks'

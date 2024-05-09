@@ -14,7 +14,7 @@ from Evaluation import evaluateSNNOutput, wer, decodeCharStr
 def getDefaultHyperparams():
 
     current_dir = os.getcwd()
-    hyperparam_file = current_dir + '\hyperparams.yaml'
+    hyperparam_file = current_dir + '/hyperparams.yaml'
     with open(hyperparam_file) as file:
         hyperparams = yaml.load(file, Loader=SafeLoader)
 
@@ -293,7 +293,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
     model.train()
     num_batches = len(train_loader)
 
-    running_loss = 0.0
+    running_loss = []
     train_progress = "Train progress: |"
     update_freq = 10 # fraction of batches before updating the progress bar
 
@@ -305,17 +305,16 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         loss = criterion(output, targets, errWeights)
         loss.backward()
         optimizer.step()
-        scheduler.step()
-        print(optimizer.param_groups[0]['lr'])
-        running_loss += loss.item()
+        running_loss.append(loss.item())
 
         #if i%(np.ceil(num_batches/update_freq))==0:
         train_progress += "#"
         print(f"{train_progress} {loss.item():.3f}", end='\r')
 
+    scheduler.step()
     print("")
 
-    return running_loss/num_batches
+    return running_loss
 
 
 
@@ -334,8 +333,8 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
     model.eval()
     num_batches = len(val_loader)
 
-    running_loss = 0.0
-    running_acc = 0.0
+    running_loss = []
+    running_acc = []
     val_progress = "Validation progress: |"
     update_freq = 10 # fraction of batches before updating the progress bar
 
@@ -344,10 +343,10 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
         data, targets, errWeights = extractBatch(trial_iter, device)
         output, spikecounts = model(data)
         loss = criterion(output, targets, errWeights)
-        running_loss += loss.item()
+        running_loss.append(loss.item())
         output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
         acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
-        running_acc += acc
+        running_acc.append(acc)
 
         #if i%(np.ceil(num_batches/update_freq))==0:
         val_progress += "#"
@@ -355,7 +354,7 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
 
     print("")
 
-    return running_loss/num_batches, running_acc/num_batches
+    return running_loss, running_acc
 
     
 

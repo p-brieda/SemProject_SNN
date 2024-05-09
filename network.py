@@ -49,18 +49,17 @@ class Net(nn.Module):
     def forward(self, x):
         x = self.fc1(x)
         x = self.sp1(self.dr1(x))
-        # x shape is [batch,neuron,timestep]
         spikeCount1 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
-        x = self.fc2(x)
-        x = self.sp2(self.dr2(x))
-        spikeCount2 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
+        #x = self.fc2(x)
+        #x = self.sp2(self.dr2(x))
+        #spikeCount2 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
         x = self.fc3(x)
         x = self.sp3(self.dr3(x))
         spikeCount3 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
         x = self.fc4(x)
         x = self.nospike(x)
 
-        return x,(spikeCount1,spikeCount2,spikeCount3)
+        return x,(spikeCount1,spikeCount3)
     
     def constrain(self, hyperparam):
         if(hyperparam['constrain_method']=='eval'):

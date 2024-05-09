@@ -1,0 +1,92 @@
+14:14:17,58 ---  
+14:14:17,58 --- =========================================================================
+14:14:17,58 --- New run started with id 394634
+14:14:17,58 ---  
+14:14:29,650 --- Loading prepared data from dir
+14:14:29,650 --- Training dataloaders ready
+14:14:29,650 --- Validation dataloaders ready
+14:14:42,335 --- Testing dataloaders ready
+14:14:42,335 ---  
+14:14:43,283 --- Using cuda:0
+14:14:45,17 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+14:14:45,17 --- Number of training batches: 30
+14:14:45,17 --- Number of validation batches: 14
+14:14:45,17 --- Number of epochs: 10
+14:14:45,17 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+14:14:45,17 ---  
+14:14:45,17 --- Epoch: 1
+14:21:09,756 --- Epoch time: 384.74 s
+14:21:09,760 --- Train loss: 2.9132 | Validation loss: 2.6502 | Validation accuracy: 0.1628
+14:21:09,760 ---  
+14:21:09,760 --- Epoch: 2
+14:27:42,615 --- Epoch time: 392.85 s
+14:27:42,615 --- Train loss: 2.6877 | Validation loss: 2.7718 | Validation accuracy: 0.1641
+14:27:42,615 ---  
+14:27:42,615 --- Epoch: 3
+14:34:12,290 --- Epoch time: 389.67 s
+14:34:12,290 --- Train loss: 2.6841 | Validation loss: 2.7798 | Validation accuracy: 0.1640
+14:34:12,290 ---  
+14:34:12,290 --- Epoch: 4
+14:40:36,337 --- Epoch time: 384.05 s
+14:40:36,337 --- Train loss: 2.6764 | Validation loss: 2.8196 | Validation accuracy: 0.1696
+14:40:36,337 ---  
+14:40:36,337 --- Epoch: 5
+15:13:13,759 ---  
+15:13:13,764 --- =========================================================================
+15:13:13,764 --- New run started with id 106885
+15:13:13,764 ---  
+15:13:37,992 --- Loading prepared data from dir
+15:13:38,75 --- Training dataloaders ready
+15:13:38,75 --- Validation dataloaders ready
+15:14:09,688 --- Testing dataloaders ready
+15:14:09,688 ---  
+15:14:09,843 --- Using cuda:0
+15:14:13,316 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+15:14:13,316 --- Number of training batches: 30
+15:14:13,316 --- Number of validation batches: 14
+15:14:13,316 --- Number of epochs: 10
+15:14:13,316 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+15:14:13,316 ---  
+15:14:13,316 --- Epoch: 1
+15:20:22,851 --- Epoch time: 369.53 s
+15:20:22,860 --- Train loss: 2.8744 | Validation loss: 2.7271 | Validation accuracy: 0.1649
+15:20:22,860 ---  
+15:20:22,860 --- Epoch: 2
+15:26:02,216 --- Epoch time: 339.35 s
+15:26:02,218 --- Train loss: 2.6846 | Validation loss: 2.7205 | Validation accuracy: 0.1640
+15:26:02,218 ---  
+15:26:02,219 --- Epoch: 3
+15:31:36,940 --- Epoch time: 334.72 s
+15:31:36,944 --- Train loss: 2.8073 | Validation loss: 2.8192 | Validation accuracy: 0.1653
+15:31:36,944 ---  
+15:31:36,945 --- Epoch: 4
+15:37:05,92 --- Epoch time: 328.15 s
+15:37:05,93 --- Train loss: 2.7013 | Validation loss: 2.7331 | Validation accuracy: 0.1633
+15:37:05,93 ---  
+15:37:05,93 --- Epoch: 5
+15:42:32,249 --- Epoch time: 327.15 s
+15:42:32,250 --- Train loss: 2.6762 | Validation loss: 2.7166 | Validation accuracy: 0.1553
+15:42:32,251 ---  
+15:42:32,251 --- Epoch: 6
+15:48:06,545 --- Epoch time: 334.29 s
+15:48:06,558 --- Train loss: 2.7253 | Validation loss: 2.7384 | Validation accuracy: 0.1655
+15:48:06,559 ---  
+15:48:06,559 --- Epoch: 7
+15:53:44,381 --- Epoch time: 337.82 s
+15:53:44,383 --- Train loss: 2.6478 | Validation loss: 2.7993 | Validation accuracy: 0.1644
+15:53:44,383 ---  
+15:53:44,384 --- Epoch: 8
+15:59:22,479 --- Epoch time: 338.10 s
+15:59:22,482 --- Train loss: 2.6635 | Validation loss: 2.8200 | Validation accuracy: 0.1207
+15:59:22,482 ---  
+15:59:22,482 --- Epoch: 9
+16:04:58,572 --- Epoch time: 336.09 s
+16:04:58,574 --- Train loss: 2.7490 | Validation loss: 2.6876 | Validation accuracy: 0.1653
+16:04:58,575 ---  
+16:04:58,576 --- Epoch: 10
+16:10:30,245 --- Epoch time: 331.67 s
+16:10:30,249 --- Train loss: 2.5507 | Validation loss: 2.6058 | Validation accuracy: 0.1691
+16:10:30,249 ---  
+16:10:30,249 --- Training time: 56.28 mins
+16:10:30,297 --- Model saved
+09:48:57,226 ---  

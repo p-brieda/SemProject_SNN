@@ -13,7 +13,7 @@ class SequenceLoss(nn.Module):
 
     def forward(self, logitOutput, batchTargets, batchWeight):
         # Handling the output delay
-        labels = batchTargets[:, :,  0:-self.hyperparams['outputDelay']]
+        labels = batchTargets[:, :, 0:-self.hyperparams['outputDelay']]
         logits = logitOutput[:, :, self.hyperparams['outputDelay']:]
         bw = batchWeight[:, 0:-self.hyperparams['outputDelay']]
 

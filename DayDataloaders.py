@@ -97,16 +97,16 @@ class DayInfiniteIterators:
 class create_Dataloaders:
     def __init__(self, manual, hyperparam, days, mode):
         self.datasets = []
-        if not os.path.exists('dataset\\prepared_test_data.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+        if not os.path.exists('dataset/prepared_test_data.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
             self.prepared_datasets = []
             for day in days:
                 prepared_data = PrepareData(hyperparam, days=[day])
                 self.prepared_datasets.append(prepared_data)
                 self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
-            torch.save(self.prepared_datasets, 'dataset\\prepared_test_data.pth')
+            torch.save(self.prepared_datasets, 'dataset/prepared_test_data.pth')
             print('Testing data saved')
         else:
-            self.prepared_datasets = torch.load('dataset\\prepared_test_data.pth')
+            self.prepared_datasets = torch.load('dataset/prepared_test_data.pth')
             for day in days:
                 self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
             print('Testing data loaded')
