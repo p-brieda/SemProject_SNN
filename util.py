@@ -300,6 +300,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
     num_batches = len(train_loader)
 
     running_loss = []
+    running_acc = []
     train_progress = "Train progress: |"
     update_freq = 10 # fraction of batches before updating the progress bar
 
@@ -314,13 +315,17 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         scheduler.step()
         running_loss.append(loss.item())
 
+        outputs, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+        acc = computeFrameAccuracy(outputs, targets, errWeights, hyperparams['outputDelay'])
+        running_acc.append(acc)
+
         #if i%(np.ceil(num_batches/update_freq))==0:
         train_progress += "#"
         print(f"{train_progress} {loss.item():.3f}", end='\r')
 
     print("")
 
-    return running_loss
+    return running_loss, running_acc
 
 
 

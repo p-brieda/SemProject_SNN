@@ -61,9 +61,11 @@ if __name__ == '__main__':
         print('Data prepared')
         logging.info(f"Preparing data file from raw data")
     else:
+        print('Loading prepared data from dir')
+        logging.info(f"Loading prepared data from dir")
         prepared_data = torch.load(prepared_data_dir + 'prepared_data.pth')
         print('Data loaded')
-        logging.info(f"Loading prepared data from dir")
+        
 
 
   
@@ -99,15 +101,15 @@ if __name__ == '__main__':
     device = torch.device('cpu')
     if torch.cuda.is_available():
         print('GPU available')
-        device = torch.device('cuda:0')
+        device = torch.device(hyperparams['device'])
     print(f'Device: {device}')
     logging.info(f"Using {device}")
 
     # Model creation
     model = Net(hyperparams)
-    if torch.cuda.device_count() > 1:
-        print(f"Using {torch.cuda.device_count()} GPUs")
-        model = nn.DataParallel(model)
+    #if torch.cuda.device_count() > 1:
+    #    print(f"Using {torch.cuda.device_count()} GPUs")
+    #    model = nn.DataParallel(model)
     model.to(device)
 
     # Loss function
@@ -147,6 +149,9 @@ if __name__ == '__main__':
     valloss_per_batch = []
     valloss_per_epoch = []
 
+    trainacc_per_batch = []
+    trainacc_per_epoch = []
+
     valacc_per_batch = []
     valacc_per_epoch = []
 
@@ -157,7 +162,7 @@ if __name__ == '__main__':
         logging.info(f"Epoch: {epoch+1}")
 
         # Training epoch
-        train_loss = trainModel(model, train_loader , optimizer, scheduler, criterion, hyperparams, device)
+        train_loss, train_acc = trainModel(model, train_loader , optimizer, scheduler, criterion, hyperparams, device)
         # Validation epoch
         val_loss, val_acc = validateModel(model, val_loader, criterion, hyperparams, device)
 
@@ -166,22 +171,27 @@ if __name__ == '__main__':
         print(f"Epoch time: {epoch_end - epoch_start:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
         logging.info(f"Epoch time: {epoch_end - epoch_start:.2f} s")
 
+        # Metrics saving
         trainloss_per_batch.append(train_loss)
+        trainacc_per_batch.append(train_acc)
         valloss_per_batch.append(val_loss)
         valacc_per_batch.append(val_acc)
 
         avg_train_loss_epoch = np.sum(train_loss)/num_batches_per_epoch_train
+        avg_train_acc_epoch = np.sum(train_acc)/num_batches_per_epoch_train
         avg_val_loss_epoch = np.sum(val_loss)/num_batches_per_epoch_val
         avg_val_acc_epoch = np.sum(val_acc)/num_batches_per_epoch_val
 
         trainloss_per_epoch.append(avg_train_loss_epoch)
+        trainacc_per_epoch.append(avg_train_acc_epoch)
         valloss_per_epoch.append(avg_val_loss_epoch)
         valacc_per_epoch.append(avg_val_acc_epoch)
 
         # Print results of the epoch
-        print(f"Train loss: {avg_train_loss_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {np.sum(val_acc)/num_batches_per_epoch_val:.4f}")
-        logging.info(f"Train loss: {avg_train_loss_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
+        print(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
+        logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
+
 
     training_end = time.time()
     print(f"Training time: {(training_end - training_start)/60:.2f} mins")
@@ -195,6 +205,7 @@ if __name__ == '__main__':
 
     # Save the metrics
     metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
+                'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
                 'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
                 'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
     torch.save(metrics, 'Model/metrics.pth')

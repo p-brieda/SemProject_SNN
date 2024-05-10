@@ -207,3 +207,33 @@
 17:02:41,361 --- Train loss: 2.7423 | Validation loss: 2.6569 | Validation accuracy: 0.1498
 17:02:41,361 ---  
 17:02:41,361 --- Epoch: 8
+10:53:05,739 ---  
+10:53:05,739 --- =========================================================================
+10:53:05,739 --- New run started with id 525137
+10:53:05,739 ---  
+10:53:07,653 --- Loading prepared data from dir
+10:53:17,771 --- Training dataloaders ready
+10:53:17,771 --- Validation dataloaders ready
+10:53:17,771 --- Loading prepared testing data from dir
+10:53:27,263 --- Testing dataloaders ready
+10:53:27,263 ---  
+10:53:27,324 --- Using cuda:0
+10:53:28,623 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+10:53:28,623 --- Number of training batches: 11
+10:53:28,623 --- Number of validation batches: 7
+10:53:28,623 --- Number of epochs: 100
+10:53:28,623 --- Scheduler: StepLR(step_size=10, gamma=0.1)
+10:53:28,623 ---  
+10:53:28,623 --- Epoch: 1
+10:56:54,284 --- Epoch time: 205.66 s
+10:56:54,284 --- Training loss: 2.9486 | Training accuracy: 0.10586257414384322 | Validation loss: 3.3072 | Validation accuracy: 0.0611
+10:56:54,284 ---  
+10:56:54,284 --- Epoch: 2
+11:00:19,934 --- Epoch time: 205.65 s
+11:00:19,934 --- Training loss: 2.7202 | Training accuracy: 0.16262356801466507 | Validation loss: 2.9285 | Validation accuracy: 0.0797
+11:00:19,934 ---  
+11:00:19,941 --- Epoch: 3
+11:03:40,558 --- Epoch time: 200.62 s
+11:03:40,559 --- Training loss: 2.7241 | Training accuracy: 0.1406726078553633 | Validation loss: 2.8814 | Validation accuracy: 0.1200
+11:03:40,559 ---  
+11:03:40,560 --- Epoch: 4

@@ -9,7 +9,7 @@
  outputDelay: 50
  directionality: 'unidirectional'
  loss: crossentropy
- learning_rate: 0.01
+ learning_rate: 0.001
  dropout: 0.2
  var_dropout_s: 0
  var_dropout_t: 0
@@ -26,7 +26,7 @@
 
 # Network
  batchnorm: 'tdBN'
- neuron_count: 256
+ neuron_count: 512
  use_bias: True
  steps: 10
  warmup_steps: 2

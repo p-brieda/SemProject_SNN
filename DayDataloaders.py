@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 import os
 import torch
 import time
+import logging
 
 # Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
@@ -107,6 +108,8 @@ class create_Dataloaders:
             torch.save(self.prepared_datasets, prepared_data_dir + 'prepared_test_data.pth')
             print('Testing data saved')
         else:
+            print('Loading prepared testing data from dir')
+            logging.info(f"Loading prepared testing data from dir")
             self.prepared_datasets = torch.load(prepared_data_dir + 'prepared_test_data.pth')
             for day in days:
                 self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
