@@ -401,3 +401,401 @@
 12:57:28,320 --- Batch 11/600 | Training loss: 2.837 | Training accuracy: 0.182
 13:00:13,700 --- Batch 21/600 | Training loss: 2.400 | Training accuracy: 0.165
 13:02:47,814 --- Batch 31/600 | Training loss: 2.912 | Training accuracy: 0.180
+13:11:33,810 ---  
+13:11:33,810 --- =========================================================================
+13:11:33,810 --- New run started with id 306177
+13:11:33,810 --- ID: 306177
+13:11:33,813 --- Infinite iterators strategy
+13:15:47,203 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+13:15:47,204 --- Training dataloaders ready
+13:15:47,212 ---  
+13:20:01,372 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+13:20:01,374 --- Validation dataloaders ready
+13:20:01,376 ---  
+13:24:39,935 --- Testing dataloaders ready
+13:24:39,936 ---  
+13:24:40,864 --- Using cuda:0
+13:24:54,29 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+13:24:54,30 --- Total training batches: 600
+13:24:54,30 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+13:24:54,32 ---  
+13:25:05,706 --- Batch 1/600 | Training loss: 3.6264 | Training accuracy: 0.0249
+13:25:06,639 --- Validation loss: 3.1047 | Validation accuracy: 0.0160
+13:26:29,302 --- Batch 11/600 | Training loss: 2.8791 | Training accuracy: 0.1582
+13:27:51,428 --- Batch 21/600 | Training loss: 2.6900 | Training accuracy: 0.1504
+13:29:04,456 --- Batch 31/600 | Training loss: 2.7404 | Training accuracy: 0.1675
+13:29:05,479 --- Validation loss: 2.7770 | Validation accuracy: 0.1267
+13:30:15,528 --- Batch 41/600 | Training loss: 2.8517 | Training accuracy: 0.1727
+13:31:37,40 --- Batch 51/600 | Training loss: 2.7256 | Training accuracy: 0.1573
+13:32:58,69 --- Batch 61/600 | Training loss: 2.3862 | Training accuracy: 0.1814
+13:32:59,38 --- Validation loss: 2.6972 | Validation accuracy: 0.1702
+13:34:17,652 --- Batch 71/600 | Training loss: 2.9401 | Training accuracy: 0.2031
+13:35:42,478 --- Batch 81/600 | Training loss: 2.4854 | Training accuracy: 0.2143
+13:37:09,63 --- Batch 91/600 | Training loss: 2.4946 | Training accuracy: 0.2444
+13:37:10,104 --- Validation loss: 2.9066 | Validation accuracy: 0.1465
+13:38:25,987 --- Batch 101/600 | Training loss: 2.3956 | Training accuracy: 0.2028
+13:39:47,298 --- Batch 111/600 | Training loss: 2.5174 | Training accuracy: 0.1978
+13:41:08,610 --- Batch 121/600 | Training loss: 2.4668 | Training accuracy: 0.2306
+13:41:09,540 --- Validation loss: 2.5154 | Validation accuracy: 0.1539
+13:42:30,931 --- Batch 131/600 | Training loss: 2.4338 | Training accuracy: 0.2413
+13:43:49,766 --- Batch 141/600 | Training loss: 2.3417 | Training accuracy: 0.2259
+13:45:10,526 --- Batch 151/600 | Training loss: 2.2850 | Training accuracy: 0.2524
+13:45:11,447 --- Validation loss: 2.3363 | Validation accuracy: 0.1381
+13:46:26,424 --- Batch 161/600 | Training loss: 2.3518 | Training accuracy: 0.2459
+13:47:51,334 --- Batch 171/600 | Training loss: 2.5328 | Training accuracy: 0.2674
+13:49:16,376 --- Batch 181/600 | Training loss: 2.3510 | Training accuracy: 0.2891
+13:49:17,277 --- Validation loss: 2.9704 | Validation accuracy: 0.1029
+13:50:32,762 --- Batch 191/600 | Training loss: 2.0786 | Training accuracy: 0.2781
+13:51:50,538 --- Batch 201/600 | Training loss: 2.3789 | Training accuracy: 0.2930
+13:53:12,421 --- Batch 211/600 | Training loss: 2.4135 | Training accuracy: 0.3033
+13:53:13,265 --- Validation loss: 3.0979 | Validation accuracy: 0.1705
+13:54:28,301 --- Batch 221/600 | Training loss: 2.3167 | Training accuracy: 0.3037
+13:55:50,91 --- Batch 231/600 | Training loss: 2.0943 | Training accuracy: 0.3337
+13:57:02,462 --- Batch 241/600 | Training loss: 2.1898 | Training accuracy: 0.3239
+13:57:03,388 --- Validation loss: 2.7058 | Validation accuracy: 0.1175
+14:09:20,175 ---  
+14:09:20,175 --- =========================================================================
+14:09:20,175 --- New run started with id 938171
+14:09:20,175 --- ID: 938171
+14:09:20,177 --- Infinite iterators strategy
+14:09:22,732 --- Loading prepared training data from dir
+14:10:33,434 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+14:10:33,437 --- Training dataloaders ready
+14:10:33,438 ---  
+14:10:33,440 --- Loading prepared validation data from dir
+14:11:53,87 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+14:11:53,88 --- Validation dataloaders ready
+14:11:53,88 ---  
+14:11:53,88 --- Loading prepared testing data from dir
+14:13:03,114 --- Testing dataloaders ready
+14:13:03,160 ---  
+14:13:03,508 --- Using cuda:0
+14:13:15,399 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+14:13:15,399 --- Total training batches: 600
+14:13:15,399 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+14:13:15,401 ---  
+14:13:27,499 --- Batch 1/600 | Training loss: 3.6220 | Training accuracy: 0.0274
+14:13:28,154 --- Validation loss: 3.3187 | Validation accuracy: 0.1654
+14:14:46,937 --- Batch 11/600 | Training loss: 2.8123 | Training accuracy: 0.1503
+14:16:08,555 --- Batch 21/600 | Training loss: 2.6821 | Training accuracy: 0.1731
+14:17:20,323 --- Batch 31/600 | Training loss: 2.7886 | Training accuracy: 0.1853
+14:17:21,54 --- Validation loss: 3.4346 | Validation accuracy: 0.1326
+14:18:43,805 --- Batch 41/600 | Training loss: 2.6028 | Training accuracy: 0.2101
+14:19:59,174 --- Batch 51/600 | Training loss: 2.5060 | Training accuracy: 0.1829
+14:21:19,500 --- Batch 61/600 | Training loss: 2.6635 | Training accuracy: 0.1918
+14:21:20,238 --- Validation loss: 2.2461 | Validation accuracy: 0.1461
+14:22:41,902 --- Batch 71/600 | Training loss: 2.1644 | Training accuracy: 0.1873
+14:24:00,140 --- Batch 81/600 | Training loss: 2.6749 | Training accuracy: 0.1618
+14:25:22,856 --- Batch 91/600 | Training loss: 2.3424 | Training accuracy: 0.2151
+14:25:23,582 --- Validation loss: 2.7266 | Validation accuracy: 0.1752
+14:26:42,381 --- Batch 101/600 | Training loss: 2.3940 | Training accuracy: 0.2325
+14:28:00,7 --- Batch 111/600 | Training loss: 2.4522 | Training accuracy: 0.2171
+14:29:21,220 --- Batch 121/600 | Training loss: 2.2333 | Training accuracy: 0.2187
+14:29:21,921 --- Validation loss: 2.9888 | Validation accuracy: 0.0967
+14:30:43,696 --- Batch 131/600 | Training loss: 2.2291 | Training accuracy: 0.2490
+14:32:05,211 --- Batch 141/600 | Training loss: 2.3012 | Training accuracy: 0.2516
+14:33:23,791 --- Batch 151/600 | Training loss: 2.4090 | Training accuracy: 0.2660
+14:33:24,539 --- Validation loss: 2.7168 | Validation accuracy: 0.1192
+14:34:36,673 --- Batch 161/600 | Training loss: 2.5514 | Training accuracy: 0.2366
+14:35:51,432 --- Batch 171/600 | Training loss: 2.0908 | Training accuracy: 0.2640
+14:37:12,931 --- Batch 181/600 | Training loss: 2.5753 | Training accuracy: 0.2821
+14:37:13,641 --- Validation loss: 2.3877 | Validation accuracy: 0.1561
+14:38:27,832 --- Batch 191/600 | Training loss: 2.3129 | Training accuracy: 0.2570
+14:39:46,444 --- Batch 201/600 | Training loss: 2.0406 | Training accuracy: 0.2699
+14:41:01,253 --- Batch 211/600 | Training loss: 2.2044 | Training accuracy: 0.2947
+14:41:01,937 --- Validation loss: 3.0215 | Validation accuracy: 0.1692
+14:42:17,275 --- Batch 221/600 | Training loss: 2.2658 | Training accuracy: 0.2995
+14:43:36,29 --- Batch 231/600 | Training loss: 2.1989 | Training accuracy: 0.3059
+14:44:55,843 --- Batch 241/600 | Training loss: 2.1246 | Training accuracy: 0.3370
+14:44:56,577 --- Validation loss: 2.8436 | Validation accuracy: 0.1329
+14:46:14,866 --- Batch 251/600 | Training loss: 2.2317 | Training accuracy: 0.3826
+14:47:31,574 --- Batch 261/600 | Training loss: 2.1508 | Training accuracy: 0.3708
+14:48:49,652 --- Batch 271/600 | Training loss: 1.8507 | Training accuracy: 0.3523
+14:48:50,391 --- Validation loss: 4.1461 | Validation accuracy: 0.0705
+14:50:14,580 --- Batch 281/600 | Training loss: 2.0446 | Training accuracy: 0.4278
+14:51:36,77 --- Batch 291/600 | Training loss: 1.9370 | Training accuracy: 0.3721
+14:52:53,921 --- Batch 301/600 | Training loss: 1.9338 | Training accuracy: 0.3895
+14:52:54,640 --- Validation loss: 2.9321 | Validation accuracy: 0.2501
+14:54:13,445 --- Batch 311/600 | Training loss: 1.6874 | Training accuracy: 0.4707
+14:55:34,274 --- Batch 321/600 | Training loss: 1.7763 | Training accuracy: 0.4525
+14:56:47,195 --- Batch 331/600 | Training loss: 2.2388 | Training accuracy: 0.4052
+14:56:47,888 --- Validation loss: 2.4191 | Validation accuracy: 0.1797
+14:58:03,673 --- Batch 341/600 | Training loss: 2.1829 | Training accuracy: 0.3498
+14:59:19,111 --- Batch 351/600 | Training loss: 1.9353 | Training accuracy: 0.4119
+15:00:42,506 --- Batch 361/600 | Training loss: 1.6677 | Training accuracy: 0.4726
+15:00:43,229 --- Validation loss: 2.0665 | Validation accuracy: 0.3827
+15:02:03,118 --- Batch 371/600 | Training loss: 1.8860 | Training accuracy: 0.4497
+15:03:22,547 --- Batch 381/600 | Training loss: 1.7688 | Training accuracy: 0.4599
+15:04:44,835 --- Batch 391/600 | Training loss: 1.5931 | Training accuracy: 0.5498
+15:04:45,759 --- Validation loss: 2.7105 | Validation accuracy: 0.1674
+15:06:09,177 --- Batch 401/600 | Training loss: 1.7833 | Training accuracy: 0.4933
+15:07:28,224 --- Batch 411/600 | Training loss: 1.6471 | Training accuracy: 0.5112
+15:08:41,436 --- Batch 421/600 | Training loss: 1.7223 | Training accuracy: 0.4982
+15:08:42,173 --- Validation loss: 2.4663 | Validation accuracy: 0.2180
+15:10:06,22 --- Batch 431/600 | Training loss: 1.5912 | Training accuracy: 0.5708
+15:11:27,664 --- Batch 441/600 | Training loss: 2.1159 | Training accuracy: 0.3820
+15:12:49,369 --- Batch 451/600 | Training loss: 1.7162 | Training accuracy: 0.5216
+15:12:50,93 --- Validation loss: 2.5509 | Validation accuracy: 0.2125
+15:14:09,77 --- Batch 461/600 | Training loss: 1.3661 | Training accuracy: 0.6070
+15:15:24,582 --- Batch 471/600 | Training loss: 1.4162 | Training accuracy: 0.5468
+15:16:49,311 --- Batch 481/600 | Training loss: 1.7818 | Training accuracy: 0.5265
+15:16:50,89 --- Validation loss: 2.8044 | Validation accuracy: 0.2061
+15:17:57,319 --- Batch 491/600 | Training loss: 1.4793 | Training accuracy: 0.6034
+15:19:16,148 --- Batch 501/600 | Training loss: 1.8665 | Training accuracy: 0.4510
+15:20:38,558 --- Batch 511/600 | Training loss: 1.8250 | Training accuracy: 0.5234
+15:20:39,291 --- Validation loss: 2.7068 | Validation accuracy: 0.1740
+15:21:58,645 --- Batch 521/600 | Training loss: 1.5148 | Training accuracy: 0.6106
+15:23:20,537 --- Batch 531/600 | Training loss: 1.5711 | Training accuracy: 0.5484
+15:24:42,874 --- Batch 541/600 | Training loss: 1.5096 | Training accuracy: 0.5841
+15:24:43,648 --- Validation loss: 1.8726 | Validation accuracy: 0.4275
+15:26:03,199 --- Batch 551/600 | Training loss: 1.5127 | Training accuracy: 0.5748
+15:27:29,474 --- Batch 561/600 | Training loss: 1.5198 | Training accuracy: 0.5962
+15:28:51,729 --- Batch 571/600 | Training loss: 1.8320 | Training accuracy: 0.4682
+15:28:52,632 --- Validation loss: 2.9568 | Validation accuracy: 0.2192
+15:30:14,898 --- Batch 581/600 | Training loss: 1.3506 | Training accuracy: 0.6295
+15:31:30,34 --- Batch 591/600 | Training loss: 1.4186 | Training accuracy: 0.6338
+15:32:42,579 --- Training time: 79.45 mins
+15:32:43,166 --- Model saved
+15:52:09,915 ---  
+15:52:09,915 --- =========================================================================
+15:52:09,915 --- New run started with id 124813
+15:52:09,917 --- Epochs strategy
+15:52:09,919 ---  
+15:52:12,512 --- Loading prepared data from dir
+15:53:40,913 --- Training dataloaders ready
+15:53:40,914 --- Validation dataloaders ready
+15:53:40,914 --- Loading prepared testing data from dir
+15:55:39,766 --- Testing dataloaders ready
+15:55:39,766 ---  
+15:55:39,799 --- Using cuda:2
+15:55:55,525 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+15:55:55,526 --- Number of training batches: 11
+15:55:55,527 --- Number of validation batches: 7
+15:55:55,529 --- Number of epochs: 50
+15:55:55,530 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+15:55:55,533 ---  
+15:55:55,538 --- Epoch: 1
+15:58:12,778 --- Epoch time: 137.24 s
+15:58:12,779 --- Training loss: 2.9183 | Training accuracy: 0.14324230497533624 | Validation loss: 3.3128 | Validation accuracy: 0.0771
+15:58:12,781 ---  
+15:58:12,784 --- Epoch: 2
+16:00:24,967 --- Epoch time: 132.18 s
+16:00:24,968 --- Training loss: 2.6446 | Training accuracy: 0.15863138979131525 | Validation loss: 2.9077 | Validation accuracy: 0.1352
+16:00:24,969 ---  
+16:00:24,972 --- Epoch: 3
+16:02:38,889 --- Epoch time: 133.92 s
+16:02:38,892 --- Training loss: 2.6789 | Training accuracy: 0.16960460489446466 | Validation loss: 3.0288 | Validation accuracy: 0.1413
+16:02:38,895 ---  
+16:02:38,897 --- Epoch: 4
+16:04:52,717 --- Epoch time: 133.82 s
+16:04:52,717 --- Training loss: 2.5443 | Training accuracy: 0.17897640575062146 | Validation loss: 2.7996 | Validation accuracy: 0.1678
+16:04:52,721 ---  
+16:04:52,724 --- Epoch: 5
+16:07:06,305 --- Epoch time: 133.58 s
+16:07:06,306 --- Training loss: 2.6199 | Training accuracy: 0.18012253804640335 | Validation loss: 2.5598 | Validation accuracy: 0.1597
+16:07:06,307 ---  
+16:07:06,309 --- Epoch: 6
+16:09:19,640 --- Epoch time: 133.33 s
+16:09:19,641 --- Training loss: 2.5161 | Training accuracy: 0.19154919277537952 | Validation loss: 2.6527 | Validation accuracy: 0.1569
+16:09:19,644 ---  
+16:09:19,645 --- Epoch: 7
+16:11:32,862 --- Epoch time: 133.22 s
+16:11:32,862 --- Training loss: 2.5405 | Training accuracy: 0.1876740022139116 | Validation loss: 2.7445 | Validation accuracy: 0.1631
+16:11:32,865 ---  
+16:11:32,867 --- Epoch: 8
+16:13:46,525 --- Epoch time: 133.66 s
+16:13:46,526 --- Training loss: 2.5097 | Training accuracy: 0.19396400451660156 | Validation loss: 2.6926 | Validation accuracy: 0.1474
+16:13:46,529 ---  
+16:13:46,531 --- Epoch: 9
+16:16:00,291 --- Epoch time: 133.76 s
+16:16:00,292 --- Training loss: 2.5018 | Training accuracy: 0.20146482641046698 | Validation loss: 2.6157 | Validation accuracy: 0.1598
+16:16:00,294 ---  
+16:16:00,296 --- Epoch: 10
+16:18:13,745 --- Epoch time: 133.45 s
+16:18:13,746 --- Training loss: 2.4047 | Training accuracy: 0.20265312628312546 | Validation loss: 2.6411 | Validation accuracy: 0.1446
+16:18:13,747 ---  
+16:18:13,751 --- Epoch: 11
+16:20:27,784 --- Epoch time: 134.03 s
+16:20:27,788 --- Training loss: 2.5107 | Training accuracy: 0.20801511677828702 | Validation loss: 2.7097 | Validation accuracy: 0.1613
+16:20:27,790 ---  
+16:20:27,793 --- Epoch: 12
+16:22:41,917 --- Epoch time: 134.12 s
+16:22:41,924 --- Training loss: 2.5131 | Training accuracy: 0.21097922325134277 | Validation loss: 2.7297 | Validation accuracy: 0.1425
+16:22:41,926 ---  
+16:22:41,928 --- Epoch: 13
+16:24:53,156 --- Epoch time: 131.23 s
+16:24:53,157 --- Training loss: 2.4269 | Training accuracy: 0.21929983659224075 | Validation loss: 2.6365 | Validation accuracy: 0.1524
+16:24:53,159 ---  
+16:24:53,161 --- Epoch: 14
+16:27:06,341 --- Epoch time: 133.18 s
+16:27:06,342 --- Training loss: 2.4120 | Training accuracy: 0.22512752359563654 | Validation loss: 2.6461 | Validation accuracy: 0.1481
+16:27:06,344 ---  
+16:27:06,344 --- Epoch: 15
+16:29:20,375 --- Epoch time: 134.03 s
+16:29:20,375 --- Training loss: 2.3979 | Training accuracy: 0.23375621708956631 | Validation loss: 2.7141 | Validation accuracy: 0.1648
+16:29:20,377 ---  
+16:29:20,379 --- Epoch: 16
+16:31:34,659 --- Epoch time: 134.28 s
+16:31:34,660 --- Training loss: 2.3435 | Training accuracy: 0.24469171870838513 | Validation loss: 2.8117 | Validation accuracy: 0.1496
+16:31:34,662 ---  
+16:31:34,665 --- Epoch: 17
+16:33:51,44 --- Epoch time: 136.38 s
+16:33:51,45 --- Training loss: 2.3378 | Training accuracy: 0.2510773918845437 | Validation loss: 2.7004 | Validation accuracy: 0.1507
+16:33:51,48 ---  
+16:33:51,50 --- Epoch: 18
+16:36:06,186 --- Epoch time: 135.14 s
+16:36:06,187 --- Training loss: 2.3512 | Training accuracy: 0.26227363673123444 | Validation loss: 2.6643 | Validation accuracy: 0.1556
+16:36:06,190 ---  
+16:36:06,192 --- Epoch: 19
+16:38:20,668 --- Epoch time: 134.48 s
+16:38:20,668 --- Training loss: 2.2473 | Training accuracy: 0.27884411811828613 | Validation loss: 2.7651 | Validation accuracy: 0.1457
+16:38:20,670 ---  
+16:38:20,672 --- Epoch: 20
+16:40:34,698 --- Epoch time: 134.02 s
+16:40:34,713 --- Training loss: 2.2537 | Training accuracy: 0.2934893478046764 | Validation loss: 2.6841 | Validation accuracy: 0.1910
+16:40:34,716 ---  
+16:40:34,719 --- Epoch: 21
+16:42:50,726 --- Epoch time: 136.01 s
+16:42:50,727 --- Training loss: 2.3226 | Training accuracy: 0.3002536513588645 | Validation loss: 2.7259 | Validation accuracy: 0.1823
+16:42:50,729 ---  
+16:42:50,733 --- Epoch: 22
+16:45:03,829 --- Epoch time: 133.10 s
+16:45:03,830 --- Training loss: 2.2130 | Training accuracy: 0.3244097016074441 | Validation loss: 2.7477 | Validation accuracy: 0.1520
+16:45:03,832 ---  
+16:45:03,836 --- Epoch: 23
+16:47:19,730 --- Epoch time: 135.89 s
+16:47:19,731 --- Training loss: 2.1077 | Training accuracy: 0.341872128573331 | Validation loss: 2.8098 | Validation accuracy: 0.1732
+16:47:19,734 ---  
+16:47:19,737 --- Epoch: 24
+16:49:36,308 --- Epoch time: 136.57 s
+16:49:36,310 --- Training loss: 2.0999 | Training accuracy: 0.35779077356511896 | Validation loss: 2.8288 | Validation accuracy: 0.1447
+16:49:36,314 ---  
+16:49:36,317 --- Epoch: 25
+16:51:53,14 --- Epoch time: 136.70 s
+16:51:53,27 --- Training loss: 2.0000 | Training accuracy: 0.3747169754721902 | Validation loss: 2.8505 | Validation accuracy: 0.2046
+16:51:53,28 ---  
+16:51:53,30 --- Epoch: 26
+16:54:08,839 --- Epoch time: 135.81 s
+16:54:08,840 --- Training loss: 2.1159 | Training accuracy: 0.39421783794056287 | Validation loss: 2.8675 | Validation accuracy: 0.1989
+16:54:08,847 ---  
+16:54:08,852 --- Epoch: 27
+16:56:24,322 --- Epoch time: 135.47 s
+16:56:24,323 --- Training loss: 2.0177 | Training accuracy: 0.3961241028525613 | Validation loss: 2.7110 | Validation accuracy: 0.2063
+16:56:24,324 ---  
+16:56:24,326 --- Epoch: 28
+16:58:39,914 --- Epoch time: 135.59 s
+16:58:39,915 --- Training loss: 1.9594 | Training accuracy: 0.41625998236916284 | Validation loss: 2.5501 | Validation accuracy: 0.2077
+16:58:39,917 ---  
+16:58:39,919 --- Epoch: 29
+17:00:55,969 --- Epoch time: 136.05 s
+17:00:55,970 --- Training loss: 1.9741 | Training accuracy: 0.42006046121770685 | Validation loss: 2.8703 | Validation accuracy: 0.2047
+17:00:55,971 ---  
+17:00:55,974 --- Epoch: 30
+17:03:08,835 --- Epoch time: 132.86 s
+17:03:08,836 --- Training loss: 1.9295 | Training accuracy: 0.43192989175969904 | Validation loss: 2.8253 | Validation accuracy: 0.2022
+17:03:08,838 ---  
+17:03:08,840 --- Epoch: 31
+17:05:20,122 --- Epoch time: 131.28 s
+17:05:20,123 --- Training loss: 1.8529 | Training accuracy: 0.43873314423994586 | Validation loss: 2.7762 | Validation accuracy: 0.2067
+17:05:20,125 ---  
+17:05:20,128 --- Epoch: 32
+17:07:33,517 --- Epoch time: 133.39 s
+17:07:33,518 --- Training loss: 1.9144 | Training accuracy: 0.4506934772838246 | Validation loss: 2.8321 | Validation accuracy: 0.2043
+17:07:33,521 ---  
+17:07:33,524 --- Epoch: 33
+17:09:46,873 --- Epoch time: 133.35 s
+17:09:46,874 --- Training loss: 1.7645 | Training accuracy: 0.46431420066139917 | Validation loss: 2.8205 | Validation accuracy: 0.2035
+17:09:46,878 ---  
+17:09:46,880 --- Epoch: 34
+17:11:59,264 --- Epoch time: 132.38 s
+17:11:59,267 --- Training loss: 1.8284 | Training accuracy: 0.475316351110285 | Validation loss: 2.7602 | Validation accuracy: 0.2050
+17:11:59,268 ---  
+17:11:59,270 --- Epoch: 35
+17:14:12,628 --- Epoch time: 133.36 s
+17:14:12,629 --- Training loss: 1.7000 | Training accuracy: 0.4820610393177379 | Validation loss: 2.7310 | Validation accuracy: 0.2271
+17:14:12,631 ---  
+17:14:12,633 --- Epoch: 36
+17:16:28,325 --- Epoch time: 135.69 s
+17:16:28,326 --- Training loss: 1.7489 | Training accuracy: 0.4863048033280806 | Validation loss: 2.7492 | Validation accuracy: 0.2352
+17:16:28,328 ---  
+17:16:28,330 --- Epoch: 37
+17:18:44,362 --- Epoch time: 136.03 s
+17:18:44,362 --- Training loss: 1.7297 | Training accuracy: 0.49477538195523346 | Validation loss: 2.7886 | Validation accuracy: 0.2158
+17:18:44,364 ---  
+17:18:44,366 --- Epoch: 38
+17:21:00,161 --- Epoch time: 135.79 s
+17:21:00,162 --- Training loss: 1.6819 | Training accuracy: 0.5129548853093927 | Validation loss: 2.7880 | Validation accuracy: 0.2321
+17:21:00,166 ---  
+17:21:00,168 --- Epoch: 39
+17:23:15,965 --- Epoch time: 135.80 s
+17:23:15,967 --- Training loss: 1.6908 | Training accuracy: 0.5108499960465864 | Validation loss: 2.7488 | Validation accuracy: 0.1982
+17:23:15,972 ---  
+17:23:15,975 --- Epoch: 40
+17:25:32,474 --- Epoch time: 136.50 s
+17:25:32,475 --- Training loss: 1.7451 | Training accuracy: 0.5162059610540216 | Validation loss: 2.8021 | Validation accuracy: 0.2373
+17:25:32,482 ---  
+17:25:32,483 --- Epoch: 41
+17:27:48,279 --- Epoch time: 135.80 s
+17:27:48,280 --- Training loss: 1.6561 | Training accuracy: 0.5244869318875399 | Validation loss: 2.6378 | Validation accuracy: 0.2404
+17:27:48,284 ---  
+17:27:48,289 --- Epoch: 42
+17:30:03,403 --- Epoch time: 135.11 s
+17:30:03,404 --- Training loss: 1.6414 | Training accuracy: 0.5246176286177202 | Validation loss: 2.6618 | Validation accuracy: 0.2265
+17:30:03,405 ---  
+17:30:03,408 --- Epoch: 43
+17:32:18,772 --- Epoch time: 135.36 s
+17:32:18,773 --- Training loss: 1.6406 | Training accuracy: 0.5321509187871759 | Validation loss: 2.7084 | Validation accuracy: 0.2292
+17:32:18,776 ---  
+17:32:18,781 --- Epoch: 44
+17:34:35,829 --- Epoch time: 137.05 s
+17:34:35,830 --- Training loss: 1.5733 | Training accuracy: 0.5373802185058594 | Validation loss: 2.6338 | Validation accuracy: 0.2464
+17:34:35,837 ---  
+17:34:35,837 --- Epoch: 45
+17:36:51,612 --- Epoch time: 135.77 s
+17:36:51,613 --- Training loss: 1.6003 | Training accuracy: 0.548040433363481 | Validation loss: 3.0077 | Validation accuracy: 0.2239
+17:36:51,614 ---  
+17:36:51,617 --- Epoch: 46
+17:39:07,906 --- Epoch time: 136.29 s
+17:39:07,907 --- Training loss: 1.5874 | Training accuracy: 0.5561764457009055 | Validation loss: 2.7264 | Validation accuracy: 0.2329
+17:39:07,908 ---  
+17:39:07,910 --- Epoch: 47
+17:41:23,623 --- Epoch time: 135.71 s
+17:41:23,624 --- Training loss: 1.5642 | Training accuracy: 0.5612149672074751 | Validation loss: 2.7862 | Validation accuracy: 0.2341
+17:41:23,627 ---  
+17:41:23,629 --- Epoch: 48
+17:43:39,83 --- Epoch time: 135.45 s
+17:43:39,84 --- Training loss: 1.5619 | Training accuracy: 0.5642686757174405 | Validation loss: 2.9299 | Validation accuracy: 0.2218
+17:43:39,85 ---  
+17:43:39,90 --- Epoch: 49
+17:45:52,867 --- Epoch time: 133.78 s
+17:45:52,867 --- Training loss: 1.5359 | Training accuracy: 0.5668861649253152 | Validation loss: 2.7228 | Validation accuracy: 0.2345
+17:45:52,869 ---  
+17:45:52,871 --- Epoch: 50
+17:48:06,808 --- Epoch time: 133.94 s
+17:48:06,809 --- Training loss: 1.5067 | Training accuracy: 0.5717607844959606 | Validation loss: 2.6965 | Validation accuracy: 0.2213
+17:48:06,813 ---  
+17:48:06,815 --- Training time: 112.19 mins
+17:48:07,160 --- Model saved
+17:48:07,188 --- Metrics saved
+17:49:52,384 ---  
+17:49:52,384 --- =========================================================================
+17:49:52,384 --- New run started with id 164328
+17:49:52,384 --- ID: 164328
+17:49:52,384 --- Infinite iterators strategy
+17:52:00,266 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+17:52:00,266 --- Training dataloaders ready
+17:52:00,266 ---  
+17:52:00,266 --- Loading prepared data from dir
+17:52:09,49 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+17:52:09,49 --- Validation dataloaders ready
+17:52:09,49 ---  
+17:52:09,49 --- Loading prepared data from dir
+17:52:21,62 --- Testing dataloaders ready
+17:52:21,78 ---  
+17:52:21,189 --- Using cuda:0
+17:52:23,347 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+17:52:23,347 --- Total training batches: 600
+17:52:23,347 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+17:52:23,347 ---  
+17:52:35,197 --- Batch 1/600 | Training loss: 3.4778 | Training accuracy: 0.0235
+17:52:42,61 --- Validation loss: 3.5984 | Validation accuracy: 0.0161
