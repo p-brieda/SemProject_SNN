@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 30
- epochs: 100
+ epochs: 500
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
@@ -18,9 +18,9 @@
  noisy_threshold: 0
 
 # Data augmentation
- constantOffsetSD: 0.6
- randomWalkSD: 0.02
- whiteNoiseSD: 0.02
+ constantOffsetSD: 0.0
+ randomWalkSD: 0.0
+ whiteNoiseSD: 0.0
  train_val_timeSteps: 1200
  test_timeSteps: 7500
 
