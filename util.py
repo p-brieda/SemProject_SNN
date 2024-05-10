@@ -7,6 +7,7 @@ from datetime import datetime
 import yaml
 from yaml.loader import SafeLoader
 from Evaluation import evaluateSNNOutput, wer, decodeCharStr
+import logging
 
 
 
@@ -404,7 +405,7 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
 
             if i%(np.ceil(num_batches/100))==0:
                     test_progress += "#"
-                    print(f"{test_progress} {loss.item():.3f}", end='\r')
+                    print(f"{test_progress} {loss.item():.4f}", end='\r')
 
             outputs = np.append(output)
         
@@ -469,6 +470,72 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
     print('Character error rate: %1.2f%%' % float(cer))
     print('Word error rate: %1.2f%%' % float(wer))
 
+
+
+def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_iterators, viable_val_days, optimizer, scheduler, criterion, hyperparams, device):
+
+    running_train_loss = []
+    running_train_acc = []
+    running_val_loss = []
+    running_val_acc = []
+    update_freq = 10 # number of batches before updating the progress bar
+    progress = "Batch progress: |"
+
+    for i in range(num_batches):
+
+        model.train()
+        random_day = np.random.choice(np.arange(len(viable_train_days)))
+        trial_iter = train_iterators.getNextIter(random_day)
+        data, targets, errWeights = extractBatch(trial_iter, device)
+        optimizer.zero_grad()
+        output, spikecounts = model(data)
+        loss = criterion(output, targets, errWeights)
+        loss.backward()
+        optimizer.step()
+        scheduler.step()
+
+        running_train_loss.append(loss.item())
+        output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+        train_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+        running_train_acc.append(train_acc)
+
+        progress += "#"
+        if i > 0: print(progress, end='\r')
+
+        if i % update_freq == 0:
+            print("")
+            progress = "Batch progress: |"
+            print(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
+            logging.info(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
+
+        if i % hyperparams['batchesPerVal'] == 0:
+            model.eval()
+            # get index of a random day
+            random_val_day = np.random.choice(np.arange(len(viable_val_days)))
+            val_iter = val_iterators.getNextIter(random_val_day)
+            data, targets, errWeights = extractBatch(val_iter, device)
+            output, spikecounts = model(data)
+            val_loss = criterion(output, targets, errWeights)
+            output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+            val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+
+            running_val_loss.append(val_loss.item())
+            running_val_acc.append(val_acc)
+
+
+            print(f"Validation loss: {val_loss.item():.4f} | Validation accuracy: {val_acc:.4f}")
+            logging.info(f"Validation loss: {val_loss.item():.4f} | Validation accuracy: {val_acc:.4f}")
+
+    return running_train_loss, running_train_acc, running_val_loss, running_val_acc
+
+        
+        
+
+
+
+
+
+    
 
 
 

@@ -237,3 +237,167 @@
 11:03:40,559 --- Training loss: 2.7241 | Training accuracy: 0.1406726078553633 | Validation loss: 2.8814 | Validation accuracy: 0.1200
 11:03:40,559 ---  
 11:03:40,560 --- Epoch: 4
+12:14:43,348 ---  
+12:14:43,348 --- =========================================================================
+12:14:43,349 --- New run started with id 908027
+12:14:43,350 ---  
+12:14:45,267 --- Loading prepared data from dir
+12:14:54,34 --- Loading prepared testing data from dir
+12:15:04,753 --- Training dataloaders ready
+12:15:04,753 ---  
+12:15:04,753 --- Loading prepared testing data from dir
+12:15:20,579 --- Validation dataloaders ready
+12:15:20,579 ---  
+12:15:20,579 --- Loading prepared testing data from dir
+12:15:36,55 --- Testing dataloaders ready
+12:15:36,55 ---  
+12:15:36,181 --- Using cuda:0
+12:15:38,70 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:15:38,70 --- Total training batches: 600
+12:15:38,70 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:15:38,70 ---  
+12:16:09,250 ---  
+12:16:09,250 --- =========================================================================
+12:16:09,250 --- New run started with id 222127
+12:16:09,250 ---  
+12:16:10,769 --- Loading prepared data from dir
+12:16:18,159 --- Loading prepared testing data from dir
+12:16:27,113 --- Training dataloaders ready
+12:16:27,113 ---  
+12:16:27,113 --- Loading prepared testing data from dir
+12:16:41,32 --- Validation dataloaders ready
+12:16:41,33 ---  
+12:16:41,33 --- Loading prepared testing data from dir
+12:16:56,104 --- Testing dataloaders ready
+12:16:56,104 ---  
+12:16:56,189 --- Using cuda:0
+12:16:57,649 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:16:57,649 --- Total training batches: 600
+12:16:57,649 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:16:57,649 ---  
+12:20:08,411 ---  
+12:20:08,411 --- =========================================================================
+12:20:08,411 --- New run started with id 438532
+12:20:08,411 ---  
+12:20:12,262 --- Loading prepared data from dir
+12:20:19,578 --- Loading prepared testing data from dir
+12:20:28,902 --- Training dataloaders ready
+12:20:28,902 ---  
+12:20:28,902 --- Loading prepared testing data from dir
+12:20:40,647 --- Validation dataloaders ready
+12:20:40,647 ---  
+12:20:40,662 --- Loading prepared testing data from dir
+12:20:53,696 --- Testing dataloaders ready
+12:20:53,699 ---  
+12:20:53,831 --- Using cuda:0
+12:20:55,784 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:20:55,784 --- Total training batches: 600
+12:20:55,784 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:20:55,784 ---  
+12:30:50,263 ---  
+12:30:50,264 --- =========================================================================
+12:30:50,264 --- New run started with id 590950
+12:30:50,264 ---  
+12:33:00,571 --- Training dataloaders ready
+12:33:00,571 ---  
+12:35:18,805 --- Validation dataloaders ready
+12:35:18,805 ---  
+12:37:41,819 --- Testing dataloaders ready
+12:37:41,819 ---  
+12:37:41,920 --- Using cuda:0
+12:37:43,282 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:37:43,282 --- Total training batches: 600
+12:37:43,282 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:37:43,282 ---  
+12:39:08,478 ---  
+12:39:08,478 --- =========================================================================
+12:39:08,478 --- New run started with id 439961
+12:39:08,478 ---  
+12:39:11,756 --- Loading prepared training data from dir
+12:39:19,284 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+12:39:19,306 --- Training dataloaders ready
+12:39:19,306 ---  
+12:39:19,306 --- Loading prepared validation data from dir
+12:39:29,83 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+12:39:29,83 --- Validation dataloaders ready
+12:39:29,83 ---  
+12:39:29,83 --- Loading prepared testing data from dir
+12:39:40,969 --- Testing dataloaders ready
+12:39:40,969 ---  
+12:39:41,34 --- Using cuda:0
+12:39:43,75 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:39:43,75 --- Total training batches: 600
+12:39:43,75 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:39:43,75 ---  
+12:40:01,119 --- Batch 1/600 | Training loss: 3.421 | Training accuracy: 0.032
+12:46:39,622 ---  
+12:46:39,622 --- =========================================================================
+12:46:39,622 --- New run started with id 335772
+12:46:39,622 ---  
+12:46:41,885 --- Loading prepared training data from dir
+12:46:50,755 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+12:46:50,755 --- Training dataloaders ready
+12:46:50,755 ---  
+12:46:50,755 --- Loading prepared validation data from dir
+12:47:00,593 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+12:47:00,593 --- Validation dataloaders ready
+12:47:00,593 ---  
+12:47:00,593 --- Loading prepared testing data from dir
+12:47:12,15 --- Testing dataloaders ready
+12:47:12,16 ---  
+12:47:12,120 --- Using cuda:0
+12:47:14,4 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:47:14,4 --- Total training batches: 600
+12:47:14,4 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:47:14,5 ---  
+12:47:33,9 --- Batch 1/600 | Training loss: 3.452 | Training accuracy: 0.097
+12:47:33,749 --- Validation loss: 3.418 | Validation accuracy: 0.018
+12:49:37,617 ---  
+12:49:37,617 --- =========================================================================
+12:49:37,617 --- New run started with id 218091
+12:49:37,617 --- ID: 218091
+12:49:37,617 --- Infinite iterators strategy
+12:49:39,647 --- Loading prepared training data from dir
+12:49:46,887 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+12:49:46,887 --- Training dataloaders ready
+12:49:46,887 ---  
+12:49:46,892 --- Loading prepared validation data from dir
+12:49:55,763 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+12:49:55,763 --- Validation dataloaders ready
+12:49:55,763 ---  
+12:49:55,763 --- Loading prepared testing data from dir
+12:50:06,559 --- Testing dataloaders ready
+12:50:06,559 ---  
+12:50:06,670 --- Using cuda:0
+12:50:08,232 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:50:08,232 --- Total training batches: 600
+12:50:08,232 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:50:08,232 ---  
+12:50:27,101 --- Batch 1/600 | Training loss: 3.436 | Training accuracy: 0.053
+12:50:27,813 --- Validation loss: 3.894 | Validation accuracy: 0.000
+12:53:47,28 ---  
+12:53:47,28 --- =========================================================================
+12:53:47,28 --- New run started with id 810262
+12:53:47,28 --- ID: 810262
+12:53:47,28 --- Infinite iterators strategy
+12:53:48,857 --- Loading prepared training data from dir
+12:53:55,842 --- Viable training days: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+12:53:55,842 --- Training dataloaders ready
+12:53:55,842 ---  
+12:53:55,842 --- Loading prepared validation data from dir
+12:54:04,685 --- Viable validation days: [1, 2, 3, 4, 5, 6, 7]
+12:54:04,685 --- Validation dataloaders ready
+12:54:04,685 ---  
+12:54:04,685 --- Loading prepared testing data from dir
+12:54:15,504 --- Testing dataloaders ready
+12:54:15,504 ---  
+12:54:15,565 --- Using cuda:0
+12:54:16,826 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False)
+12:54:16,826 --- Total training batches: 600
+12:54:16,826 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))
+12:54:16,826 ---  
+12:54:35,646 --- Batch 1/600 | Training loss: 3.848 | Training accuracy: 0.035
+12:54:36,441 --- Validation loss: 3.481 | Validation accuracy: 0.049
+12:57:28,320 --- Batch 11/600 | Training loss: 2.837 | Training accuracy: 0.182
+13:00:13,700 --- Batch 21/600 | Training loss: 2.400 | Training accuracy: 0.165
+13:02:47,814 --- Batch 31/600 | Training loss: 2.912 | Training accuracy: 0.180

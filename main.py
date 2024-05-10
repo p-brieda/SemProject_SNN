@@ -37,6 +37,7 @@ if __name__ == '__main__':
     logging.info("=========================================================================")
     logging.info(f"New run started with id {hyperparams['id']}")
     print(f"ID: {hyperparams['id']}", end=' ')
+    logging.info('Epochs strategy')
     logging.info(' ')
 
 
@@ -133,7 +134,7 @@ if __name__ == '__main__':
     # Scheduler 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/100000))
     #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-    logging.info(f"Scheduler: StepLR(step_size=10, gamma=0.1)")
+    logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))")
     logging.info(' ')
     
     
@@ -209,3 +210,5 @@ if __name__ == '__main__':
                 'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
                 'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
     torch.save(metrics, 'Model/metrics.pth')
+    print('Metrics saved')
+    logging.info('Metrics saved')

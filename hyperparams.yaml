@@ -2,6 +2,7 @@
 #Training
  batch_size: 30
  epochs: 500
+ batchesPerVal: 30
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1

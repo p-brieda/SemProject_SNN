@@ -99,21 +99,21 @@ class create_Dataloaders:
     def __init__(self, manual, hyperparam, days, mode):
         self.datasets = []
         prepared_data_dir = hyperparam['prepared_data_dir']
-        if not os.path.exists(prepared_data_dir + 'prepared_test_data.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+        if not os.path.exists(prepared_data_dir + 'prepared_' + mode + '_data.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
             self.prepared_datasets = []
             for day in days:
                 prepared_data = PrepareData(hyperparam, days=[day])
                 self.prepared_datasets.append(prepared_data)
                 self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
-            torch.save(self.prepared_datasets, prepared_data_dir + 'prepared_test_data.pth')
-            print('Testing data saved')
+            torch.save(self.prepared_datasets, prepared_data_dir + 'prepared_' + mode + '_data.pth')
+            print(mode + ' data saved')
         else:
-            print('Loading prepared testing data from dir')
-            logging.info(f"Loading prepared testing data from dir")
-            self.prepared_datasets = torch.load(prepared_data_dir + 'prepared_test_data.pth')
+            print(f"Loading prepared {mode} data from dir")
+            logging.info(f"Loading prepared {mode} data from dir")
+            self.prepared_datasets = torch.load(prepared_data_dir + 'prepared_' + mode + '_data.pth')
             for day in days:
                 self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
-            print('Testing data loaded')
+            print(f"{mode} data loaded")
 
         self.dataloaders = []
         self.viabledays = []
