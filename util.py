@@ -512,24 +512,26 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
             print(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
             logging.info(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
 
-        if i % hyperparams['batchesPerVal'] == 0:
+        if i % hyperparams['updateVal'] == 0:
             model.eval()
             with torch.no_grad():
-                # get index of a random day
-                random_val_day = np.random.choice(np.arange(len(viable_val_days)))
-                val_iter = val_iterators.getNextIter(random_val_day)
-                data, targets, errWeights = extractBatch(val_iter, device)
-                output, spikecounts = model(data)
-                val_loss = criterion(output, targets, errWeights)
-                output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
-                val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+                for i in range(hyperparams['batchesPerVal']):
+                    # get index of a random day
+                    random_val_day = np.random.choice(np.arange(len(viable_val_days)))
+                    val_iter = val_iterators.getNextIter(random_val_day)
+                    data, targets, errWeights = extractBatch(val_iter, device)
+                    output, spikecounts = model(data)
+                    val_loss = criterion(output, targets, errWeights)
+                    output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+                    val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
 
-                running_val_loss.append(val_loss.item())
-                running_val_acc.append(val_acc)
+                    running_val_loss.append(val_loss.item())
+                    running_val_acc.append(val_acc)
 
-
-            print(f"Validation loss: {val_loss.item():.4f} | Validation accuracy: {val_acc:.4f}")
-            logging.info(f"Validation loss: {val_loss.item():.4f} | Validation accuracy: {val_acc:.4f}")
+            avg_val_loss = np.sum(running_val_loss[-hyperparams['batchesPerVal']:])/hyperparams['batchesPerVal']
+            avg_val_acc = np.sum(running_val_acc[-hyperparams['batchesPerVal']:])/hyperparams['batchesPerVal']
+            print(f"Validation loss: {avg_val_loss:.4f} | Validation accuracy: {avg_val_acc:.4f}")
+            logging.info(f"Validation loss: {avg_val_loss:.4f} | Validation accuracy: {avg_val_acc:.4f}")
 
     return running_train_loss, running_train_acc, running_val_loss, running_val_acc
 
