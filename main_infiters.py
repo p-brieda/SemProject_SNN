@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
     # save metrics
     metrics = {'train_loss': train_loss, 'train_acc': train_acc, 'val_loss': val_loss, 'val_acc': val_acc}
-    torch.save(metrics, 'Model/metrics.pth')
+    torch.save(metrics, 'Model/metrics_inf.pth')
     
 
     # Save the model

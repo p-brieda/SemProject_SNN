@@ -350,19 +350,21 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
     val_progress = "Validation progress: |"
     update_freq = 10 # fraction of batches before updating the progress bar
 
-    for i, trial_iter in enumerate(val_loader):
+    with torch.no_grad():
 
-        data, targets, errWeights = extractBatch(trial_iter, device)
-        output, spikecounts = model(data)
-        loss = criterion(output, targets, errWeights)
-        running_loss.append(loss.item())
-        output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
-        acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
-        running_acc.append(acc)
+        for i, trial_iter in enumerate(val_loader):
 
-        #if i%(np.ceil(num_batches/update_freq))==0:
-        val_progress += "#"
-        print(f"{val_progress} {loss.item():.3f}", end='\r')
+            data, targets, errWeights = extractBatch(trial_iter, device)
+            output, spikecounts = model(data)
+            loss = criterion(output, targets, errWeights)
+            running_loss.append(loss.item())
+            output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+            acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+            running_acc.append(acc)
+
+            #if i%(np.ceil(num_batches/update_freq))==0:
+            val_progress += "#"
+            print(f"{val_progress} {loss.item():.3f}", end='\r')
 
     print("")
 
@@ -379,83 +381,85 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
 
     model.eval()
 
-    for idx_loader in range(len(test_loaders)):
+    with torch.no_grad():
 
-        print(f"Testing on day {hyperparams['dataDirs'][viable_test_days[idx_loader]]}")
+        for idx_loader in range(len(test_loaders)):
 
-        test_loader = iter(test_loaders[idx_loader])
-        num_batches = len(test_loaders[idx_loader])
+            print(f"Testing on day {hyperparams['dataDirs'][viable_test_days[idx_loader]]}")
 
-        running_loss = 0.0
-        running_acc = 0.0
-        test_progress = "Testing progress: |"
+            test_loader = iter(test_loaders[idx_loader])
+            num_batches = len(test_loaders[idx_loader])
 
-        outputs = []
+            running_loss = 0.0
+            running_acc = 0.0
+            test_progress = "Testing progress: |"
 
-        for i in range(num_batches):
+            outputs = []
 
-            trial_iter = next(test_loader)
-            data, targets, errWeights = extractBatch(trial_iter, device)
-            output, spikecounts = model(data)
-            loss = model.loss(output, targets, errWeights)
-            running_loss += loss.item()
-            output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
-            acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
-            running_acc += acc
+            for i in range(num_batches):
 
-            if i%(np.ceil(num_batches/100))==0:
-                    test_progress += "#"
-                    print(f"{test_progress} {loss.item():.4f}", end='\r')
+                trial_iter = next(test_loader)
+                data, targets, errWeights = extractBatch(trial_iter, device)
+                output, spikecounts = model(data)
+                loss = model.loss(output, targets, errWeights)
+                running_loss += loss.item()
+                output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+                acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+                running_acc += acc
 
-            outputs = np.append(output)
-        
+                if i%(np.ceil(num_batches/100))==0:
+                        test_progress += "#"
+                        print(f"{test_progress} {loss.item():.4f}", end='\r')
 
-        outputs = np.concatenate(outputs, axis=0)
-        num_sentences = outputs.shape[0]
-        predictions[hyperparams['dataDirs'][viable_test_days[idx_loader]]] = outputs
-        
-
-        # Character error rate and Word error rate computation
-        dayIdx = viable_test_days[idx_loader]
-        cvPartFile = scipy.io.loadmat(hyperparams['cvPartitionFile_'+str(dayIdx)])
-        testIdx = cvPartFile[hyperparams['dataDirs'][dayIdx]+'_test']
-                                                
-        sentenceDat = scipy.io.loadmat(hyperparams['sentencesFile_'+str(dayIdx)])
-
-        errCounts, decSentences = evaluateSNNOutput(outputs, sentenceDat['numTimeBinsPerSentence'][testIdx] / hyperparams['rnnBinSize'] + hyperparams['outputDelay'],
-                                                    sentenceDat['sentencePrompt'][testIdx],
-                                                    charDef,
-                                                    charStartThresh=0.3,
-                                                    charsStartDelay=15)
-        
-        #save decoded sentences, character error rates and word error rates for later summarization
-        saveDict = {}
-        saveDict['decSentences'] = decSentences
-        saveDict['trueSentences'] = sentenceDat['sentencePrompt'][testIdx]
-        saveDict.update(errCounts)
-                
-        valAcc = 100*(1 - np.sum(errCounts['charErrors']) / np.sum(errCounts['charCounts']))
-
-        print('Character error rate for this session: %1.2f%%' % float(100-valAcc))
-        print('Below is the decoder output for all validation sentences in this session:')
-        print(' ')
-        
-        for v in np.arange(num_sentences):
-            trueText = sentenceDat['sentencePrompt'][testIdx][v,0][0]
-            trueText = trueText.replace('>',' ')
-            trueText = trueText.replace('~','.')
-            trueText = trueText.replace('#','')
+                outputs = np.append(output)
             
-            print('#' + str(v) + ':')
-            print('True:    ' + trueText)
-            print('Decoded: ' + decSentences[v])
+
+            outputs = np.concatenate(outputs, axis=0)
+            num_sentences = outputs.shape[0]
+            predictions[hyperparams['dataDirs'][viable_test_days[idx_loader]]] = outputs
+            
+
+            # Character error rate and Word error rate computation
+            dayIdx = viable_test_days[idx_loader]
+            cvPartFile = scipy.io.loadmat(hyperparams['cvPartitionFile_'+str(dayIdx)])
+            testIdx = cvPartFile[hyperparams['dataDirs'][dayIdx]+'_test']
+                                                    
+            sentenceDat = scipy.io.loadmat(hyperparams['sentencesFile_'+str(dayIdx)])
+
+            errCounts, decSentences = evaluateSNNOutput(outputs, sentenceDat['numTimeBinsPerSentence'][testIdx] / hyperparams['rnnBinSize'] + hyperparams['outputDelay'],
+                                                        sentenceDat['sentencePrompt'][testIdx],
+                                                        charDef,
+                                                        charStartThresh=0.3,
+                                                        charsStartDelay=15)
+            
+            #save decoded sentences, character error rates and word error rates for later summarization
+            saveDict = {}
+            saveDict['decSentences'] = decSentences
+            saveDict['trueSentences'] = sentenceDat['sentencePrompt'][testIdx]
+            saveDict.update(errCounts)
+                    
+            valAcc = 100*(1 - np.sum(errCounts['charErrors']) / np.sum(errCounts['charCounts']))
+
+            print('Character error rate for this session: %1.2f%%' % float(100-valAcc))
+            print('Below is the decoder output for all validation sentences in this session:')
             print(' ')
-    
-        #put together all the error counts from all sessions so we can compute overall error rates below
-        allErrCounts.append(np.stack([errCounts['charCounts'],
-                                errCounts['charErrors'],
-                                errCounts['wordCounts'],
-                                errCounts['wordErrors']],axis=0).T)
+            
+            for v in np.arange(num_sentences):
+                trueText = sentenceDat['sentencePrompt'][testIdx][v,0][0]
+                trueText = trueText.replace('>',' ')
+                trueText = trueText.replace('~','.')
+                trueText = trueText.replace('#','')
+                
+                print('#' + str(v) + ':')
+                print('True:    ' + trueText)
+                print('Decoded: ' + decSentences[v])
+                print(' ')
+        
+            #put together all the error counts from all sessions so we can compute overall error rates below
+            allErrCounts.append(np.stack([errCounts['charCounts'],
+                                    errCounts['charErrors'],
+                                    errCounts['wordCounts'],
+                                    errCounts['wordErrors']],axis=0).T)
         
     
     # Save predicitons
@@ -510,17 +514,18 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
 
         if i % hyperparams['batchesPerVal'] == 0:
             model.eval()
-            # get index of a random day
-            random_val_day = np.random.choice(np.arange(len(viable_val_days)))
-            val_iter = val_iterators.getNextIter(random_val_day)
-            data, targets, errWeights = extractBatch(val_iter, device)
-            output, spikecounts = model(data)
-            val_loss = criterion(output, targets, errWeights)
-            output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
-            val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
+            with torch.no_grad():
+                # get index of a random day
+                random_val_day = np.random.choice(np.arange(len(viable_val_days)))
+                val_iter = val_iterators.getNextIter(random_val_day)
+                data, targets, errWeights = extractBatch(val_iter, device)
+                output, spikecounts = model(data)
+                val_loss = criterion(output, targets, errWeights)
+                output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
+                val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
 
-            running_val_loss.append(val_loss.item())
-            running_val_acc.append(val_acc)
+                running_val_loss.append(val_loss.item())
+                running_val_acc.append(val_acc)
 
 
             print(f"Validation loss: {val_loss.item():.4f} | Validation accuracy: {val_acc:.4f}")
