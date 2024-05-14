@@ -61,6 +61,7 @@ class Net(nn.Module):
         # subsampling
         timeSteps = x.shape[2] # number of time steps of the original data
         x = self.fc3(x[:,:,0::self.hyperparam['skipLen']])
+        #x = self.fc3(x)
         x = self.sp3(self.dr3(x))
         spikeCount3 = torch.mean(x, dim=(-1)).to(self.hyperparam['device'])
 
@@ -74,7 +75,7 @@ class Net(nn.Module):
         x = torch.index_select(x, 2, expIdx)
         
 
-        return x,(spikeCount1,spikeCount3)
+        return x,(spikeCount1, spikeCount3)
     
     def constrain(self, hyperparam):
         if(hyperparam['constrain_method']=='eval'):
@@ -147,7 +148,7 @@ class RSNNet(nn.Module):
     def forward(self, x):
         steps = x.shape[-1]
         n_batches = x.shape[0]
-        out = torch.zeros((n_batches,2,steps), device=x.device)
+        out = torch.zeros((n_batches,self.hyperparam['n_outputs'],steps), device=x.device)
 
         self.sp1.reset(batch_size = n_batches)
         self.sp2.reset(batch_size = n_batches)
@@ -173,6 +174,8 @@ class RSNNet(nn.Module):
             spikes1 = self.sp1(x_ + xr)
             spikeCount1 += spikes1
 
+            if step % self.hyperparam['skipLen'] != 0:
+                continue
 
             x_ = self.fc2(spikes1)
             xr = self.frc2(self.sp2.sp)
@@ -186,17 +189,20 @@ class RSNNet(nn.Module):
             spikeCount2 += spikes2
 
 
-            x_ = self.fc3(spikes2)
-            xr = self.frc3(self.sp3.sp)
-            x_ = self.dr3(x_)
-            if(self.hyperparam['batchnorm'] != 'none'):
-                x_ = self.bn3(x_)
-            spikes3 = self.sp3(x_ + xr)
-            spikeCount3 = torch.mean(spikes2, dim=(-1)).to(self.hyperparam['device'])
+            #x_ = self.fc3(spikes2)
+            #xr = self.frc3(self.sp3.sp)
+            #x_ = self.dr3(x_)
+            #if(self.hyperparam['batchnorm'] != 'none'):
+            #    x_ = self.bn3(x_)
+            #spikes3 = self.sp3(x_ + xr)
+            #spikeCount3 = torch.mean(spikes2, dim=(-1)).to(self.hyperparam['device'])
 
             x_ = self.fc4(spikes2)
             o = self.nospike(x_)
-            out[...,step] = o
+            
+            # expaning o with last dim = 1
+            o = o.unsqueeze(-1)
+            out[...,step: step + self.hyperparam['skipLen']] = o
 
 
         if self.training and self.hyperparam['batchnorm'] == 'tdBN':

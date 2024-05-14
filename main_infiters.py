@@ -19,8 +19,6 @@ import torch.nn as nn
 
 if __name__ == '__main__':
     hyperparams = getDefaultHyperparams()
-    hyperparams['batch_size'] = 50
-    hyperparams['train_val_timeSteps'] = 1200
     
     hyperparams['n_channels'] = 192
     hyperparams['n_outputs'] = 32
@@ -107,6 +105,12 @@ if __name__ == '__main__':
     #    model = nn.DataParallel(model)
     model.to(device)
 
+    tot_train_batches = 550
+    logging.info(f"Total training batches: {tot_train_batches}")
+    logging.info(f"Batch size: {hyperparams['batch_size']}")
+    logging.info(f"Time steps: {hyperparams['train_val_timeSteps']}")
+    logging.info(f"White noise: {hyperparams['whiteNoiseSD']}")
+
     # Loss function
     criterion = SequenceLoss(hyperparams)
 
@@ -117,8 +121,6 @@ if __name__ == '__main__':
     logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
     
-    tot_train_batches = 600
-    logging.info(f"Total training batches: {tot_train_batches}")
 
     # Scheduler 
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/100000))
@@ -151,11 +153,11 @@ if __name__ == '__main__':
 
     # save metrics
     metrics = {'train_loss': train_loss, 'train_acc': train_acc, 'val_loss': val_loss, 'val_acc': val_acc}
-    torch.save(metrics, 'Model/metrics_inf.pth')
+    torch.save(metrics, f"trainOutputs/metrics_inf_{hyperparams['id']}.pth")
     
 
     # Save the model
-    torch.save(model.state_dict(), 'Model/model.pth')
+    torch.save(model.state_dict(), f"Model/model_inf_{hyperparams['id']}.pth")
     print('Model saved')
     logging.info('Model saved')
 

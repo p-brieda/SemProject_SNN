@@ -8,6 +8,7 @@ import yaml
 from yaml.loader import SafeLoader
 from Evaluation import evaluateSNNOutput, wer, decodeCharStr
 import logging
+from scipy.ndimage import gaussian_filter1d
 
 
 
@@ -45,9 +46,6 @@ def getDefaultHyperparams():
   
     #this seed is set for numpy and tensorflow when the class is initialized                             
     hyperparams['seed'] = datetime.now().microsecond
-
-
-    print("Please set:", "/n","hyperparams['outputDir']")
 
     return hyperparams
 
@@ -259,10 +257,44 @@ def binTensor(data, binSize):
     return binnedTensor
 
 
-def extractBatch(trial_iter, device):
+def gaussianSmoothing(data, kernelSD):
+    """
+    Applies a 1D gaussian smoothing operation with tensorflow to smooth the data along the time axis.
+    """
+
+    inp = np.zeros([100])
+    inp[50] = 1
+    gaussKernel = gaussian_filter1d(inp, kernelSD)
+
+    validIdx = np.argwhere(gaussKernel > 0.01)
+    gaussKernel = gaussKernel[validIdx].flatten()
+    gaussKernel = torch.from_numpy(gaussKernel / np.sum(gaussKernel)).float()
+    gaussKernel = gaussKernel.view(1, 1, -1)
+
+    # Initialize output tensor
+    smoothedData = torch.zeros_like(data)
+    
+    # Apply convolution for each feature across the batch
+    for i in range(data.shape[1]):  # Loop over each feature channel N
+        feature_data = data[:, i, :].unsqueeze(1)  # Reshape to [B, 1, T]
+        
+        smoothed_feature = torch.nn.functional.conv1d(feature_data, gaussKernel, padding=(gaussKernel.shape[-1] - 1) // 2)
+        
+        smoothedData[:, i, :] = smoothed_feature.squeeze(1)
+
+    return smoothedData
+
+    return smoothedData
+
+
+
+
+def extractBatch(trial_iter, hyperparams, device):
 
     neural_data = trial_iter['neuralData']
     neural_data = neural_data.permute(0, 2, 1)
+    if hyperparams['smoothInputs']:
+        neural_data = gaussianSmoothing(neural_data, kernelSD=4/hyperparams['rnnBinSize'])
     neural_data = neural_data.to(device)
 
     targets = trial_iter['targets']
@@ -295,7 +327,6 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
-
 def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams, device):
     model.train()
     num_batches = len(train_loader)
@@ -307,7 +338,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
 
     for i, trial_iter in enumerate(train_loader):
 
-        data, targets, errWeights = extractBatch(trial_iter, device)
+        data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
         optimizer.zero_grad()
         output, spikecounts = model(data)
         loss = criterion(output, targets, errWeights)
@@ -320,9 +351,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         acc = computeFrameAccuracy(outputs, targets, errWeights, hyperparams['outputDelay'])
         running_acc.append(acc)
 
-        #if i%(np.ceil(num_batches/update_freq))==0:
-        train_progress += "#"
-        print(f"{train_progress} {loss.item():.3f}", end='\r')
+        print(f"{train_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
     print("")
 
@@ -354,17 +383,15 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
 
         for i, trial_iter in enumerate(val_loader):
 
-            data, targets, errWeights = extractBatch(trial_iter, device)
+            data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
             output, spikecounts = model(data)
             loss = criterion(output, targets, errWeights)
             running_loss.append(loss.item())
             output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
             acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
             running_acc.append(acc)
-
-            #if i%(np.ceil(num_batches/update_freq))==0:
-            val_progress += "#"
-            print(f"{val_progress} {loss.item():.3f}", end='\r')
+    
+            print(f"{val_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
     print("")
 
@@ -373,7 +400,7 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
     
 
 
-def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
+def testModel(model, test_loaders, viable_test_days ,criterion, hyperparams, device):
 
     charDef = getHandwritingCharacterDefinitions()
     allErrCounts = []
@@ -399,23 +426,24 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
             for i in range(num_batches):
 
                 trial_iter = next(test_loader)
-                data, targets, errWeights = extractBatch(trial_iter, device)
+                data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
                 output, spikecounts = model(data)
-                loss = model.loss(output, targets, errWeights)
+                loss = criterion(output, targets, errWeights)
                 running_loss += loss.item()
                 output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
                 acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
                 running_acc += acc
 
-                if i%(np.ceil(num_batches/100))==0:
-                        test_progress += "#"
-                        print(f"{test_progress} {loss.item():.4f}", end='\r')
+                #if i%(np.ceil(num_batches/100))==0:
+                test_progress += "#"
+                print(f"{test_progress} {loss.item():.4f}", end='\r')
 
-                outputs = np.append(output)
+                outputs.append(output)
             
 
             outputs = np.concatenate(outputs, axis=0)
             num_sentences = outputs.shape[0]
+            print(f"Number of sentences of the day: {num_sentences}")
             predictions[hyperparams['dataDirs'][viable_test_days[idx_loader]]] = outputs
             
 
@@ -430,7 +458,7 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
                                                         sentenceDat['sentencePrompt'][testIdx],
                                                         charDef,
                                                         charStartThresh=0.3,
-                                                        charsStartDelay=15)
+                                                        charStartDelay=15)
             
             #save decoded sentences, character error rates and word error rates for later summarization
             saveDict = {}
@@ -463,7 +491,7 @@ def testModel(model, test_loaders, viable_test_days ,hyperparams, device):
         
     
     # Save predicitons
-    predictions_file = hyperparams['outputDir'] + 'predictions.mat'
+    predictions_file = 'inferOutputs' + 'predictions.mat'
     scipy.io.savemat(predictions_file, predictions)
 
     # Summarize character error rate and word error rate across all sessions
@@ -490,7 +518,7 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
         model.train()
         random_day = np.random.choice(np.arange(len(viable_train_days)))
         trial_iter = train_iterators.getNextIter(random_day)
-        data, targets, errWeights = extractBatch(trial_iter, device)
+        data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
         optimizer.zero_grad()
         output, spikecounts = model(data)
         loss = criterion(output, targets, errWeights)
@@ -519,7 +547,7 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
                     # get index of a random day
                     random_val_day = np.random.choice(np.arange(len(viable_val_days)))
                     val_iter = val_iterators.getNextIter(random_val_day)
-                    data, targets, errWeights = extractBatch(val_iter, device)
+                    data, targets, errWeights = extractBatch(val_iter, hyperparams, device)
                     output, spikecounts = model(data)
                     val_loss = criterion(output, targets, errWeights)
                     output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)

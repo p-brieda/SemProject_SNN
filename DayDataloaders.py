@@ -101,6 +101,7 @@ class create_Dataloaders:
         prepared_data_dir = hyperparam['prepared_data_dir']
 
         if not os.path.exists(prepared_data_dir + 'prepared_data_days.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+            print('Preparing data')
             self.prepared_datasets = []
             for day in days:
                 prepared_data = PrepareData(hyperparam, days=[day])

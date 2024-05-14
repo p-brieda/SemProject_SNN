@@ -1,9 +1,9 @@
 ---
 #Training
- batch_size: 30
- epochs: 500
+ batch_size: 50
+ epochs: 3
  batchesPerVal: 10
- updateVal: 30
+ updateVal: 20
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
@@ -12,22 +12,22 @@
  directionality: 'unidirectional'
  loss: crossentropy
  learning_rate: 0.001
- dropout: 0.2
+ dropout: 0
  var_dropout_s: 0
  var_dropout_t: 0
  zoneout: False
- weight_decay: 0.01
- noisy_threshold: 0
+ weight_decay: 0.005
+ noisy_threshold: 0.2
 
 # Data augmentation
- constantOffsetSD: 0.0
- randomWalkSD: 0.0
- whiteNoiseSD: 0.0
+ constantOffsetSD: 0
+ randomWalkSD: 0
+ whiteNoiseSD: 0.6
  train_val_timeSteps: 1200
  test_timeSteps: 7500
 
 # Network
- batchnorm: 'tdBN'
+ batchnorm: 'none'
  neuron_count: 512
  use_bias: True
  steps: 10
@@ -83,21 +83,19 @@
 #Reporting
  experiment_name: 'baseline_fp_run'
  loss_steps: 100 #how often to report the loss
- output_report: Report.txt
+ output_report: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Report.txt'
  output_plots: ./
  output_csv: ./
- results_dir: ./
+ results_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/trainOutputs/'
  if_plot: False
 
 #General
  seed: 'random' #use 'random' for a non-deterministic seed
  device: cuda:0
- trials: 1
- 5-fold: False
  early_stopping: False
  dataset_file: 
 #save and load model
- save_model: False
- save_model_dir: ./
+ save_model: True
+ save_model_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Model/'
  load_model: False 
  load_model_dir: 
