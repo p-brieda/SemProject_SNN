@@ -6204,3 +6204,601 @@
 11:47:40,333 --- Training time: 2.51 mins
 11:47:40,345 --- Model saved
 11:47:40,346 --- Metrics saved
+14:56:25,429 ---  
+14:56:25,429 --- =========================================================================
+14:56:25,429 --- New run started with id 357415
+14:56:25,429 --- Epochs strategy
+14:56:25,429 ---  
+14:56:27,143 --- Loading prepared data from dir
+14:56:36,740 --- Training dataloaders ready
+14:56:36,741 --- Validation dataloaders ready
+14:56:36,777 --- Using cuda:0
+14:56:37,6 --- Number of training batches: 11
+14:56:37,7 --- Number of validation batches: 7
+14:56:37,7 --- Number of epochs: 3
+14:56:37,8 --- Total training batches: 33
+14:56:37,8 --- Batch size: 50
+14:56:37,8 --- Time steps: 1200
+14:56:37,8 --- White noise: 0.6
+14:56:37,8 --- Smoothing inputs
+14:56:37,811 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+14:56:37,811 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+14:56:37,811 ---  
+14:56:37,811 --- Epoch: 1
+14:57:10,814 --- Spike counts per Inference Step and Layer:
+14:57:10,814 --- Layer 0: Not Spiking
+14:57:10,814 --- Layer 1: 7261.6514 never spiked: 7279
+14:57:10,814 --- Layer 2: 1690.5692 never spiked: 15135
+14:57:20,868 --- Epoch time: 43.06 s
+14:57:20,868 --- Train loss: 2.9788 | Train accuracy: 0.1331 | Val loss: 3.0524 | Val accuracy: 0.1644
+14:57:20,868 ---  
+14:57:20,870 --- Metrics saved
+14:57:20,871 --- Epoch: 2
+14:57:51,945 --- Spike counts per Inference Step and Layer:
+14:57:51,945 --- Layer 0: Not Spiking
+14:57:51,945 --- Layer 1: 6884.1084 never spiked: 8591
+14:57:51,945 --- Layer 2: 1569.785 never spiked: 14656
+14:58:01,3 --- Epoch time: 40.13 s
+14:58:01,3 --- Train loss: 2.9601 | Train accuracy: 0.1687 | Val loss: 3.0827 | Val accuracy: 0.1666
+14:58:01,3 ---  
+14:58:01,13 --- Epoch: 3
+15:32:16,352 ---  
+15:32:16,353 --- =========================================================================
+15:32:16,353 --- New run started with id 979753
+15:32:16,353 --- Epochs strategy
+15:32:16,353 ---  
+15:32:18,489 --- Loading prepared data from dir
+15:32:25,490 --- Training dataloaders ready
+15:32:25,490 --- Validation dataloaders ready
+15:32:25,524 --- Using cuda:0
+15:32:25,765 --- Number of training batches: 11
+15:32:25,765 --- Number of validation batches: 7
+15:32:25,765 --- Number of epochs: 3
+15:32:25,765 --- Total training batches: 33
+15:32:25,765 --- Batch size: 50
+15:32:25,765 --- Time steps: 1200
+15:32:25,765 --- White noise: 0.6
+15:32:25,765 --- Smoothing inputs
+15:32:26,540 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+15:32:26,540 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+15:32:26,540 ---  
+15:32:26,540 --- Epoch: 1
+15:33:00,956 --- Spike counts per Inference Step and Layer:
+15:33:00,956 --- Layer 1: 3708.198486328125 never spiked: 5501 out of 16384
+15:33:00,956 --- Layer 2: 856.74169921875 never spiked: 10054 out of 16384
+15:33:02,570 --- Epoch time: 36.03 s
+15:33:02,570 --- Train loss: 3.1081 | Train accuracy: 0.1395 | Val loss: 3.0731 | Val accuracy: 0.1010
+15:33:02,570 ---  
+15:33:02,570 --- Metrics saved
+15:33:02,570 --- Epoch: 2
+15:33:37,680 --- Spike counts per Inference Step and Layer:
+15:33:37,690 --- Layer 1: 3725.722412109375 never spiked: 6905 out of 17408
+15:33:37,690 --- Layer 2: 839.0550537109375 never spiked: 10935 out of 17408
+15:33:39,184 --- Epoch time: 36.61 s
+15:33:39,184 --- Train loss: 2.8890 | Train accuracy: 0.1510 | Val loss: 3.0406 | Val accuracy: 0.1632
+15:33:39,184 ---  
+15:33:39,184 --- Epoch: 3
+15:34:14,321 --- Spike counts per Inference Step and Layer:
+15:34:14,331 --- Layer 1: 3667.755126953125 never spiked: 6756 out of 16384
+15:34:14,331 --- Layer 2: 812.7384033203125 never spiked: 10450 out of 16384
+15:34:15,835 --- Epoch time: 36.65 s
+15:34:15,835 --- Train loss: 2.7904 | Train accuracy: 0.1640 | Val loss: 2.9519 | Val accuracy: 0.1623
+15:34:15,835 ---  
+15:34:15,835 --- Training time: 1.82 mins
+15:34:15,859 --- Model saved
+15:34:15,861 --- Final metrics saved
+15:35:41,895 ---  
+15:35:41,895 --- =========================================================================
+15:35:41,895 --- New run started with id 845175
+15:35:41,895 --- Epochs strategy
+15:35:41,895 ---  
+15:35:43,846 --- Loading prepared data from dir
+15:35:50,150 --- Training dataloaders ready
+15:35:50,152 --- Validation dataloaders ready
+15:35:50,191 --- Using cuda:0
+15:35:50,412 --- Number of training batches: 11
+15:35:50,412 --- Number of validation batches: 7
+15:35:50,412 --- Number of epochs: 3
+15:35:50,412 --- Total training batches: 33
+15:35:50,412 --- Batch size: 50
+15:35:50,412 --- Time steps: 1200
+15:35:50,412 --- White noise: 0.6
+15:35:50,412 --- Smoothing inputs
+15:35:51,217 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+15:35:51,217 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+15:35:51,217 ---  
+15:35:51,217 --- Epoch: 1
+15:36:25,460 --- Spike counts per Inference Step and Layer:
+15:36:25,460 --- Layer 1: 3524.40087890625 never spiked: 5177 out of 16384
+15:36:25,460 --- Layer 2: 921.5941772460938 never spiked: 9731 out of 16384
+15:36:27,64 --- Epoch time: 35.85 s
+15:36:27,64 --- Train loss: 2.9727 | Train accuracy: 0.1238 | Val loss: 3.1254 | Val accuracy: 0.1663
+15:36:27,64 ---  
+15:36:27,74 --- Metrics saved
+15:36:27,74 --- Epoch: 2
+15:37:01,595 --- Spike counts per Inference Step and Layer:
+15:37:01,595 --- Layer 1: 3334.275146484375 never spiked: 5714 out of 16384
+15:37:01,595 --- Layer 2: 865.6416625976562 never spiked: 10363 out of 16384
+15:37:03,120 --- Epoch time: 36.05 s
+15:37:03,121 --- Train loss: 2.8517 | Train accuracy: 0.1651 | Val loss: 3.0391 | Val accuracy: 0.1639
+15:37:03,121 ---  
+15:37:03,122 --- Epoch: 3
+15:37:38,445 --- Spike counts per Inference Step and Layer:
+15:37:38,445 --- Layer 1: 3266.3525390625 never spiked: 6209 out of 17408
+15:37:38,445 --- Layer 2: 895.5549926757812 never spiked: 10973 out of 17408
+15:37:39,906 --- Epoch time: 36.78 s
+15:37:39,906 --- Train loss: 2.8181 | Train accuracy: 0.1666 | Val loss: 3.0921 | Val accuracy: 0.1616
+15:37:39,906 ---  
+15:37:39,906 --- Training time: 1.81 mins
+15:37:39,922 --- Model saved
+15:37:39,923 --- Final metrics saved
+15:40:57,911 ---  
+15:40:57,911 --- =========================================================================
+15:40:57,911 --- New run started with id 149334
+15:40:57,911 --- Epochs strategy
+15:40:57,911 ---  
+15:41:00,337 --- Loading prepared data from dir
+15:41:06,13 --- Training dataloaders ready
+15:41:06,13 --- Validation dataloaders ready
+15:41:06,57 --- Using cuda:0
+15:41:06,265 --- Number of training batches: 11
+15:41:06,266 --- Number of validation batches: 7
+15:41:06,266 --- Number of epochs: 3
+15:41:06,266 --- Total training batches: 33
+15:41:06,266 --- Batch size: 50
+15:41:06,266 --- Time steps: 1200
+15:41:06,266 --- White noise: 0.6
+15:41:06,266 --- Smoothing inputs
+15:41:06,954 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+15:41:06,954 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+15:41:06,954 ---  
+15:41:06,954 --- Epoch: 1
+15:44:17,425 --- Spike counts per Inference Step and Layer:
+15:44:17,425 --- Layer 1: 1448.404296875 never spiked: 740 out of 15360
+15:44:17,425 --- Layer 2: 2321.50439453125 never spiked: 7231 out of 15360
+15:44:19,79 --- Epoch time: 192.12 s
+15:44:19,79 --- Train loss: 3.0792 | Train accuracy: 0.1233 | Val loss: 3.0424 | Val accuracy: 0.1260
+15:44:19,79 ---  
+15:44:19,79 --- Metrics saved
+15:44:19,79 --- Epoch: 2
+15:47:32,211 --- Spike counts per Inference Step and Layer:
+15:47:32,211 --- Layer 1: 2016.1641845703125 never spiked: 605 out of 17408
+15:47:32,211 --- Layer 2: 3263.11279296875 never spiked: 8526 out of 17408
+15:47:34,114 --- Epoch time: 195.04 s
+15:47:34,114 --- Train loss: 2.9292 | Train accuracy: 0.1634 | Val loss: 2.9428 | Val accuracy: 0.1582
+15:47:34,114 ---  
+15:47:34,114 --- Epoch: 3
+15:56:43,363 ---  
+15:56:43,363 --- =========================================================================
+15:56:43,363 --- New run started with id 758802
+15:56:43,363 --- Epochs strategy
+15:56:43,363 ---  
+15:56:45,790 --- Loading prepared data from dir
+15:57:36,28 ---  
+15:57:36,28 --- =========================================================================
+15:57:36,28 --- New run started with id 406154
+15:57:36,28 --- Epochs strategy
+15:57:36,28 ---  
+15:57:38,957 --- Loading prepared data from dir
+15:57:43,739 --- Training dataloaders ready
+15:57:43,739 --- Validation dataloaders ready
+15:57:43,779 --- Using cuda:0
+15:57:43,975 --- Number of training batches: 11
+15:57:43,975 --- Number of validation batches: 7
+15:57:43,975 --- Number of epochs: 3
+15:57:43,975 --- Total training batches: 33
+15:57:43,975 --- Batch size: 50
+15:57:43,975 --- Time steps: 1200
+15:57:43,975 --- White noise: 0.6
+15:57:43,975 --- Smoothing inputs
+15:57:44,696 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+15:57:44,696 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+15:57:44,696 ---  
+15:57:44,696 --- Epoch: 1
+15:58:21,710 --- Spike counts per Inference Step and Layer:
+15:58:21,710 --- Layer 1: 3.9e+03 never spiked: 6332 out of 17408
+15:58:21,720 --- Layer 2: 1e+03 never spiked: 10286 out of 17408
+15:58:23,290 --- Epoch time: 38.59 s
+15:58:23,290 --- Train loss: 3.0197 | Train accuracy: 0.1300 | Val loss: 3.1329 | Val accuracy: 0.1670
+15:58:23,290 ---  
+15:58:23,290 --- Metrics saved
+15:58:23,290 --- Epoch: 2
+15:58:58,0 --- Spike counts per Inference Step and Layer:
+15:58:58,0 --- Layer 1: 3.7e+03 never spiked: 6864 out of 16384
+15:58:58,10 --- Layer 2: 9.1e+02 never spiked: 9976 out of 16384
+15:58:59,453 --- Epoch time: 36.16 s
+15:58:59,463 --- Train loss: 2.8852 | Train accuracy: 0.1628 | Val loss: 3.0492 | Val accuracy: 0.1615
+15:58:59,463 ---  
+15:58:59,463 --- Epoch: 3
+15:59:35,532 --- Spike counts per Inference Step and Layer:
+15:59:35,532 --- Layer 1: 3.7e+03 never spiked: 7200 out of 17408
+15:59:35,532 --- Layer 2: 9.5e+02 never spiked: 10646 out of 17408
+15:59:36,975 --- Epoch time: 37.51 s
+15:59:36,975 --- Train loss: 2.8362 | Train accuracy: 0.1662 | Val loss: 3.0518 | Val accuracy: 0.1684
+15:59:36,975 ---  
+15:59:36,975 --- Training time: 1.87 mins
+15:59:36,994 --- Model saved
+15:59:36,996 --- Final metrics saved
+16:38:04,163 ---  
+16:38:04,164 --- =========================================================================
+16:38:04,164 --- New run started with id 879925
+16:38:04,164 --- Epochs strategy
+16:38:04,164 ---  
+16:38:07,520 --- Loading prepared data from dir
+16:38:14,676 --- Training dataloaders ready
+16:38:14,676 --- Validation dataloaders ready
+16:38:14,714 --- Using cuda:0
+16:38:14,902 --- Number of training batches: 11
+16:38:14,902 --- Number of validation batches: 7
+16:38:14,902 --- Number of epochs: 3
+16:38:14,902 --- Total training batches: 33
+16:38:14,902 --- Batch size: 50
+16:38:14,902 --- Time steps: 1200
+16:38:14,902 --- White noise: 0.6
+16:38:14,902 --- Smoothing inputs
+16:38:15,623 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+16:38:15,623 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/33))
+16:38:15,623 ---  
+16:38:15,633 --- Epoch: 1
+16:38:50,583 --- Spike counts per Inference Step and Layer:
+16:38:50,593 --- Layer 1| Spikes: 3271.631 | Never spiked: 5425 neurons out of 15360 [BxN]
+16:38:50,593 --- Layer 2| Spikes: 789.506 | Never spiked: 9061 neurons out of 15360 [BxN]
+16:38:52,174 --- Epoch time: 36.55 s
+16:38:52,174 --- Train loss: 2.9915 | Train accuracy: 0.1292 | Val loss: 3.0502 | Val accuracy: 0.1702
+16:38:52,174 ---  
+16:38:52,184 --- Metrics saved
+16:38:52,184 --- Epoch: 2
+16:39:28,560 --- Spike counts per Inference Step and Layer:
+16:39:28,560 --- Layer 1| Spikes: 4112.020 | Never spiked: 6494 neurons out of 16896 [BxN]
+16:39:28,560 --- Layer 2| Spikes: 982.857 | Never spiked: 10340 neurons out of 16896 [BxN]
+16:39:30,30 --- Epoch time: 37.85 s
+16:39:30,30 --- Train loss: 2.7716 | Train accuracy: 0.1646 | Val loss: 3.0685 | Val accuracy: 0.1594
+16:39:30,30 ---  
+16:39:30,30 --- Epoch: 3
+16:40:06,142 --- Spike counts per Inference Step and Layer:
+16:40:06,152 --- Layer 1| Spikes: 3440.192 | Never spiked: 6380 neurons out of 16384 [BxN]
+16:40:06,152 --- Layer 2| Spikes: 839.291 | Never spiked: 10064 neurons out of 16384 [BxN]
+16:40:07,615 --- Epoch time: 37.59 s
+16:40:07,615 --- Train loss: 2.8747 | Train accuracy: 0.1623 | Val loss: 2.9151 | Val accuracy: 0.1642
+16:40:07,615 ---  
+16:40:07,615 --- Training time: 1.87 mins
+16:40:09,560 --- Model saved
+16:40:09,575 --- Final metrics saved
+16:51:18,316 ---  
+16:51:18,317 --- =========================================================================
+16:51:18,317 --- New run started with id 485410
+16:51:18,317 --- Epochs strategy
+16:51:18,317 ---  
+16:51:20,585 --- Loading prepared data from dir
+16:51:27,305 --- Training dataloaders ready
+16:51:27,305 --- Validation dataloaders ready
+16:51:27,333 --- Using cuda:0
+16:51:27,570 --- Number of training batches: 11
+16:51:27,571 --- Number of validation batches: 7
+16:51:27,571 --- Number of epochs: 1
+16:51:27,571 --- Total training batches: 11
+16:51:27,571 --- Batch size: 50
+16:51:27,571 --- Time steps: 1200
+16:51:27,571 --- White noise: 0.6
+16:51:27,571 --- Smoothing inputs
+16:51:28,298 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+16:51:28,308 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/11))
+16:51:28,308 ---  
+16:51:28,308 --- Epoch: 1
+16:52:01,580 --- Spike counts per Inference Step and Layer:
+16:52:01,580 --- Layer 1| Spikes: 3789.020 | Never spiked: 4566 neurons out of 17408 [BxN]
+16:52:01,580 --- Layer 2| Spikes: 955.284 | Never spiked: 9601 neurons out of 17408 [BxN]
+16:52:03,154 --- Epoch time: 34.85 s
+16:52:03,154 --- Train loss: 2.8835 | Train accuracy: 0.1390 | Val loss: 3.0267 | Val accuracy: 0.1650
+16:52:03,154 ---  
+16:52:03,164 --- Metrics saved
+16:52:03,164 --- Training time: 0.58 mins
+16:52:05,25 --- Model saved
+16:52:05,25 --- Final metrics saved
+16:53:52,869 ---  
+16:53:52,869 --- =========================================================================
+16:53:52,869 --- New run started with id 352111
+16:53:52,869 --- Epochs strategy
+16:53:52,869 ---  
+16:53:56,82 --- Loading prepared data from dir
+16:54:03,971 --- Training dataloaders ready
+16:54:03,971 --- Validation dataloaders ready
+16:54:04,6 --- Using cuda:0
+16:54:04,196 --- Number of training batches: 11
+16:54:04,196 --- Number of validation batches: 7
+16:54:04,196 --- Number of epochs: 10
+16:54:04,196 --- Total training batches: 110
+16:54:04,196 --- Batch size: 50
+16:54:04,196 --- Time steps: 1200
+16:54:04,196 --- White noise: 0.6
+16:54:04,196 --- Smoothing inputs
+16:54:04,927 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+16:54:04,927 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/110))
+16:54:04,927 ---  
+16:54:04,927 --- Epoch: 1
+16:54:38,944 --- Spike counts per Inference Step and Layer:
+16:54:38,944 --- Layer 1| Spikes: 4252.838 | Never spiked: 5744 neurons out of 15360 [BxN]
+16:54:38,944 --- Layer 2| Spikes: 912.281 | Never spiked: 8941 neurons out of 15360 [BxN]
+16:54:40,507 --- Epoch time: 35.58 s
+16:54:40,517 --- Train loss: 2.9489 | Train accuracy: 0.1215 | Val loss: 3.0348 | Val accuracy: 0.1642
+16:54:40,517 ---  
+16:54:40,517 --- Metrics saved
+16:54:40,517 --- Epoch: 2
+16:55:15,239 --- Spike counts per Inference Step and Layer:
+16:55:15,239 --- Layer 1| Spikes: 5158.255 | Never spiked: 6911 neurons out of 16896 [BxN]
+16:55:15,239 --- Layer 2| Spikes: 1053.899 | Never spiked: 10246 neurons out of 16896 [BxN]
+16:55:16,906 --- Epoch time: 36.39 s
+16:55:16,906 --- Train loss: 2.7902 | Train accuracy: 0.1636 | Val loss: 3.0037 | Val accuracy: 0.1642
+16:55:16,906 ---  
+16:55:16,906 --- Epoch: 3
+16:55:52,362 --- Spike counts per Inference Step and Layer:
+16:55:52,362 --- Layer 1| Spikes: 4172.908 | Never spiked: 6910 neurons out of 16384 [BxN]
+16:55:52,362 --- Layer 2| Spikes: 887.114 | Never spiked: 10094 neurons out of 16384 [BxN]
+16:55:53,803 --- Epoch time: 36.90 s
+16:55:53,803 --- Train loss: 2.8177 | Train accuracy: 0.1660 | Val loss: 2.9682 | Val accuracy: 0.1639
+16:55:53,803 ---  
+16:55:53,803 --- Epoch: 4
+16:56:27,325 --- Spike counts per Inference Step and Layer:
+16:56:27,325 --- Layer 1| Spikes: 4863.188 | Never spiked: 7464 neurons out of 17408 [BxN]
+16:56:27,325 --- Layer 2| Spikes: 990.385 | Never spiked: 10685 neurons out of 17408 [BxN]
+16:56:28,772 --- Epoch time: 34.97 s
+16:56:28,772 --- Train loss: 2.7685 | Train accuracy: 0.1634 | Val loss: 2.9841 | Val accuracy: 0.1638
+16:56:28,772 ---  
+16:56:28,772 --- Epoch: 5
+16:57:03,567 --- Spike counts per Inference Step and Layer:
+16:57:03,567 --- Layer 1| Spikes: 4608.819 | Never spiked: 7163 neurons out of 16896 [BxN]
+16:57:03,567 --- Layer 2| Spikes: 998.297 | Never spiked: 10408 neurons out of 16896 [BxN]
+16:57:05,34 --- Epoch time: 36.26 s
+16:57:05,34 --- Train loss: 2.8262 | Train accuracy: 0.1638 | Val loss: 3.0547 | Val accuracy: 0.1656
+16:57:05,34 ---  
+16:57:05,44 --- Epoch: 6
+16:57:39,287 --- Spike counts per Inference Step and Layer:
+16:57:39,287 --- Layer 1| Spikes: 4364.562 | Never spiked: 7341 neurons out of 17408 [BxN]
+16:57:39,287 --- Layer 2| Spikes: 907.701 | Never spiked: 10669 neurons out of 17408 [BxN]
+16:57:40,753 --- Epoch time: 35.72 s
+16:57:40,753 --- Train loss: 2.8240 | Train accuracy: 0.1662 | Val loss: 3.0581 | Val accuracy: 0.1655
+16:57:40,753 ---  
+16:57:40,753 --- Epoch: 7
+16:58:15,702 --- Spike counts per Inference Step and Layer:
+16:58:15,702 --- Layer 1| Spikes: 4429.765 | Never spiked: 6643 neurons out of 16384 [BxN]
+16:58:15,702 --- Layer 2| Spikes: 993.043 | Never spiked: 10149 neurons out of 16384 [BxN]
+16:58:17,190 --- Epoch time: 36.44 s
+16:58:17,190 --- Train loss: 2.7333 | Train accuracy: 0.1622 | Val loss: 3.0474 | Val accuracy: 0.1674
+16:58:17,190 ---  
+16:58:17,190 --- Epoch: 8
+16:58:51,149 --- Spike counts per Inference Step and Layer:
+16:58:51,149 --- Layer 1| Spikes: 4280.566 | Never spiked: 6682 neurons out of 16384 [BxN]
+16:58:51,149 --- Layer 2| Spikes: 973.179 | Never spiked: 10117 neurons out of 16384 [BxN]
+16:58:52,625 --- Epoch time: 35.43 s
+16:58:52,625 --- Train loss: 2.8053 | Train accuracy: 0.1659 | Val loss: 3.1083 | Val accuracy: 0.1679
+16:58:52,625 ---  
+16:58:52,625 --- Epoch: 9
+16:59:26,628 --- Spike counts per Inference Step and Layer:
+16:59:26,628 --- Layer 1| Spikes: 4041.876 | Never spiked: 6670 neurons out of 16384 [BxN]
+16:59:26,628 --- Layer 2| Spikes: 921.843 | Never spiked: 10146 neurons out of 16384 [BxN]
+16:59:28,62 --- Epoch time: 35.44 s
+16:59:28,62 --- Train loss: 2.8365 | Train accuracy: 0.1660 | Val loss: 2.9288 | Val accuracy: 0.1643
+16:59:28,62 ---  
+16:59:28,62 --- Epoch: 10
+17:00:02,436 --- Spike counts per Inference Step and Layer:
+17:00:02,436 --- Layer 1| Spikes: 4246.574 | Never spiked: 6637 neurons out of 16384 [BxN]
+17:00:02,436 --- Layer 2| Spikes: 958.109 | Never spiked: 10152 neurons out of 16384 [BxN]
+17:00:03,907 --- Epoch time: 35.84 s
+17:00:03,907 --- Train loss: 2.8508 | Train accuracy: 0.1664 | Val loss: 2.9961 | Val accuracy: 0.1659
+17:00:03,907 ---  
+17:00:03,907 --- Training time: 5.98 mins
+17:00:05,875 --- Model saved
+17:00:05,875 --- Final metrics saved
+17:15:27,532 ---  
+17:15:27,532 --- =========================================================================
+17:15:27,532 --- New run started with id 969507
+17:15:27,532 --- Epochs strategy
+17:15:27,532 ---  
+17:15:52,521 --- Loading prepared data from dir
+17:15:59,826 --- Training dataloaders ready
+17:15:59,826 --- Validation dataloaders ready
+17:15:59,860 --- Using cuda:0
+17:16:00,51 --- Number of training batches: 11
+17:16:00,51 --- Number of validation batches: 7
+17:16:00,51 --- Number of epochs: 10
+17:16:00,51 --- Total training batches: 110
+17:16:00,51 --- Batch size: 50
+17:16:00,51 --- Time steps: 1200
+17:16:00,51 --- White noise: 0.6
+17:16:00,51 --- Smoothing inputs
+17:16:00,798 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+17:16:00,798 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/110))
+17:16:00,798 ---  
+17:16:00,798 --- Epoch: 1
+17:16:35,791 --- Spike counts per Inference Step and Layer:
+17:16:35,791 --- Layer 1| Spikes: 4936.651 | Never spiked: 6630 neurons out of 16896 [BxN]
+17:16:35,791 --- Avg spike count of a single neuron per time step: 0.000
+17:16:35,801 ---  
+17:16:35,801 --- Layer 2| Spikes: 1027.453 | Never spiked: 9561 neurons out of 16896 [BxN]
+17:16:35,801 --- Avg spike count of a single neuron per time step: 0.000
+17:16:35,801 ---  
+17:16:37,431 --- Epoch time: 36.63 s
+17:16:37,431 --- Train loss: 2.8883 | Train accuracy: 0.1377 | Val loss: 3.0811 | Val accuracy: 0.1692
+17:16:37,431 ---  
+17:16:37,431 --- Metrics saved
+17:16:37,431 --- Epoch: 2
+17:17:12,991 --- Spike counts per Inference Step and Layer:
+17:17:13,1 --- Layer 1| Spikes: 5013.515 | Never spiked: 7630 neurons out of 17408 [BxN]
+17:17:13,1 --- Avg spike count of a single neuron per time step: 0.000
+17:17:13,1 ---  
+17:17:13,1 --- Layer 2| Spikes: 1018.350 | Never spiked: 10199 neurons out of 17408 [BxN]
+17:17:13,1 --- Avg spike count of a single neuron per time step: 0.000
+17:17:13,1 ---  
+17:17:14,450 --- Epoch time: 37.02 s
+17:17:14,450 --- Train loss: 2.8774 | Train accuracy: 0.1666 | Val loss: 3.0719 | Val accuracy: 0.1649
+17:17:14,450 ---  
+17:17:14,450 --- Epoch: 3
+17:17:49,719 --- Spike counts per Inference Step and Layer:
+17:17:49,729 --- Layer 1| Spikes: 5055.611 | Never spiked: 7290 neurons out of 16896 [BxN]
+17:17:49,729 --- Avg spike count of a single neuron per time step: 0.000
+17:17:49,729 ---  
+17:17:49,729 --- Layer 2| Spikes: 1020.466 | Never spiked: 10011 neurons out of 16896 [BxN]
+17:17:49,729 --- Avg spike count of a single neuron per time step: 0.000
+17:17:49,729 ---  
+17:17:51,156 --- Epoch time: 36.71 s
+17:17:51,156 --- Train loss: 2.7648 | Train accuracy: 0.1626 | Val loss: 3.0035 | Val accuracy: 0.1654
+17:17:51,156 ---  
+17:17:51,156 --- Epoch: 4
+17:18:27,169 --- Spike counts per Inference Step and Layer:
+17:18:27,169 --- Layer 1| Spikes: 4586.098 | Never spiked: 7259 neurons out of 16896 [BxN]
+17:18:27,169 --- Avg spike count of a single neuron per time step: 0.000
+17:18:27,169 ---  
+17:18:27,169 --- Layer 2| Spikes: 936.062 | Never spiked: 10037 neurons out of 16896 [BxN]
+17:18:27,169 --- Avg spike count of a single neuron per time step: 0.000
+17:18:27,169 ---  
+17:18:28,608 --- Epoch time: 37.45 s
+17:18:28,608 --- Train loss: 2.8604 | Train accuracy: 0.1602 | Val loss: 3.0733 | Val accuracy: 0.1602
+17:18:28,608 ---  
+17:18:28,608 --- Epoch: 5
+17:19:04,361 --- Spike counts per Inference Step and Layer:
+17:19:04,361 --- Layer 1| Spikes: 5096.392 | Never spiked: 7193 neurons out of 16384 [BxN]
+17:19:04,361 --- Avg spike count of a single neuron per time step: 0.000
+17:19:04,361 ---  
+17:19:04,361 --- Layer 2| Spikes: 1050.223 | Never spiked: 9666 neurons out of 16384 [BxN]
+17:19:04,361 --- Avg spike count of a single neuron per time step: 0.000
+17:19:04,361 ---  
+17:19:05,824 --- Epoch time: 37.22 s
+17:19:05,824 --- Train loss: 2.7049 | Train accuracy: 0.1612 | Val loss: 3.1053 | Val accuracy: 0.1662
+17:19:05,824 ---  
+17:19:05,824 --- Epoch: 6
+17:19:41,520 --- Spike counts per Inference Step and Layer:
+17:19:41,520 --- Layer 1| Spikes: 4984.381 | Never spiked: 7170 neurons out of 16384 [BxN]
+17:19:41,520 --- Avg spike count of a single neuron per time step: 0.000
+17:19:41,520 ---  
+17:19:41,520 --- Layer 2| Spikes: 1029.650 | Never spiked: 9685 neurons out of 16384 [BxN]
+17:19:41,530 --- Avg spike count of a single neuron per time step: 0.000
+17:19:41,530 ---  
+17:19:43,36 --- Epoch time: 37.21 s
+17:19:43,37 --- Train loss: 2.8350 | Train accuracy: 0.1625 | Val loss: 2.9536 | Val accuracy: 0.1664
+17:19:43,38 ---  
+17:19:43,39 --- Epoch: 7
+17:20:18,679 --- Spike counts per Inference Step and Layer:
+17:20:18,679 --- Layer 1| Spikes: 3882.047 | Never spiked: 7297 neurons out of 16896 [BxN]
+17:20:18,679 --- Avg spike count of a single neuron per time step: 0.000
+17:20:18,679 ---  
+17:20:18,679 --- Layer 2| Spikes: 808.026 | Never spiked: 9968 neurons out of 16896 [BxN]
+17:20:18,679 --- Avg spike count of a single neuron per time step: 0.000
+17:20:18,679 ---  
+17:20:20,199 --- Epoch time: 37.16 s
+17:20:20,199 --- Train loss: 2.8244 | Train accuracy: 0.1694 | Val loss: 3.0316 | Val accuracy: 0.1670
+17:20:20,199 ---  
+17:20:20,209 --- Epoch: 8
+17:20:56,452 --- Spike counts per Inference Step and Layer:
+17:20:56,452 --- Layer 1| Spikes: 3825.774 | Never spiked: 6794 neurons out of 15360 [BxN]
+17:20:56,452 --- Avg spike count of a single neuron per time step: 0.000
+17:20:56,452 ---  
+17:20:56,452 --- Layer 2| Spikes: 805.093 | Never spiked: 9058 neurons out of 15360 [BxN]
+17:20:56,452 --- Avg spike count of a single neuron per time step: 0.000
+17:20:56,452 ---  
+17:20:57,972 --- Epoch time: 37.77 s
+17:20:57,972 --- Train loss: 2.8579 | Train accuracy: 0.1640 | Val loss: 2.9577 | Val accuracy: 0.1672
+17:20:57,972 ---  
+17:20:57,972 --- Epoch: 9
+17:21:33,281 --- Spike counts per Inference Step and Layer:
+17:21:33,281 --- Layer 1| Spikes: 4568.255 | Never spiked: 7551 neurons out of 17408 [BxN]
+17:21:33,281 --- Avg spike count of a single neuron per time step: 0.000
+17:21:33,281 ---  
+17:21:33,281 --- Layer 2| Spikes: 947.950 | Never spiked: 10288 neurons out of 17408 [BxN]
+17:21:33,281 --- Avg spike count of a single neuron per time step: 0.000
+17:21:33,281 ---  
+17:21:34,717 --- Epoch time: 36.75 s
+17:21:34,717 --- Train loss: 2.7653 | Train accuracy: 0.1652 | Val loss: 3.0322 | Val accuracy: 0.1633
+17:21:34,717 ---  
+17:21:34,717 --- Epoch: 10
+17:22:10,17 --- Spike counts per Inference Step and Layer:
+17:22:10,17 --- Layer 1| Spikes: 4589.632 | Never spiked: 6986 neurons out of 16384 [BxN]
+17:22:10,17 --- Avg spike count of a single neuron per time step: 0.000
+17:22:10,17 ---  
+17:22:10,17 --- Layer 2| Spikes: 955.384 | Never spiked: 9603 neurons out of 16384 [BxN]
+17:22:10,17 --- Avg spike count of a single neuron per time step: 0.000
+17:22:10,17 ---  
+17:22:11,447 --- Epoch time: 36.73 s
+17:22:11,447 --- Train loss: 2.7793 | Train accuracy: 0.1654 | Val loss: 2.9796 | Val accuracy: 0.1659
+17:22:11,447 ---  
+17:22:11,447 --- Training time: 6.18 mins
+17:22:13,296 --- Model saved
+17:22:13,296 --- Final metrics saved
+17:27:18,374 ---  
+17:27:18,374 --- =========================================================================
+17:27:18,374 --- New run started with id 167828
+17:27:18,374 --- Epochs strategy
+17:27:18,374 ---  
+17:27:21,42 --- Loading prepared data from dir
+17:27:28,325 --- Training dataloaders ready
+17:27:28,325 --- Validation dataloaders ready
+17:27:28,362 --- Using cuda:0
+17:27:28,554 --- Number of training batches: 11
+17:27:28,554 --- Number of validation batches: 7
+17:27:28,554 --- Number of epochs: 5
+17:27:28,554 --- Total training batches: 55
+17:27:28,554 --- Batch size: 50
+17:27:28,554 --- Time steps: 1200
+17:27:28,554 --- White noise: 0.6
+17:27:28,554 --- Smoothing inputs
+17:27:29,273 --- Optimizer: AdamW(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.005, amsgrad=False)
+17:27:29,273 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/55))
+17:27:29,273 ---  
+17:27:29,273 --- Epoch: 1
+17:28:02,616 --- Spike counts per Inference Step and Layer:
+17:28:02,616 --- Layer 1| Spikes: 4120.519 | Never spiked: 5939 neurons out of 17408 [BxN]
+17:28:02,616 --- Avg spike count of a single neuron per time step: 0.197*10-3
+17:28:02,616 ---  
+17:28:02,616 --- Layer 2| Spikes: 1005.005 | Never spiked: 9670 neurons out of 17408 [BxN]
+17:28:02,616 --- Avg spike count of a single neuron per time step: 0.010*10-3
+17:28:02,616 ---  
+17:28:04,206 --- Epoch time: 34.93 s
+17:28:04,206 --- Train loss: 3.0521 | Train accuracy: 0.1300 | Val loss: 3.0529 | Val accuracy: 0.1670
+17:28:04,206 ---  
+17:28:04,206 --- Metrics saved
+17:28:04,206 --- Epoch: 2
+17:28:37,518 --- Spike counts per Inference Step and Layer:
+17:28:37,518 --- Layer 1| Spikes: 3544.732 | Never spiked: 7089 neurons out of 17408 [BxN]
+17:28:37,518 --- Avg spike count of a single neuron per time step: 0.170*10-3
+17:28:37,518 ---  
+17:28:37,518 --- Layer 2| Spikes: 854.554 | Never spiked: 10329 neurons out of 17408 [BxN]
+17:28:37,518 --- Avg spike count of a single neuron per time step: 0.008*10-3
+17:28:37,518 ---  
+17:28:38,976 --- Epoch time: 34.77 s
+17:28:38,976 --- Train loss: 2.8696 | Train accuracy: 0.1631 | Val loss: 3.0337 | Val accuracy: 0.1272
+17:28:38,976 ---  
+17:28:38,976 --- Epoch: 3
+17:29:13,618 --- Spike counts per Inference Step and Layer:
+17:29:13,618 --- Layer 1| Spikes: 4089.844 | Never spiked: 6864 neurons out of 17408 [BxN]
+17:29:13,618 --- Avg spike count of a single neuron per time step: 0.196*10-3
+17:29:13,618 ---  
+17:29:13,618 --- Layer 2| Spikes: 974.153 | Never spiked: 10565 neurons out of 17408 [BxN]
+17:29:13,618 --- Avg spike count of a single neuron per time step: 0.009*10-3
+17:29:13,618 ---  
+17:29:15,89 --- Epoch time: 36.11 s
+17:29:15,89 --- Train loss: 2.8822 | Train accuracy: 0.1612 | Val loss: 3.0419 | Val accuracy: 0.1690
+17:29:15,89 ---  
+17:29:15,89 --- Epoch: 4
+17:29:48,920 --- Spike counts per Inference Step and Layer:
+17:29:48,920 --- Layer 1| Spikes: 3506.517 | Never spiked: 6281 neurons out of 16384 [BxN]
+17:29:48,920 --- Avg spike count of a single neuron per time step: 0.178*10-3
+17:29:48,920 ---  
+17:29:48,920 --- Layer 2| Spikes: 873.315 | Never spiked: 9971 neurons out of 16384 [BxN]
+17:29:48,920 --- Avg spike count of a single neuron per time step: 0.009*10-3
+17:29:48,920 ---  
+17:29:50,384 --- Epoch time: 35.29 s
+17:29:50,384 --- Train loss: 2.8407 | Train accuracy: 0.1629 | Val loss: 3.0714 | Val accuracy: 0.1638
+17:29:50,384 ---  
+17:29:50,384 --- Epoch: 5
+17:30:25,236 --- Spike counts per Inference Step and Layer:
+17:30:25,246 --- Layer 1| Spikes: 3521.725 | Never spiked: 6219 neurons out of 16384 [BxN]
+17:30:25,246 --- Avg spike count of a single neuron per time step: 0.179*10-3
+17:30:25,246 ---  
+17:30:25,246 --- Layer 2| Spikes: 877.798 | Never spiked: 9943 neurons out of 16384 [BxN]
+17:30:25,246 --- Avg spike count of a single neuron per time step: 0.009*10-3
+17:30:25,246 ---  
+17:30:26,699 --- Epoch time: 36.32 s
+17:30:26,699 --- Train loss: 2.7559 | Train accuracy: 0.1672 | Val loss: 3.0544 | Val accuracy: 0.1669
+17:30:26,699 ---  
+17:30:26,699 --- Training time: 2.96 mins
+17:30:28,487 --- Model saved
+17:30:28,487 --- Final metrics saved

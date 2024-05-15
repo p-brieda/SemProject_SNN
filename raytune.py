@@ -9,7 +9,7 @@ import logging
 import pickle
 
 # Custom imports and torch imports
-from util import getDefaultHyperparams, extractBatch, trainModel, validateModel
+from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
@@ -47,9 +47,8 @@ def main():
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
     #              When there is only random function for tune.choice, it indicates the samples into the space.
     local_dir_path = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Raytune/'
-
     if hyperparams['system'] == 'Linux':
-        local_dir_path = '/scratch/sem24f8/raytune/'
+        local_dir_path = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Raytune/'
     
     reporter = tune.CLIReporter(
         metric_columns=["epoch", "train_loss", "train_acc", "val_loss", "val_acc"],
@@ -104,14 +103,8 @@ def train_tune_parallel(config):
 
     # ---------- DATASET PREPARATION ----------
     manual_prep = False
-
-    if hyperparams['system'] == 'Linux':
-        prepared_data_dir = '/scratch/sem24f8/dataset/'
-    else:
-        prepared_data_dir = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/dataset/'
-
-    hyperparams['prepared_data_dir'] = prepared_data_dir
-
+    prepared_data_dir = hyperparams['prepared_data_dir']
+    
     if not os.path.exists(prepared_data_dir + 'prepared_data.pth') or (manual_prep and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
         print('Preparing data')
         dataprep_start = time.time()
@@ -158,9 +151,6 @@ def train_tune_parallel(config):
 
     # Model creation
     model = RSNNet(hyperparams)
-    #if torch.cuda.device_count() > 1:
-    #    print(f"Using {torch.cuda.device_count()} GPUs")
-    #    model = nn.DataParallel(model)
     model.to(device)
 
     # Loss function
@@ -177,7 +167,6 @@ def train_tune_parallel(config):
     logging.info(f"Total training batches: {tot_train_batches}")
     logging.info(f"Batch size: {hyperparams['batch_size']}")    
     logging.info(f"Time steps: {hyperparams['train_val_timeSteps']}")
-    logging.info(f"White noise: {hyperparams['whiteNoiseSD']}")
     if hyperparams['smoothInputs']: logging.info(f"Smoothing inputs")
 
 
@@ -274,8 +263,13 @@ def train_tune_parallel(config):
     training_end = time.time()
     print(f"Training time: {(training_end - training_start)/60:.2f} mins")
     logging.info(f"Training time: {(training_end - training_start)/60:.2f} mins")
+
+
+    # ---------- NEURON HISTOGRAM PLOT ----------
+    neuron_hist_plot(model, hyperparams)
     
 
+    # ---------- SAVE MODEL AND METRICS ----------
     # Save the model
     torch.save(model, f"{hyperparams['save_model_dir']}/model_{hyperparams['id']}.pth")
     print('Model saved')
@@ -297,6 +291,9 @@ def train_tune_parallel(config):
     # save hyperparam
     with open(hyperparams['results_dir'] + 'hyperparam.pickle', 'wb') as f:
         pickle.dump(hyperparams, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    # ---------- TRAINING PLOT ----------
+    TrainPlot(metrics, hyperparams)
 
     
 

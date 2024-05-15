@@ -5,7 +5,7 @@ import os
 import logging
 import sys
 import time
-from util import getDefaultHyperparams, extractBatch, trainModel, validateModel
+from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
@@ -96,9 +96,6 @@ if __name__ == '__main__':
 
     # Model creation
     model = RSNNet(hyperparams)
-    #if torch.cuda.device_count() > 1:
-    #    print(f"Using {torch.cuda.device_count()} GPUs")
-    #    model = nn.DataParallel(model)
     model.to(device)
 
     # Loss function
@@ -209,8 +206,12 @@ if __name__ == '__main__':
     training_end = time.time()
     print(f"Training time: {(training_end - training_start)/60:.2f} mins")
     logging.info(f"Training time: {(training_end - training_start)/60:.2f} mins")
-    
 
+
+    # ---------- NEURON HISTOGRAM PLOT ----------
+    neuron_hist_plot(model, hyperparams)
+
+    # ---------- SAVE THE MODEL AND METRICS ----------
     # Save the model
     torch.save(model, f"Model/model_{hyperparams['id']}.pth")
     print('Model saved')
@@ -224,5 +225,9 @@ if __name__ == '__main__':
     torch.save(metrics, f"trainOutputs/metrics_{hyperparams['id']}.pth")
     print('Final metrics saved')
     logging.info('Final metrics saved')
+
+
+    # ---------- TRAINING PLOT ----------
+    TrainPlot(metrics, hyperparams)
 
     

@@ -9,6 +9,7 @@ from yaml.loader import SafeLoader
 from Evaluation import evaluateSNNOutput, wer, decodeCharStr
 import logging
 from scipy.ndimage import gaussian_filter1d
+import matplotlib.pyplot as plt
 
 
 
@@ -23,11 +24,22 @@ def getDefaultHyperparams():
     
     rootDir = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/handwritingBCIData/'
     hyperparams['system'] = 'Windows'
+    hyperparams['prepared_data_dir'] = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/dataset/'
+
     # Handle different OS (Linux and Windows)
     if not os.path.exists(rootDir): 
         rootDir = os.path.expanduser('~') + '/Semester_project/handwritingBCIData/'
         hyperparams['system'] = 'Linux'
+        hyperparams['output_report'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Report.txt'
+        hyperparams['results_dir'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/trainOutputs/'
+        hyperparams['output_plots'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Plots/'
+        hyperparams['output_csv'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/CSV/'
+        hyperparams['save_model_dir'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Model/'
+        hyperparams['prepared_data_dir'] = '/scratch/sem24f8/dataset/'
 
+
+    
+    # Define the data directories
     dataDirs = ['t5.2019.05.08','t5.2019.11.25','t5.2019.12.09','t5.2019.12.11','t5.2019.12.18',
             't5.2019.12.20','t5.2020.01.06','t5.2020.01.08','t5.2020.01.13','t5.2020.01.15']
     
@@ -327,6 +339,94 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
+
+def save_to_csv(data, name):
+    #var, trial, epoch, type
+    np.savetxt(name, data, delimiter=",")
+
+
+
+
+def spikeplot(spike, hyperparam):
+    # spike is a tuple containing the spike counts for each layer
+    # each of the spike counts is a tensor of shape: (B x N)
+    layers = len(spike)
+    spikes = []
+    for i in range(layers) :
+        spikes.append(spike[i][:,:].detach().to('cpu').numpy()) 
+        
+    #plot Spike count
+    logging.info('Spike counts per Inference Step and Layer:')
+    for i in range(layers):
+        logging.info(f"Layer {str(i+1)}| Spikes: {np.sum(spikes[i]):.3f} | Never spiked: {spikes[i].shape[0]*spikes[i].shape[1] - np.count_nonzero(spikes[i])} neurons out of {spikes[i].shape[0]*spikes[i].shape[1]} [BxN]")
+        # taking into consideration the slower layer
+        if i == layers - 1:
+            logging.info(f"---Avg spike count of a single neuron per time step: {np.sum(spikes[i])/(spikes[i].shape[0]*spikes[i].shape[1]) / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'] * 1000:.3f} * 10-3")
+        else:
+            logging.info(f"---Avg spike count of a single neuron per time step: {np.sum(spikes[i])/(spikes[i].shape[0]*spikes[i].shape[1]) / hyperparam['train_val_timeSteps'] * 1000:.3f} * 10-3")
+    
+    
+    fig, axs = plt.subplots(1,layers,figsize = (21,7))
+    for i in range(layers):
+        save_to_csv(spikes[i][0], hyperparam['output_csv'] + "SNN_spike_layer_{}.csv".format(i))
+    for i, ax in enumerate(axs):
+        ax.hist(spikes[i][0], density=False, bins=40)  
+        ax.set_ylabel('Count of Neurons')
+        ax.set_xlabel('Spike Rate')
+        ax.set_title('layer '+str(i+1))
+    plt.savefig(hyperparam['output_plots']+'Spikerate_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+
+
+
+
+def neuron_hist_plot(net, hyperparam):
+    fig, axs = plt.subplots(1,6,figsize = (21,7))
+    LIF_layer = (net.sp1, net.sp2, net.sp3)
+    LI_layer = (net.nospike)
+    save_to_csv(LI_layer.tau.to('cpu').data.numpy(), hyperparam['output_csv'] + "TAU_LI")
+    for i in range(3):
+        save_to_csv(LIF_layer[i].tau.to('cpu').data.numpy(), hyperparam['output_csv'] + "TAU_Layer_{}".format(i))
+        axs[i*2].hist(LIF_layer[i].Vth.to('cpu').data.numpy(), density=False, bins=np.linspace(-0.1,1.1,50)) 
+        axs[i*2].set_ylabel('Count of Neurons')
+        axs[i*2].set_xlabel('Layer '+str(i)+' Vth')
+        tau = LIF_layer[i].tau.to('cpu').data.numpy()
+        axs[i*2+1].hist(LIF_layer[i].tau.to('cpu').data.numpy(), density=False, bins=np.linspace(min(tau),max(tau),50)) 
+        axs[i*2+1].set_ylabel('Count of Neurons')
+        axs[i*2+1].set_xlabel('Layer '+str(i)+' tau')
+    plt.savefig(hyperparam['output_plots']+'Neuron_distribution_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+
+
+
+def TrainPlot(metrics, hyperparam):
+
+    trainloss_per_epoch = metrics['trainloss_per_epoch']
+    trainacc_per_epoch = metrics['trainacc_per_epoch']
+    valloss_per_epoch = metrics['valloss_per_epoch']
+    valacc_per_epoch = metrics['valacc_per_epoch']
+
+
+    fig, axs = plt.subplots(2,2,figsize = (21,14))
+    axs[0,0].plot(trainloss_per_epoch)
+    axs[0,0].set_ylabel('Loss')
+    axs[0,0].set_xlabel('Epoch')
+    axs[0,0].set_title('Train Loss per Epoch')
+    axs[0,1].plot(trainacc_per_epoch, color='orange')
+    axs[0,1].set_ylabel('Accuracy')
+    axs[0,1].set_xlabel('Epoch')
+    axs[0,1].set_title('Train Accuracy per Epoch')
+    axs[1,0].plot(valloss_per_epoch)
+    axs[1,0].set_ylabel('Loss')
+    axs[1,0].set_xlabel('Epoch')
+    axs[1,0].set_title('Validation Loss per Epoch')
+    axs[1,1].plot(valacc_per_epoch, color='orange')
+    axs[1,1].set_ylabel('Accuracy')
+    axs[1,1].set_xlabel('Epoch')
+    axs[1,1].set_title('Validation Accuracy per Epoch')
+    plt.savefig(hyperparam['output_plots']+'Train_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+
+
+
+
 def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams, device):
     model.train()
     num_batches = len(train_loader)
@@ -394,6 +494,8 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
             print(f"{val_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
     print("")
+
+    spikeplot(spikecounts, hyperparams)
 
     return running_loss, running_acc
 
