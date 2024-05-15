@@ -75,6 +75,12 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam
         },
 
+        "Surrogate_gradient_search": {
+            "seed": tune.randint(1,10000),
+            "surrogate_gradient": tune.grid_search(['square','multi_gaussian']),
+            "hyperparam": hyperparam
+        },
+
         "Combined_search": {
             "seed": tune.randint(1,10000),
             "neuron_count": tune.grid_search([256, 512, 1024]),
