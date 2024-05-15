@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 50
- epochs: 5
+ epochs: 10
  batchesPerVal: 10
  updateVal: 20
  rnnBinSize: 2
@@ -11,13 +11,18 @@
  outputDelay: 50
  directionality: 'unidirectional'
  loss: crossentropy
- learning_rate: 0.001
+ learning_rate: 0.01
+ scheduler: StepLR
+ scheduler_gamma: 0.9
+ scheduler_step_size: 10
  dropout: 0
+ weight_decay: 0.0
+ noisy_threshold: 0.2
+
  var_dropout_s: 0
  var_dropout_t: 0
  zoneout: False
- weight_decay: 0.005
- noisy_threshold: 0.2
+ 
 
 # Data augmentation
  constantOffsetSD: 0

@@ -30,11 +30,11 @@ def getDefaultHyperparams():
     if not os.path.exists(rootDir): 
         rootDir = os.path.expanduser('~') + '/Semester_project/handwritingBCIData/'
         hyperparams['system'] = 'Linux'
-        hyperparams['output_report'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Report.txt'
-        hyperparams['results_dir'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/trainOutputs/'
-        hyperparams['output_plots'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Plots/'
-        hyperparams['output_csv'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/CSV/'
-        hyperparams['save_model_dir'] = '/home/sem24f8/Semester_project/SNN_project/SemProject_SNN/Model/'
+        hyperparams['output_report'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Report.txt'
+        hyperparams['results_dir'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/trainOutputs/'
+        hyperparams['output_plots'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Plots/'
+        hyperparams['output_csv'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/CSV/'
+        hyperparams['save_model_dir'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Model/'
         hyperparams['prepared_data_dir'] = '/scratch/sem24f8/dataset/'
 
 
@@ -451,9 +451,9 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         acc = computeFrameAccuracy(outputs, targets, errWeights, hyperparams['outputDelay'])
         running_acc.append(acc)
 
-        print(f"{train_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
+        #print(f"{train_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
-    print("")
+    #print("")
 
     return running_loss, running_acc
 
@@ -491,9 +491,9 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
             acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])
             running_acc.append(acc)
     
-            print(f"{val_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
+            #print(f"{val_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
-    print("")
+    #print("")
 
     spikeplot(spikecounts, hyperparams)
 
