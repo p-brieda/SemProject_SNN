@@ -8712,3 +8712,241 @@
 13:40:14,940 --- Training time: 187.67 mins
 13:40:18,863 --- Model saved
 13:40:18,925 --- Metrics saved
+18:40:54,108 ---  
+18:40:54,108 --- =========================================================================
+18:40:54,108 --- New run started with id 997393
+18:40:54,108 --- Epochs strategy
+18:40:54,108 ---  
+18:40:54,108 --- Loading prepared data from dir
+18:47:06,817 ---  
+18:47:06,818 --- =========================================================================
+18:47:06,818 --- New run started with id 166596
+18:47:06,818 --- Epochs strategy
+18:47:06,818 ---  
+18:47:06,818 --- Loading prepared data from dir
+18:50:56,222 ---  
+18:50:56,222 --- =========================================================================
+18:50:56,222 --- New run started with id 340840
+18:50:56,222 --- Epochs strategy
+18:50:56,222 ---  
+18:50:56,222 --- Loading prepared data from dir
+18:53:19,471 ---  
+18:53:19,471 --- =========================================================================
+18:53:19,471 --- New run started with id 664095
+18:53:19,471 --- Epochs strategy
+18:53:19,471 ---  
+18:53:19,471 --- Loading prepared data from dir
+18:53:25,116 ---  
+18:53:25,116 --- =========================================================================
+18:53:25,116 --- New run started with id 763073
+18:53:25,116 --- Epochs strategy
+18:53:25,116 ---  
+18:53:25,116 --- Loading prepared data from dir
+18:53:37,933 --- Training dataloaders ready
+18:53:37,933 --- Validation dataloaders ready
+18:53:38,11 --- Using cuda:0
+18:53:38,482 --- Number of training batches / epoch: 11
+18:53:38,482 --- Number of validation batches / epoch: 7
+18:53:38,482 --- Number of epochs: 10
+18:53:38,482 --- Total training batches: 110
+18:53:39,225 --- Training dataloaders ready
+18:53:39,225 --- Validation dataloaders ready
+18:53:39,245 --- Using cuda:0
+18:53:39,381 --- Number of training batches / epoch: 11
+18:53:39,381 --- Number of validation batches / epoch: 7
+18:53:39,381 --- Number of epochs: 10
+18:53:39,381 --- Total training batches: 110
+18:53:40,87 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.0, amsgrad=False)
+18:53:40,87 --- Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/110))
+18:53:40,87 ---  
+18:53:40,87 --- 664095 - Epoch: 1
+18:53:40,317 --- Optimizer: AdamW(lr=0.01, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.0, amsgrad=False)
+18:53:40,317 --- Scheduler: StepLR(step_size=10, gamma=0.9)
+18:53:40,318 ---  
+18:53:40,318 --- 763073 - Epoch: 1
+18:55:07,382 --- Spike counts per Inference Step and Layer:
+18:55:07,382 --- Layer 1| Spikes: 7864.456 | Never spiked: 9065 neurons out of 17408 [BxN]
+18:55:07,382 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+18:55:07,382 --- Layer 2| Spikes: 1581.806 | Never spiked: 9195 neurons out of 17408 [BxN]
+18:55:07,382 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+18:55:09,812 --- Epoch time: 89.72 s
+18:55:09,812 --- Training loss: 4.4907 | Training accuracy: 0.1063 | Validation loss: 3.7206 | Validation accuracy: 0.0385
+18:55:09,812 ---  
+18:55:09,822 --- Metrics saved
+18:55:09,856 --- 664095 - Epoch: 2
+18:55:11,592 --- Spike counts per Inference Step and Layer:
+18:55:11,592 --- Layer 1| Spikes: 5798.815 | Never spiked: 10759 neurons out of 16896 [BxN]
+18:55:11,592 --- ---Avg spike count of a single neuron per time step: 0.286 * 10-3
+18:55:11,592 --- Layer 2| Spikes: 1394.943 | Never spiked: 9026 neurons out of 16896 [BxN]
+18:55:11,592 --- ---Avg spike count of a single neuron per time step: 0.344 * 10-3
+18:55:13,481 --- Epoch time: 93.16 s
+18:55:13,481 --- Training loss: 4.1773 | Training accuracy: 0.0738 | Validation loss: 3.9106 | Validation accuracy: 0.1639
+18:55:13,481 ---  
+18:55:13,498 --- Metrics saved
+18:55:13,511 --- 763073 - Epoch: 2
+18:56:13,797 --- Spike counts per Inference Step and Layer:
+18:56:13,797 --- Layer 1| Spikes: 7609.125 | Never spiked: 8661 neurons out of 16896 [BxN]
+18:56:13,797 --- ---Avg spike count of a single neuron per time step: 0.375 * 10-3
+18:56:13,797 --- Layer 2| Spikes: 1536.445 | Never spiked: 8829 neurons out of 16896 [BxN]
+18:56:13,797 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+18:56:16,27 --- Epoch time: 66.17 s
+18:56:16,27 --- Training loss: 3.3887 | Training accuracy: 0.1073 | Validation loss: 3.1673 | Validation accuracy: 0.1615
+18:56:16,37 ---  
+18:56:16,47 --- 664095 - Epoch: 3
+18:56:18,353 --- Spike counts per Inference Step and Layer:
+18:56:18,353 --- Layer 1| Spikes: 5804.195 | Never spiked: 10707 neurons out of 16896 [BxN]
+18:56:18,353 --- ---Avg spike count of a single neuron per time step: 0.286 * 10-3
+18:56:18,353 --- Layer 2| Spikes: 1397.688 | Never spiked: 8998 neurons out of 16896 [BxN]
+18:56:18,353 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+18:56:20,137 --- Epoch time: 66.63 s
+18:56:20,137 --- Training loss: 3.4550 | Training accuracy: 0.1171 | Validation loss: 3.0316 | Validation accuracy: 0.1635
+18:56:20,137 ---  
+18:56:20,147 --- 763073 - Epoch: 3
+18:57:13,988 --- Spike counts per Inference Step and Layer:
+18:57:13,988 --- Layer 1| Spikes: 7853.712 | Never spiked: 9076 neurons out of 17408 [BxN]
+18:57:13,988 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+18:57:13,989 --- Layer 2| Spikes: 1581.592 | Never spiked: 9152 neurons out of 17408 [BxN]
+18:57:13,989 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+18:57:16,32 --- Epoch time: 59.99 s
+18:57:16,32 --- Training loss: 3.0648 | Training accuracy: 0.1154 | Validation loss: 3.0431 | Validation accuracy: 0.1664
+18:57:16,32 ---  
+18:57:16,42 --- 664095 - Epoch: 4
+18:57:19,878 --- Spike counts per Inference Step and Layer:
+18:57:19,878 --- Layer 1| Spikes: 5975.566 | Never spiked: 11012 neurons out of 17408 [BxN]
+18:57:19,878 --- ---Avg spike count of a single neuron per time step: 0.286 * 10-3
+18:57:19,878 --- Layer 2| Spikes: 1439.347 | Never spiked: 9247 neurons out of 17408 [BxN]
+18:57:19,878 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+18:57:21,865 --- Epoch time: 61.72 s
+18:57:21,865 --- Training loss: 2.8474 | Training accuracy: 0.1513 | Validation loss: 2.8949 | Validation accuracy: 0.1636
+18:57:21,865 ---  
+18:57:21,875 --- 763073 - Epoch: 4
+18:58:14,20 --- Spike counts per Inference Step and Layer:
+18:58:14,20 --- Layer 1| Spikes: 7392.354 | Never spiked: 8285 neurons out of 16384 [BxN]
+18:58:14,20 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+18:58:14,20 --- Layer 2| Spikes: 1489.693 | Never spiked: 8537 neurons out of 16384 [BxN]
+18:58:14,20 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+18:58:15,950 --- Epoch time: 59.91 s
+18:58:15,950 --- Training loss: 3.0196 | Training accuracy: 0.1434 | Validation loss: 3.0040 | Validation accuracy: 0.1706
+18:58:15,960 ---  
+18:58:15,960 --- 664095 - Epoch: 5
+18:58:18,677 --- Spike counts per Inference Step and Layer:
+18:58:18,677 --- Layer 1| Spikes: 5988.917 | Never spiked: 10916 neurons out of 17408 [BxN]
+18:58:18,677 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+18:58:18,677 --- Layer 2| Spikes: 1440.014 | Never spiked: 9231 neurons out of 17408 [BxN]
+18:58:18,677 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+18:58:20,419 --- Epoch time: 58.54 s
+18:58:20,419 --- Training loss: 2.9541 | Training accuracy: 0.1627 | Validation loss: 2.8179 | Validation accuracy: 0.1693
+18:58:20,419 ---  
+18:58:20,419 --- 763073 - Epoch: 5
+18:59:11,913 --- Spike counts per Inference Step and Layer:
+18:59:11,913 --- Layer 1| Spikes: 7852.655 | Never spiked: 9061 neurons out of 17408 [BxN]
+18:59:11,913 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+18:59:11,913 --- Layer 2| Spikes: 1582.143 | Never spiked: 9161 neurons out of 17408 [BxN]
+18:59:11,913 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+18:59:14,339 --- Epoch time: 58.38 s
+18:59:14,340 --- Training loss: 2.7889 | Training accuracy: 0.1633 | Validation loss: 2.8866 | Validation accuracy: 0.1638
+18:59:14,340 ---  
+18:59:14,346 --- 664095 - Epoch: 6
+18:59:17,266 --- Spike counts per Inference Step and Layer:
+18:59:17,266 --- Layer 1| Spikes: 5820.560 | Never spiked: 10637 neurons out of 16896 [BxN]
+18:59:17,266 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+18:59:17,266 --- Layer 2| Spikes: 1397.411 | Never spiked: 8962 neurons out of 16896 [BxN]
+18:59:17,266 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+18:59:19,360 --- Epoch time: 58.94 s
+18:59:19,360 --- Training loss: 2.7616 | Training accuracy: 0.1500 | Validation loss: 2.8754 | Validation accuracy: 0.1679
+18:59:19,360 ---  
+18:59:19,375 --- 763073 - Epoch: 6
+19:00:11,512 --- Spike counts per Inference Step and Layer:
+19:00:11,512 --- Layer 1| Spikes: 7395.024 | Never spiked: 8600 neurons out of 16384 [BxN]
+19:00:11,512 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+19:00:11,512 --- Layer 2| Spikes: 1488.776 | Never spiked: 8631 neurons out of 16384 [BxN]
+19:00:11,512 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+19:00:13,478 --- Epoch time: 59.13 s
+19:00:13,478 --- Training loss: 2.8212 | Training accuracy: 0.1645 | Validation loss: 2.8505 | Validation accuracy: 0.1633
+19:00:13,478 ---  
+19:00:13,488 --- 664095 - Epoch: 7
+19:00:16,422 --- Spike counts per Inference Step and Layer:
+19:00:16,422 --- Layer 1| Spikes: 6001.715 | Never spiked: 10772 neurons out of 17408 [BxN]
+19:00:16,422 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+19:00:16,422 --- Layer 2| Spikes: 1440.951 | Never spiked: 9221 neurons out of 17408 [BxN]
+19:00:16,422 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+19:00:18,628 --- Epoch time: 59.25 s
+19:00:18,628 --- Training loss: 2.8921 | Training accuracy: 0.1643 | Validation loss: 2.8985 | Validation accuracy: 0.1684
+19:00:18,628 ---  
+19:00:18,645 --- 763073 - Epoch: 7
+19:01:11,217 --- Spike counts per Inference Step and Layer:
+19:01:11,217 --- Layer 1| Spikes: 7633.441 | Never spiked: 8335 neurons out of 16896 [BxN]
+19:01:11,217 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+19:01:11,217 --- Layer 2| Spikes: 1536.372 | Never spiked: 8739 neurons out of 16896 [BxN]
+19:01:11,217 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+19:01:13,328 --- Epoch time: 59.84 s
+19:01:13,328 --- Training loss: 2.7797 | Training accuracy: 0.1647 | Validation loss: 2.9118 | Validation accuracy: 0.1665
+19:01:13,328 ---  
+19:01:13,338 --- 664095 - Epoch: 8
+19:01:15,511 --- Spike counts per Inference Step and Layer:
+19:01:15,511 --- Layer 1| Spikes: 5999.208 | Never spiked: 10900 neurons out of 17408 [BxN]
+19:01:15,511 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+19:01:15,521 --- Layer 2| Spikes: 1439.997 | Never spiked: 9228 neurons out of 17408 [BxN]
+19:01:15,521 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+19:01:17,235 --- Epoch time: 58.59 s
+19:01:17,235 --- Training loss: 2.8078 | Training accuracy: 0.1576 | Validation loss: 2.8265 | Validation accuracy: 0.1652
+19:01:17,235 ---  
+19:01:17,235 --- 763073 - Epoch: 8
+19:02:08,284 --- Spike counts per Inference Step and Layer:
+19:02:08,284 --- Layer 1| Spikes: 7612.786 | Never spiked: 8699 neurons out of 16896 [BxN]
+19:02:08,284 --- ---Avg spike count of a single neuron per time step: 0.375 * 10-3
+19:02:08,284 --- Layer 2| Spikes: 1536.280 | Never spiked: 8840 neurons out of 16896 [BxN]
+19:02:08,284 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+19:02:10,375 --- Epoch time: 57.04 s
+19:02:10,375 --- Training loss: 2.8358 | Training accuracy: 0.1674 | Validation loss: 2.7886 | Validation accuracy: 0.1641
+19:02:10,375 ---  
+19:02:10,375 --- 664095 - Epoch: 9
+19:02:12,983 --- Spike counts per Inference Step and Layer:
+19:02:12,983 --- Layer 1| Spikes: 5828.003 | Never spiked: 10540 neurons out of 16896 [BxN]
+19:02:12,983 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+19:02:12,983 --- Layer 2| Spikes: 1398.701 | Never spiked: 8956 neurons out of 16896 [BxN]
+19:02:12,983 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+19:02:14,824 --- Epoch time: 57.59 s
+19:02:14,824 --- Training loss: 2.8283 | Training accuracy: 0.1663 | Validation loss: 2.8037 | Validation accuracy: 0.1666
+19:02:14,824 ---  
+19:02:14,836 --- 763073 - Epoch: 9
+19:03:11,707 --- Spike counts per Inference Step and Layer:
+19:03:11,707 --- Layer 1| Spikes: 7856.201 | Never spiked: 9088 neurons out of 17408 [BxN]
+19:03:11,717 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+19:03:11,717 --- Layer 2| Spikes: 1581.603 | Never spiked: 9132 neurons out of 17408 [BxN]
+19:03:11,717 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+19:03:14,688 --- Epoch time: 64.31 s
+19:03:14,698 --- Training loss: 2.8567 | Training accuracy: 0.1651 | Validation loss: 2.7152 | Validation accuracy: 0.1622
+19:03:14,698 ---  
+19:03:14,791 --- 664095 - Epoch: 10
+19:03:18,565 --- Spike counts per Inference Step and Layer:
+19:03:18,565 --- Layer 1| Spikes: 5999.483 | Never spiked: 10929 neurons out of 17408 [BxN]
+19:03:18,565 --- ---Avg spike count of a single neuron per time step: 0.287 * 10-3
+19:03:18,565 --- Layer 2| Spikes: 1439.689 | Never spiked: 9233 neurons out of 17408 [BxN]
+19:03:18,565 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+19:03:21,9 --- Epoch time: 66.17 s
+19:03:21,9 --- Training loss: 2.9583 | Training accuracy: 0.1665 | Validation loss: 2.8001 | Validation accuracy: 0.1663
+19:03:21,9 ---  
+19:03:21,35 --- 763073 - Epoch: 10
+19:04:12,392 --- Spike counts per Inference Step and Layer:
+19:04:12,395 --- Layer 1| Spikes: 7854.990 | Never spiked: 9172 neurons out of 17408 [BxN]
+19:04:12,396 --- ---Avg spike count of a single neuron per time step: 0.376 * 10-3
+19:04:12,398 --- Layer 2| Spikes: 1581.747 | Never spiked: 9176 neurons out of 17408 [BxN]
+19:04:12,399 --- ---Avg spike count of a single neuron per time step: 0.379 * 10-3
+19:04:14,441 --- Epoch time: 59.65 s
+19:04:14,441 --- Training loss: 2.8549 | Training accuracy: 0.1662 | Validation loss: 2.6612 | Validation accuracy: 0.1657
+19:04:14,441 ---  
+19:04:14,454 --- Training time: 10.57 mins
+19:04:16,969 --- Spike counts per Inference Step and Layer:
+19:04:16,969 --- Layer 1| Spikes: 5657.030 | Never spiked: 10165 neurons out of 16384 [BxN]
+19:04:16,969 --- ---Avg spike count of a single neuron per time step: 0.288 * 10-3
+19:04:16,969 --- Layer 2| Spikes: 1355.825 | Never spiked: 8689 neurons out of 16384 [BxN]
+19:04:16,969 --- ---Avg spike count of a single neuron per time step: 0.345 * 10-3
+19:04:16,969 --- Model saved
+19:04:16,969 --- Metrics saved
+19:04:19,228 --- Epoch time: 58.19 s
+19:04:19,228 --- Training loss: 2.8071 | Training accuracy: 0.1652 | Validation loss: 2.8481 | Validation accuracy: 0.1652
+19:04:19,228 ---  
+19:04:19,237 --- Training time: 10.65 mins
+19:04:21,668 --- Model saved
+19:04:21,668 --- Metrics saved

@@ -52,7 +52,7 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam
         },
 
-        "Noise_search": {
+        "noise_search": {
             "seed": tune.randint(1,10000),
             "whiteNoiseSD": tune.grid_search([0.0, 0.3, 0.6, 1.0, 1.2]),
             "constantOffsetSD": tune.grid_search([0.0, 0.3, 0.6]),
@@ -75,13 +75,13 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam
         },
 
-        "Surrogate_gradient_search": {
+        "surrogate_gradient_search": {
             "seed": tune.randint(1,10000),
-            "surrogate_gradient": tune.grid_search(['square','multi_gaussian']),
+            "surrogate_gradient": tune.grid_search(["square","multi_gaussian"]),
             "hyperparam": hyperparam
         },
 
-        "Combined_search": {
+        "combined_search": {
             "seed": tune.randint(1,10000),
             "neuron_count": tune.grid_search([256, 512, 1024]),
             "learning_rate": tune.loguniform(1e-5, 1e-1),

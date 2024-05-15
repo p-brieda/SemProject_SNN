@@ -12,7 +12,7 @@
  directionality: 'unidirectional'
  loss: crossentropy
  learning_rate: 0.01
- scheduler: StepLR
+ scheduler: LambdaLR
  scheduler_gamma: 0.9
  scheduler_step_size: 10
  dropout: 0
@@ -34,6 +34,7 @@
 # Network
  batchnorm: 'none'
  neuron_count: 512
+ layers: 2
  use_bias: True
  steps: 10
  warmup_steps: 2
@@ -41,6 +42,7 @@
  reset_by_subtraction: True
  surrogate_gradient: 'square'
  init_u: 'zero'
+ 
 
 #Neuron
  Vth: 0.4

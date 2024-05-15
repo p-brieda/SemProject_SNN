@@ -28,14 +28,14 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = 'Scheduler_search'
+    EXPERIMENT_NAME = "Scheduler_search"
     hyperparams = getDefaultHyperparams()
     
     hyperparams['n_channels'] = 192
     hyperparams['n_outputs'] = 32
 
     # torch.set_num_threads = 3
-    config_name = 'scheduler_search'
+    config_name = "scheduler_search"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
@@ -49,7 +49,7 @@ def main():
         local_dir_path = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Raytune/'
     
     reporter = tune.CLIReporter(
-        metric_columns=["ID", "epoch", "train_loss", "train_acc", "val_loss", "val_acc"],
+        metric_columns=["ID","epoch", "train_loss", "train_acc", "val_loss", "val_acc"],
         max_report_frequency=60
     )
 

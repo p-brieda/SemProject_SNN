@@ -269,6 +269,8 @@ def binTensor(data, binSize):
     return binnedTensor
 
 
+
+
 def gaussianSmoothing(data, kernelSD):
     """
     Applies a 1D gaussian smoothing operation with tensorflow to smooth the data along the time axis.
@@ -340,6 +342,46 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
+def ModelComplexity(hyperparam):
+    # Computets the number of MACs and ACs operations of the model, accounting for neuron firing rates
+
+    # Get the neuron firing rates
+    neuron_rates = torch.load(f"{hyperparam['trainOutputs']}SNN_spike_rate_{hyperparam['id']}.pth")
+
+    MACs = 0
+    ACs = 0
+    num_layers = hyperparam['layers']
+
+    for layer in range(num_layers + 1):
+        if layer == 0:
+            # Input layer -- inputs are analog
+            M = hyperparam['n_channels']
+            N = hyperparam['neuron_count']
+            Fin = 1
+            Fr= neuron_rates[layer]
+            MACs += (1 + Fr + M)*N
+            ACs += (3 + Fr + N*Fr)*N
+        
+        elif layer == num_layers:
+            # Output layer -- nospike
+            M = hyperparam['neuron_count']
+            N = hyperparam['n_outputs']
+            Fin = neuron_rates[layer-1]
+            MACs += N
+            ACs += (1 + M*Fin)*N
+
+        else:
+            # Hidden layers
+            M = hyperparam['neuron_count']
+            N = hyperparam['neuron_count']
+            Fin = neuron_rates[layer-1]
+            Fr = neuron_rates[layer]
+            MACs += (1 + Fr)*N
+            ACs += (3 + Fr + M*Fin + N*Fr)*N
+
+    return MACs, ACs
+
+
 def save_to_csv(data, name):
     #var, trial, epoch, type
     np.savetxt(name, data, delimiter=",")
@@ -354,17 +396,25 @@ def spikeplot(spike, hyperparam):
     spikes = []
     for i in range(layers) :
         spikes.append(spike[i][:,:].detach().to('cpu').numpy()) 
-        
+    
+    spike_rates = []
     #plot Spike count
     logging.info('Spike counts per Inference Step and Layer:')
     for i in range(layers):
-        logging.info(f"Layer {str(i+1)}| Spikes: {np.sum(spikes[i]):.3f} | Never spiked: {spikes[i].shape[0]*spikes[i].shape[1] - np.count_nonzero(spikes[i])} neurons out of {spikes[i].shape[0]*spikes[i].shape[1]} [BxN]")
+        tot_spikes = np.sum(spikes[i])
+        tot_neurons = spikes[i].shape[0]*spikes[i].shape[1]
+
+        logging.info(f"Layer {str(i+1)}| Spikes: {tot_spikes:.3f} | Never spiked: {tot_neurons - np.count_nonzero(spikes[i])} neurons out of {tot_neurons} [BxN]")
         # taking into consideration the slower layer
         if i == layers - 1:
-            logging.info(f"---Avg spike count of a single neuron per time step: {np.sum(spikes[i])/(spikes[i].shape[0]*spikes[i].shape[1]) / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'] * 1000:.3f} * 10-3")
+            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'] * 1000:.3f} * 10-3")
+            spike_rates.append(tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'])
         else:
-            logging.info(f"---Avg spike count of a single neuron per time step: {np.sum(spikes[i])/(spikes[i].shape[0]*spikes[i].shape[1]) / hyperparam['train_val_timeSteps'] * 1000:.3f} * 10-3")
+            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * 1000:.3f} * 10-3")
+            spike_rates.append(tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'])
     
+    torch.save(spike_rates, f"{hyperparam['trainOutputs']}SNN_spike_rate_{hyperparam['id']}.pth")
+        
     
     fig, axs = plt.subplots(1,layers,figsize = (21,7))
     for i in range(layers):
