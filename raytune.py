@@ -30,9 +30,6 @@ def main():
     # SET AN EXPERIMENT NAME
     EXPERIMENT_NAME = "Scheduler_search"
     hyperparams = getDefaultHyperparams()
-    
-    hyperparams['n_channels'] = 192
-    hyperparams['n_outputs'] = 32
 
     # torch.set_num_threads = 3
     config_name = "scheduler_search"

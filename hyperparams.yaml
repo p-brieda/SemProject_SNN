@@ -32,6 +32,8 @@
  test_timeSteps: 7500
 
 # Network
+ n_channels: 192
+ n_outputs: 32 
  batchnorm: 'none'
  neuron_count: 512
  layers: 2
