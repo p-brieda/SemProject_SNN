@@ -198,9 +198,10 @@ class RSNNet(nn.Module):
             #spikeCount3 = torch.mean(spikes2, dim=(-1)).to(self.hyperparam['device'])
 
             x_ = self.fc4(spikes2)
-            o = self.nospike(x_)
+            if self.hyperparam['last_nospike']: o = self.nospike(x_)
+            else: o = x_
             
-            # expaning o with last dim = 1
+            # expanding o with last dim = 1
             o = o.unsqueeze(-1)
             out[...,step: step + self.hyperparam['skipLen']] = o
 

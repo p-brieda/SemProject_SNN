@@ -342,11 +342,11 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
-def ModelComplexity(hyperparam):
+def modelComplexity(hyperparam):
     # Computets the number of MACs and ACs operations of the model, accounting for neuron firing rates
 
     # Get the neuron firing rates
-    neuron_rates = torch.load(f"{hyperparam['trainOutputs']}SNN_spike_rate_{hyperparam['id']}.pth")
+    neuron_rates = torch.load(f"{hyperparam['results_dir']}SNN_spike_rate_{hyperparam['id']}.pth")
 
     MACs = 0
     ACs = 0
@@ -413,7 +413,7 @@ def spikeplot(spike, hyperparam):
             logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * 1000:.3f} * 10-3")
             spike_rates.append(tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'])
     
-    torch.save(spike_rates, f"{hyperparam['trainOutputs']}SNN_spike_rate_{hyperparam['id']}.pth")
+    torch.save(spike_rates, f"{hyperparam['results_dir']}SNN_spike_rate_{hyperparam['id']}.pth")
         
     
     fig, axs = plt.subplots(1,layers,figsize = (21,7))

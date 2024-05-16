@@ -9,7 +9,7 @@ import logging
 import pickle
 
 # Custom imports and torch imports
-from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot
+from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot, modelComplexity
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
@@ -28,11 +28,11 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Scheduler_search"
+    EXPERIMENT_NAME = "Baseline_test"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "scheduler_search"
+    config_name = "baseline"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
@@ -46,13 +46,13 @@ def main():
         local_dir_path = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Raytune/'
     
     reporter = tune.CLIReporter(
-        metric_columns=["ID","epoch", "train_loss", "train_acc", "val_loss", "val_acc"],
-        max_report_frequency=60
+        metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],
+        max_report_frequency=30
     )
 
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':0.5}, 
+                        resources_per_trial={'cpu': 2, 'gpu':1}, 
                         max_concurrent_trials = 2,
                         num_samples = 1,
                         progress_reporter=reporter,
@@ -203,7 +203,7 @@ def train_tune_parallel(config):
     for epoch in range(epochs):
         # Start epoch timer
         epoch_start = time.time()
-        print(f"\nEpoch {epoch+1}")
+        #print(f"\nEpoch {epoch+1}")
         logging.info(f"{hyperparams['id']} - Epoch: {epoch+1}")
 
         # Training epoch
@@ -213,8 +213,9 @@ def train_tune_parallel(config):
 
 
         epoch_end = time.time()
-        print(f"Epoch time: {epoch_end - epoch_start:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
-        logging.info(f"Epoch time: {epoch_end - epoch_start:.2f} s")
+        epoch_time = epoch_end - epoch_start
+        #print(f"Epoch time: {epoch_time:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
+        #logging.info(f"Epoch time: {epoch_time:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
 
         # Metrics saving
         trainloss_per_batch.append(train_loss)
@@ -234,8 +235,8 @@ def train_tune_parallel(config):
 
     
         # Print results of the epoch
-        print(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
-        logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
+        #print(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
+        #logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
 
         if epoch % 10 == 0:
@@ -252,10 +253,13 @@ def train_tune_parallel(config):
         tune.report(
             ID=hyperparams['id'],
             epoch=epoch+1,
+            t_epoch = epoch_time,
             train_loss=avg_train_loss_epoch,
             train_acc=avg_train_acc_epoch,
             val_loss=avg_val_loss_epoch,
-            val_acc=avg_val_acc_epoch)
+            val_acc=avg_val_acc_epoch,
+            lr=scheduler.get_last_lr()[0]
+            )
 
 
 
@@ -295,7 +299,11 @@ def train_tune_parallel(config):
     # ---------- TRAINING PLOT ----------
     TrainPlot(metrics, hyperparams)
 
-    
+    # ----------MODEL COMPLEXITY ----------
+    MACs, ACs = modelComplexity(hyperparams)
+    print(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+    logging.info(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+
 
 
 if __name__ == '__main__':

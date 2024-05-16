@@ -22,6 +22,12 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam
         },
 
+        "network_search": {
+            "seed": tune.randint(1,10000),
+            "last_nospikes": tune.grid_search([True, False]),
+            "hyperparam": hyperparam
+        },
+
         "learning_rate_search": {
             "seed": tune.randint(1,10000),
             "learning_rate": tune.loguniform(1e-4, 1e-1),
@@ -83,11 +89,8 @@ def ray_config_dict(hyperparam, config_name):
 
         "combined_search": {
             "seed": tune.randint(1,10000),
-            "neuron_count": tune.grid_search([256, 512, 1024]),
-            "learning_rate": tune.loguniform(1e-5, 1e-1),
-            "weight_decay": tune.loguniform(1e-5, 1e-1),
-            "dropout": tune.grid_search([0.0, 0.2, 0.4]),
-            "whiteNoiseSD": tune.grid_search([0.0, 0.3, 0.6, 1.0, 1.2]),
+            "scheduler": tune.grid_search(["LambdaLR", "StepLR"]),
+            "learning_rate": tune.grid_search([1e-4, 5e-4,1e-3, 5e-3, 1e-2]),
             "hyperparam": hyperparam
         }
 
