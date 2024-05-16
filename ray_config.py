@@ -24,7 +24,7 @@ def ray_config_dict(hyperparam, config_name):
 
         "network_search": {
             "seed": tune.randint(1,10000),
-            "last_nospikes": tune.grid_search([True, False]),
+            "last_nospike": tune.grid_search([True, False]),
             "hyperparam": hyperparam
         },
 

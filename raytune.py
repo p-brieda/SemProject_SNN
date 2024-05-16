@@ -28,11 +28,11 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Baseline_test"
+    EXPERIMENT_NAME = "Network_search"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "baseline"
+    config_name = "network_search"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
