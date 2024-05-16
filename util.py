@@ -359,7 +359,7 @@ def modelComplexity(hyperparam):
             N = hyperparam['neuron_count']
             Fin = 1
             Fr= neuron_rates[layer]
-            MACs += (1 + Fr + M)*N
+            MACs += (1 + M)*N
             ACs += (3 + Fr + N*Fr)*N
         
         elif layer == num_layers:
@@ -376,7 +376,7 @@ def modelComplexity(hyperparam):
             N = hyperparam['neuron_count']
             Fin = neuron_rates[layer-1]
             Fr = neuron_rates[layer]
-            MACs += (1 + Fr)*N
+            MACs += N
             ACs += (3 + Fr + M*Fin + N*Fr)*N
 
     return MACs, ACs
