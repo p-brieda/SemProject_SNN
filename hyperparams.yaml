@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 50
- epochs: 2
+ epochs: 200
  batchesPerVal: 10
  updateVal: 20
  rnnBinSize: 2
@@ -11,11 +11,11 @@
  outputDelay: 50
  directionality: 'unidirectional'
  loss: crossentropy
- learning_rate: 0.01
- scheduler: LambdaLR
+ learning_rate: 0.001
+ scheduler: 'LambdaLR'
  scheduler_gamma: 0.9
  scheduler_step_size: 10
- dropout: 0
+ dropout: 0.0
  weight_decay: 0.0
  noisy_threshold: 0.2
 
@@ -36,6 +36,8 @@
  n_outputs: 32 
  batchnorm: 'none'
  last_nospike: True
+ inner_layer: 'fc'
+ conv_ker_size: 51
  neuron_count: 512
  layers: 2
  use_bias: True

@@ -15,6 +15,7 @@ from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
 from torch.utils.data import DataLoader
 from network import Net, RSNNet
+from RNN_network import RNN
 from SequenceLoss import SequenceLoss
 import torch.nn as nn
 
@@ -28,11 +29,11 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Network_search"
+    EXPERIMENT_NAME = "Baseline"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "network_search"
+    config_name = "baseline"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
@@ -47,7 +48,7 @@ def main():
     
     reporter = tune.CLIReporter(
         metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],
-        max_report_frequency=30
+        max_report_frequency=60
     )
 
     analysis = tune.run(train_tune_parallel,
@@ -147,6 +148,7 @@ def train_tune_parallel(config):
 
     # Model creation
     model = RSNNet(hyperparams)
+    #model = RNN(hyperparams)
     model.to(device)
 
     # Loss function
@@ -304,6 +306,7 @@ def train_tune_parallel(config):
     print(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
     logging.info(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
 
+    torch.cuda.empty_cache()
 
 
 if __name__ == '__main__':

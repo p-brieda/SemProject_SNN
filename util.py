@@ -490,7 +490,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
 
         data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
         optimizer.zero_grad()
-        output, spikecounts = model(data)
+        output, _ = model(data)
         loss = criterion(output, targets, errWeights)
         loss.backward()
         optimizer.step()

@@ -112,6 +112,7 @@ class RSNNet(nn.Module):
         self.sp1 = RLIFSpike([hyperparam['neuron_count']], hyperparam = hyperparam)
 
         self.fc2 = nn.Linear(hyperparam['neuron_count'], hyperparam['neuron_count'], bias = hyperparam['use_bias'])
+        self.conv2 = nn.Conv1d(1, 1, kernel_size=hyperparam['conv_ker_size'], padding=hyperparam['conv_ker_size']//2, bias = hyperparam['use_bias']) # convolutional layer
         self.frc2 = nn.Linear(hyperparam['neuron_count'], hyperparam['neuron_count'], bias = hyperparam['use_bias'])
         self.drr2 = nn.Dropout(p=hyperparam['dropout'])
         self.dr2 = nn.Dropout(p=hyperparam['dropout'])
@@ -123,6 +124,7 @@ class RSNNet(nn.Module):
         self.sp2 = RLIFSpike([hyperparam['neuron_count']], hyperparam = hyperparam)
 
         self.fc3 = nn.Linear(hyperparam['neuron_count'], hyperparam['neuron_count'], bias = hyperparam['use_bias'])
+        self.conv3 = nn.Conv1d(1, 1, kernel_size=hyperparam['conv_ker_size'], padding=hyperparam['conv_ker_size']//2, bias = hyperparam['use_bias'])
         self.frc3 = nn.Linear(hyperparam['neuron_count'], hyperparam['neuron_count'], bias = hyperparam['use_bias'])
         self.dr3 = nn.Dropout(p=hyperparam['dropout'])
         if(hyperparam['batchnorm'] == 'tdBN'):
@@ -162,6 +164,7 @@ class RSNNet(nn.Module):
         for step in range(steps):
             x_ = x[...,step]
 
+            # FIRST LAYER
             x_ = self.fc1(x_) 
             xr = self.frc2(self.sp1.sp)
             x_ = self.dr1(x_)
@@ -174,30 +177,39 @@ class RSNNet(nn.Module):
             spikes1 = self.sp1(x_ + xr)
             spikeCount1 += spikes1
 
+            # OPTIONAL MIDDLE LAYER
+            if self.hyperparam['layers'] == 3:
+                if self.hyperparam['inner_layer'] == 'fc': x_ = self.fc2(spikes1)
+                elif self.hyperparam['inner_layer'] == 'conv': x_ = self.conv2(spikes1.unsqueeze(1)).squeeze(1)
+                xr = self.frc2(self.sp2.sp)
+                x_ = self.dr2(x_)
+                if(self.hyperparam['batchnorm'] != 'none'):
+                    x_ = self.bn2(x_)
+                    if self.hyperparam.get('recurrent_batchnorm', False):
+                        xr = self.bnr2(xr)
+                
+                spikes2 = self.sp2(x_ + xr)
+                spikeCount2 += spikes2
+
+            
+
+            # SLOW LAYER
             if step % self.hyperparam['skipLen'] != 0:
                 continue
-
-            x_ = self.fc2(spikes1)
-            xr = self.frc2(self.sp2.sp)
-            x_ = self.dr2(x_)
+            # check if we need to skip the second layer
+            if self.hyperparam['layers'] == 2:
+                spikes2 = spikes1
+            if self.hyperparam['inner_layer'] == 'fc': x_ = self.fc3(spikes2)
+            elif self.hyperparam['inner_layer'] == 'conv':x_ = self.conv3(spikes2.unsqueeze(1)).squeeze(1)
+            xr = self.frc3(self.sp3.sp)
+            x_ = self.dr3(x_)
             if(self.hyperparam['batchnorm'] != 'none'):
-                x_ = self.bn2(x_)
-                if self.hyperparam.get('recurrent_batchnorm', False):
-                    xr = self.bnr2(xr)
-            
-            spikes2 = self.sp2(x_ + xr)
-            spikeCount2 += spikes2
+                x_ = self.bn3(x_)
+            spikes3 = self.sp3(x_ + xr)
+            spikeCount3 += spikes3
 
-
-            #x_ = self.fc3(spikes2)
-            #xr = self.frc3(self.sp3.sp)
-            #x_ = self.dr3(x_)
-            #if(self.hyperparam['batchnorm'] != 'none'):
-            #    x_ = self.bn3(x_)
-            #spikes3 = self.sp3(x_ + xr)
-            #spikeCount3 = torch.mean(spikes2, dim=(-1)).to(self.hyperparam['device'])
-
-            x_ = self.fc4(spikes2)
+            # Final layer for output
+            x_ = self.fc4(spikes3)
             if self.hyperparam['last_nospike']: o = self.nospike(x_)
             else: o = x_
             
@@ -218,10 +230,12 @@ class RSNNet(nn.Module):
         
         spikeCount1 /= steps
         spikeCount2 /= steps
-        #spikeCount3 /= steps
+        spikeCount3 /= steps
 
-    
-        return out,(spikeCount1,spikeCount2)
+        if self.hyperparam['layers'] == 2:
+            return out,(spikeCount1,spikeCount3)
+        else:
+            return out,(spikeCount1,spikeCount2, spikeCount3)
     
     def constrain(self, hyperparam):
         if(hyperparam['constrain_method']=='eval'):

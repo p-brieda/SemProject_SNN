@@ -18,13 +18,26 @@ def ray_config_dict(hyperparam, config_name):
 
         "neuron_count_search": {
             "seed": tune.randint(1,10000),
-            "neuron_count": tune.grid_search([256, 512, 1024]),
+            "neuron_count": tune.grid_search([256, 512]),
             "hyperparam": hyperparam
         },
 
         "network_search": {
             "seed": tune.randint(1,10000),
-            "last_nospike": tune.grid_search([True, False]),
+            "layers": tune.grid_search([2, 3]),
+            "hyperparam": hyperparam
+        },
+
+        "inner_layer_search": {
+            "seed": tune.randint(1,10000),
+            "inner_layer": tune.grid_search(["fc", "conv"]),
+            "hyperparam": hyperparam
+        },
+
+        "conv_layer_search": {
+            "seed": tune.randint(1,10000),
+            "inner_layer": "conv",
+            "conv_ker_size": tune.grid_search([7, 11, 31, 51]),
             "hyperparam": hyperparam
         },
 
