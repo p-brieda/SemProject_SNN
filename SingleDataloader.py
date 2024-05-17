@@ -112,7 +112,14 @@ class CustomBatchSampler(Sampler):
             end = min(start + self.batch_size, len(day_indices))
 
             # Yield the current batch
-            yield day_indices[start:end]
+            batch = day_indices[start:end]
+
+            if len(batch) < self.batch_size:
+                # If the last batch is smaller than the batch size fill it with additional random trials from the same day
+                remaining = self.batch_size - len(batch)
+                batch = np.concatenate((batch, day_indices[:remaining]))
+            
+            yield batch
 
             # Update the start index for the next batch from this day
             start_indices[day] += self.batch_size

@@ -1,6 +1,6 @@
 ---
 #Training
- batch_size: 50
+ batch_size: 64
  epochs: 200
  batchesPerVal: 10
  updateVal: 20
@@ -16,7 +16,7 @@
  scheduler_gamma: 0.9
  scheduler_step_size: 100
  dropout: 0.0
- weight_decay: 0.0
+ weight_decay: 0.00001
  noisy_threshold: 0.0
 
  var_dropout_s: 0
@@ -25,8 +25,8 @@
  
 
 # Data augmentation
- constantOffsetSD: 0.3
- randomWalkSD: 0.02
+ constantOffsetSD: 0.0
+ randomWalkSD: 0.0
  whiteNoiseSD: 0.6
  train_val_timeSteps: 1200
  test_timeSteps: 7500
