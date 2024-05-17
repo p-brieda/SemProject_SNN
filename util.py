@@ -10,7 +10,7 @@ from Evaluation import evaluateSNNOutput, wer, decodeCharStr
 import logging
 from scipy.ndimage import gaussian_filter1d
 import matplotlib.pyplot as plt
-
+import torch.nn as nn
 
 
 # function for the creation of the arguments dictionary
@@ -493,6 +493,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         output, _ = model(data)
         loss = criterion(output, targets, errWeights)
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), 10)
         optimizer.step()
         scheduler.step()
         running_loss.append(loss.item())

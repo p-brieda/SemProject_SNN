@@ -271,7 +271,7 @@ def train_tune_parallel(config):
 
 
     # ---------- NEURON HISTOGRAM PLOT ----------
-    neuron_hist_plot(model, hyperparams)
+    #neuron_hist_plot(model, hyperparams)
     
 
     # ---------- SAVE MODEL AND METRICS ----------

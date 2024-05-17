@@ -12,12 +12,12 @@
  directionality: 'unidirectional'
  loss: crossentropy
  learning_rate: 0.001
- scheduler: 'LambdaLR'
+ scheduler: 'StepLR'
  scheduler_gamma: 0.9
- scheduler_step_size: 10
+ scheduler_step_size: 100
  dropout: 0.0
  weight_decay: 0.0
- noisy_threshold: 0.2
+ noisy_threshold: 0.0
 
  var_dropout_s: 0
  var_dropout_t: 0
@@ -25,8 +25,8 @@
  
 
 # Data augmentation
- constantOffsetSD: 0
- randomWalkSD: 0
+ constantOffsetSD: 0.3
+ randomWalkSD: 0.02
  whiteNoiseSD: 0.6
  train_val_timeSteps: 1200
  test_timeSteps: 7500
@@ -41,8 +41,6 @@
  neuron_count: 512
  layers: 2
  use_bias: True
- steps: 10
- warmup_steps: 2
  network_type: 'default'
  reset_by_subtraction: True
  surrogate_gradient: 'square'
@@ -50,7 +48,7 @@
  
 
 #Neuron
- Vth: 0.4
+ Vth: 0.5
  Vth_init_range: 0.1
  Vth_trainable: False
 
