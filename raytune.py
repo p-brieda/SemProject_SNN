@@ -29,11 +29,11 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Baseline"
+    EXPERIMENT_NAME = "LearnRateSearch"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "baseline"
+    config_name = "learning_rate_search"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
@@ -53,7 +53,7 @@ def main():
 
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':1}, 
+                        resources_per_trial={'cpu': 2, 'gpu':0.5}, 
                         max_concurrent_trials = 2,
                         num_samples = 1,
                         progress_reporter=reporter,
@@ -130,7 +130,7 @@ def train_tune_parallel(config):
 
     # loading the validation dataset and creating a DataLoader
     Val_dataset = DataProcessing(hyperparams, prepared_data, mode='validation')
-    valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'])
+    valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'], fill_batch = False)
     val_loader = DataLoader(Val_dataset, batch_sampler = valDayBatch_Sampler, num_workers=1)
     print('Validation dataloader ready')
     logging.info(f"Validation dataloaders ready")
@@ -271,7 +271,7 @@ def train_tune_parallel(config):
 
 
     # ---------- NEURON HISTOGRAM PLOT ----------
-    #neuron_hist_plot(model, hyperparams)
+    neuron_hist_plot(model, hyperparams)
     
 
     # ---------- SAVE MODEL AND METRICS ----------

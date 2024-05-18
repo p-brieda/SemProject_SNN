@@ -14,9 +14,9 @@
  learning_rate: 0.001
  scheduler: 'StepLR'
  scheduler_gamma: 0.9
- scheduler_step_size: 100
+ scheduler_step_size: 200
  dropout: 0.0
- weight_decay: 0.00001
+ weight_decay: 0.0
  noisy_threshold: 0.0
 
  var_dropout_s: 0
@@ -50,7 +50,7 @@
 #Neuron
  Vth: 0.5
  Vth_init_range: 0.1
- Vth_trainable: False
+ Vth_trainable: True
 
  tau: 0.6 # also mean of distribution if tau_init_range > 0
  tau_init_range: 0.1 # width of uniform distribution / std of normal distribution

@@ -84,9 +84,10 @@ class DataProcessing(Dataset):
 # until all trials have been used. If all trials of a day have been used, the sampler removes that day from the list of available days.
 
 class CustomBatchSampler(Sampler):
-    def __init__(self, Idx_perDay, batch_size):
+    def __init__(self, Idx_perDay, batch_size, fill_batch=True):
         self.Idx_perDay = Idx_perDay
         self.batch_size = batch_size
+        self.fill_batch = fill_batch
         self.total_trials = sum(len(indices) for indices in self.Idx_perDay)
         # Calculate the probability for each day based on the number of trials
         self.probabilities = np.array([len(indices) / self.total_trials for indices in Idx_perDay])
@@ -114,7 +115,7 @@ class CustomBatchSampler(Sampler):
             # Yield the current batch
             batch = day_indices[start:end]
 
-            if len(batch) < self.batch_size:
+            if len(batch) < self.batch_size and self.fill_batch:
                 # If the last batch is smaller than the batch size fill it with additional random trials from the same day
                 remaining = self.batch_size - len(batch)
                 batch = np.concatenate((batch, day_indices[:remaining]))

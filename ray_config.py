@@ -43,7 +43,7 @@ def ray_config_dict(hyperparam, config_name):
 
         "learning_rate_search": {
             "seed": tune.randint(1,10000),
-            "learning_rate": tune.loguniform(1e-4, 1e-1),
+            "learning_rate": tune.grid_search([1e-4, 1e-3, 5e-3, 1e-2]),
             "hyperparam": hyperparam
         },
 
