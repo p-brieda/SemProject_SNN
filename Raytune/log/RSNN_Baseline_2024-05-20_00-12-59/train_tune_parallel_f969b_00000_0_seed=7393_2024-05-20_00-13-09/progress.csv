@@ -1,0 +1,2 @@
+ID,epoch,t_epoch,train_loss,train_acc,val_loss,val_acc,lr,time_this_iter_s,done,timesteps_total,episodes_total,training_iteration,trial_id,experiment_id,date,timestamp,time_total_s,pid,hostname,node_ip,time_since_restore,timesteps_since_restore,iterations_since_restore,warmup_time
+596860,1,49.8556604385376,3.111560192975131,0.07418422265486284,3.049016101019723,0.15727157252175467,0.0001,59.33008003234863,False,,,1,f969b_00000,dc3756e4028e4996993ca3cfe2bf5f0b,2024-05-20_00-14-12,1716156852,59.33008003234863,115200,Neptune,127.0.0.1,59.33008003234863,0,1,0.01562786102294922

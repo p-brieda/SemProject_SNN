@@ -16,6 +16,19 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam,
         },
 
+        "RNN_baseline": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RNN",
+            "learning_rate": 0.01,
+            "weight_decay": 0.00001,
+            "epochs": 2400,
+            "scheduler": "LambdaLR",
+            "constantOffsetSD": 0.6,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.2,
+            "hyperparam": hyperparam
+        },
+
         "neuron_count_search": {
             "seed": tune.randint(1,10000),
             "neuron_count": tune.grid_search([256, 512]),

@@ -1,0 +1,11 @@
+{
+  "constantOffsetSD": 0.6,
+  "epochs": 500,
+  "learning_rate": 0.01,
+  "network_type": "RNN",
+  "randomWalkSD": 0.02,
+  "scheduler": "LambdaLR",
+  "seed": 6631,
+  "weight_decay": 1e-05,
+  "whiteNoiseSD": 1.2
+}

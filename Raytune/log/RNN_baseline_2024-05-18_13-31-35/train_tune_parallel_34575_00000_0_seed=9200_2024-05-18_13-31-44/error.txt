@@ -1,0 +1,35 @@
+Failure # 1 (occurred at 2024-05-18_13-32-07)
+[36mray::ImplicitFunc.train()[39m (pid=94868, ip=127.0.0.1, repr=train_tune_parallel)
+  File "python\ray\_raylet.pyx", line 830, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 834, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 780, in ray._raylet.execute_task.function_executor
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\_private\function_manager.py", line 674, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 466, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\trainable.py", line 367, in train
+    raise skipped from exception_cause(skipped)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\function_trainable.py", line 335, in entrypoint
+    return self._trainable_func(
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 466, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\function_trainable.py", line 652, in _trainable_func
+    output = fn()
+  File "c:\Users\pietr\OneDrive\Documenti\PIETRO\ETH\SS24\Semester_project\SNN_project\raytune.py", line 217, in train_tune_parallel
+    train_loss, train_acc = trainModel(model, train_loader , optimizer, scheduler, criterion, hyperparams, device)
+  File "C:\Users\pietr\OneDrive\Documenti\PIETRO\ETH\SS24\Semester_project\SNN_project\util.py", line 489, in trainModel
+    for i, trial_iter in enumerate(train_loader):
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\utils\data\dataloader.py", line 631, in __next__
+    data = self._next_data()
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\utils\data\dataloader.py", line 1346, in _next_data
+    return self._process_data(data)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\utils\data\dataloader.py", line 1370, in _process_data
+    self._try_put_index()
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\utils\data\dataloader.py", line 1352, in _try_put_index
+    index = self._next_index()
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\utils\data\dataloader.py", line 621, in _next_index
+    return next(self._sampler_iter)  # may raise StopIteration
+  File "C:\Users\pietr\OneDrive\Documenti\PIETRO\ETH\SS24\Semester_project\SNN_project\SingleDataloader.py", line 122, in __iter__
+    batch = np.concatenate((batch, np.random.choice(day_indices, remaining, replace=False)))
+  File "numpy\\random\\mtrand.pyx", line 1001, in numpy.random.mtrand.RandomState.choice
+ValueError: Cannot take a larger sample than population when 'replace=False'

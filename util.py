@@ -490,10 +490,14 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
 
         data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
         optimizer.zero_grad()
-        output, _= model(data)
+        if hyperparams['network_type'] != 'RNN':
+            output, spikecounts = model(data)
+        else:
+            output = model(data)
         loss = criterion(output, targets, errWeights)
         loss.backward()
-        #nn.utils.clip_grad_norm_(model.parameters(), 10)
+        # gradient clipping
+        nn.utils.clip_grad_norm_(model.parameters(), 10)
         optimizer.step()
         scheduler.step()
         running_loss.append(loss.item())
@@ -535,7 +539,10 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
         for i, trial_iter in enumerate(val_loader):
 
             data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
-            output, spikecounts = model(data)
+            if hyperparams['network_type'] != 'RNN':
+                output, spikecounts = model(data)
+            else:
+                output = model(data)
             loss = criterion(output, targets, errWeights)
             running_loss.append(loss.item())
             output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
@@ -545,8 +552,8 @@ def validateModel(model, val_loader, criterion, hyperparams, device):
             #print(f"{val_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
 
     #print("")
-
-    spikeplot(spikecounts, hyperparams)
+    if hyperparams['network_type'] != 'RNN':
+        spikeplot(spikecounts, hyperparams)
 
     return running_loss, running_acc
 
@@ -580,7 +587,7 @@ def testModel(model, test_loaders, viable_test_days ,criterion, hyperparams, dev
 
                 trial_iter = next(test_loader)
                 data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
-                output, spikecounts = model(data)
+                output = model(data)
                 loss = criterion(output, targets, errWeights)
                 running_loss += loss.item()
                 output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)

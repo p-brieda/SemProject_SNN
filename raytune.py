@@ -29,11 +29,11 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "LearnRateSearch"
+    EXPERIMENT_NAME = "RSNN_Baseline"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "learning_rate_search"
+    config_name = "baseline"
     ray_config = ray_config_dict(hyperparams, config_name)
 
     #optuna_search = OptunaSearch()
@@ -48,12 +48,12 @@ def main():
     
     reporter = tune.CLIReporter(
         metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],
-        max_report_frequency=60
+        max_report_frequency=45
     )
 
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':0.5}, 
+                        resources_per_trial={'cpu': 2, 'gpu':1}, 
                         max_concurrent_trials = 2,
                         num_samples = 1,
                         progress_reporter=reporter,
@@ -147,9 +147,12 @@ def train_tune_parallel(config):
     logging.info(f"Using {device}")
 
     # Model creation
-    model = RSNNet(hyperparams)
-    #model = RNN(hyperparams)
+    if hyperparams['network_type'] == 'RSNN':
+        model = RSNNet(hyperparams)
+    elif hyperparams['network_type'] == 'RNN':
+        model = RNN(hyperparams)
     model.to(device)
+
 
     # Loss function
     criterion = SequenceLoss(hyperparams)
@@ -166,16 +169,19 @@ def train_tune_parallel(config):
 
 
     # Optimizer
-    optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
-                                betas= (0.9, 0.999), eps=1e-08, 
-                                weight_decay=hyperparams['weight_decay'], amsgrad=False)
-    logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+    #optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
+    #                            betas= (0.9, 0.999), eps=1e-08, 
+    #                            weight_decay=hyperparams['weight_decay'], amsgrad=False)
+    #logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['learning_rate'], betas=(0.9, 0.999), eps=1e-01, weight_decay=hyperparams['weight_decay'], amsgrad=False)
+    logging.info(f"Optimizer: Adam(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-01, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
 
     # Scheduler 
     if hyperparams['scheduler'] == 'LambdaLR':
-        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/tot_train_batches))
-        logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{tot_train_batches}))")
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/20000))
+        logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{20000}))")
     elif hyperparams['scheduler'] == 'StepLR':
         # since the scheduler is inside the epoch loop, the actual step_size is in terms of batches
         step_size = hyperparams['scheduler_step_size'] * num_batches_per_epoch_train
@@ -271,7 +277,8 @@ def train_tune_parallel(config):
 
 
     # ---------- NEURON HISTOGRAM PLOT ----------
-    neuron_hist_plot(model, hyperparams)
+    if hyperparams['network_type'] !='RNN':
+        neuron_hist_plot(model, hyperparams)
     
 
     # ---------- SAVE MODEL AND METRICS ----------
@@ -302,9 +309,10 @@ def train_tune_parallel(config):
     TrainPlot(metrics, hyperparams)
 
     # ----------MODEL COMPLEXITY ----------
-    MACs, ACs = modelComplexity(hyperparams)
-    print(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
-    logging.info(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+    if hyperparams['network_type'] != 'RNN':
+        MACs, ACs = modelComplexity(hyperparams)
+        print(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+        logging.info(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
 
     torch.cuda.empty_cache()
 

@@ -1,0 +1,26 @@
+Failure # 1 (occurred at 2024-05-20_16-01-45)
+[36mray::ImplicitFunc.train()[39m (pid=68160, ip=127.0.0.1, repr=train_tune_parallel)
+  File "python\ray\_raylet.pyx", line 830, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 834, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 780, in ray._raylet.execute_task.function_executor
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\_private\function_manager.py", line 674, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 466, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\trainable.py", line 367, in train
+    raise skipped from exception_cause(skipped)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\function_trainable.py", line 335, in entrypoint
+    return self._trainable_func(
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 466, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\ray\tune\trainable\function_trainable.py", line 652, in _trainable_func
+    output = fn()
+  File "c:\Users\pietr\OneDrive\Documenti\PIETRO\ETH\SS24\Semester_project\SNN_project\raytune.py", line 154, in train_tune_parallel
+    model = torch.load('Model/model_' + '873558' + '.pth')
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\serialization.py", line 998, in load
+    with _open_file_like(f, 'rb') as opened_file:
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\serialization.py", line 445, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+  File "C:\Users\pietr\anaconda3\envs\snnproject\lib\site-packages\torch\serialization.py", line 426, in __init__
+    super().__init__(open(name, mode))
+FileNotFoundError: [Errno 2] No such file or directory: 'Model/model_873558.pth'

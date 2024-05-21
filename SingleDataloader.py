@@ -119,6 +119,7 @@ class CustomBatchSampler(Sampler):
                 # If the last batch is smaller than the batch size fill it with additional random trials from the same day
                 remaining = self.batch_size - len(batch)
                 batch = np.concatenate((batch, day_indices[:remaining]))
+                #batch = np.concatenate([batch, np.random.choice(day_indices, remaining, replace=True)])
             
             yield batch
 

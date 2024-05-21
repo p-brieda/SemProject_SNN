@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 64
- epochs: 200
+ epochs: 500
  batchesPerVal: 10
  updateVal: 20
  rnnBinSize: 2
@@ -10,13 +10,12 @@
  cvPart: 'HeldOutBlocks'
  outputDelay: 50
  directionality: 'unidirectional'
- loss: crossentropy
- learning_rate: 0.001
- scheduler: 'StepLR'
+ learning_rate: 0.01
+ scheduler: 'LambdaLR'
  scheduler_gamma: 0.9
- scheduler_step_size: 200
+ scheduler_step_size: 500
  dropout: 0.0
- weight_decay: 0.0
+ weight_decay: 0.00001
  noisy_threshold: 0.0
 
  var_dropout_s: 0
@@ -25,8 +24,8 @@
  
 
 # Data augmentation
- constantOffsetSD: 0.0
- randomWalkSD: 0.0
+ constantOffsetSD: 0.3
+ randomWalkSD: 0.02
  whiteNoiseSD: 0.6
  train_val_timeSteps: 1200
  test_timeSteps: 7500
@@ -41,7 +40,7 @@
  neuron_count: 512
  layers: 2
  use_bias: True
- network_type: 'default'
+ network_type: 'RSNN'
  reset_by_subtraction: True
  surrogate_gradient: 'square'
  init_u: 'zero'
@@ -59,9 +58,6 @@
  tau_sigmoid: False
 
  constrain_method: 'forward'
- reset_by_subtraction: True
- surrogate_gradient: 'square'
- init_u: 'zero'
 
 
 #Dataset

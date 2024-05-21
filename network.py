@@ -210,8 +210,11 @@ class RSNNet(nn.Module):
 
             # Final layer for output
             x_ = self.fc4(spikes3)
-            if self.hyperparam['last_nospike']: o = self.nospike(x_)
-            else: o = x_
+            if self.hyperparam['last_nospike']: 
+                o[:,:-1] = self.nospike(x_[:,:-1])
+                o[:,-1] = x_[:,-1]
+            else: 
+                o = x_
             
             # expanding o with last dim = 1
             o = o.unsqueeze(-1)
