@@ -723,6 +723,8 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
 
     return running_train_loss, running_train_acc, running_val_loss, running_val_acc
 
+
+
         
         
 

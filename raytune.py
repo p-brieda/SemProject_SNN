@@ -247,7 +247,7 @@ def train_tune_parallel(config):
         #logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
 
-        if epoch % 10 == 0:
+        if epoch % 270 == 0:
             # Save the metrics
             metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
                         'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
@@ -256,6 +256,11 @@ def train_tune_parallel(config):
             torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
             print('Metrics saved')
             logging.info('Metrics saved')
+
+            # Save the model
+            torch.save(model, f"{hyperparams['save_model_dir']}model_{hyperparams['id']}.pth")
+            print('Model saved')
+            logging.info('Model saved')
 
         # save metrics in tune report
         tune.report(
@@ -284,8 +289,8 @@ def train_tune_parallel(config):
     # ---------- SAVE MODEL AND METRICS ----------
     # Save the model
     torch.save(model, f"{hyperparams['save_model_dir']}model_{hyperparams['id']}.pth")
-    print('Model saved')
-    logging.info('Model saved')
+    print('Final model saved')
+    logging.info('Final model saved')
 
     # Save the metrics
     metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
@@ -293,8 +298,8 @@ def train_tune_parallel(config):
                 'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
                 'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
     torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
-    print('Metrics saved')
-    logging.info('Metrics saved')
+    print('Final metrics saved')
+    logging.info('Final metrics saved')
 
     # save metrics
     with open(f"{hyperparams['results_dir']}results_{hyperparams['id']}.pickle", 'wb') as f:

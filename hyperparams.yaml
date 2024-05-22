@@ -1,7 +1,7 @@
 ---
 #Training
  batch_size: 64
- epochs: 500
+ epochs: 300
  batchesPerVal: 10
  updateVal: 20
  rnnBinSize: 2
