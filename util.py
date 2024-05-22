@@ -499,7 +499,8 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         # gradient clipping
         nn.utils.clip_grad_norm_(model.parameters(), 10)
         optimizer.step()
-        scheduler.step()
+        if hyperparams['scheduler'] == 'LambdaLR' or hyperparams['scheduler'] == 'StepLR':
+            scheduler.step()
         running_loss.append(loss.item())
 
         outputs, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
@@ -507,6 +508,9 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
         running_acc.append(acc)
 
         #print(f"{train_progress} Batch: {i+1}/{num_batches} | Loss: {loss.item():.3f}")
+
+    if hyperparams['scheduler'] == 'ReduceLROnPlateau':
+        scheduler.step(sum(running_acc) / len(running_acc))
 
     #print("")
 

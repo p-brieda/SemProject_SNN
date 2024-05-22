@@ -19,6 +19,7 @@ def ray_config_dict(hyperparam, config_name):
         "RNN_baseline": {
             "seed": tune.randint(1,10000),
             "network_type": "RNN",
+            "optimizer": "Adam",
             "learning_rate": 0.01,
             "weight_decay": 0.00001,
             "epochs": 2400,
@@ -28,6 +29,22 @@ def ray_config_dict(hyperparam, config_name):
             "whiteNoiseSD": 1.2,
             "hyperparam": hyperparam
         },
+
+        "RSNN_combined": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RSNN",
+            "optimizer": "Adam",
+            "learning_rate": tune.grid_search([0.01, 0.005, 0.001, 0.0001]),
+            "epsilon": 0.1,
+            "weight_decay": 0.00001,
+            "epochs": 600,
+            "scheduler": "'ReduceLROnPlateau",
+            "constantOffsetSD": 0.6,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.2,
+            "hyperparam": hyperparam
+        },
+
 
         "neuron_count_search": {
             "seed": tune.randint(1,10000),

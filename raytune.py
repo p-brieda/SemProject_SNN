@@ -169,24 +169,34 @@ def train_tune_parallel(config):
 
 
     # Optimizer
-    #optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
-    #                            betas= (0.9, 0.999), eps=1e-08, 
-    #                            weight_decay=hyperparams['weight_decay'], amsgrad=False)
-    #logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+    if hyperparams['optimizer'] == 'AdamW':
+        optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
+                                    betas= (0.9, 0.999), eps=hyperparams['epsilon'], 
+                                    weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps={hyperparams['epsilon']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['learning_rate'], betas=(0.9, 0.999), eps=1e-01, weight_decay=hyperparams['weight_decay'], amsgrad=False)
-    logging.info(f"Optimizer: Adam(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-01, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+    elif hyperparams['optimizer'] == 'Adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['learning_rate'], 
+                                     betas=(0.9, 0.999), eps=hyperparams['epsilon'], 
+                                     weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: Adam(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps={hyperparams['epsilon']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
 
     # Scheduler 
     if hyperparams['scheduler'] == 'LambdaLR':
         scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/20000))
         logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{20000}))")
+
     elif hyperparams['scheduler'] == 'StepLR':
         # since the scheduler is inside the epoch loop, the actual step_size is in terms of batches
         step_size = hyperparams['scheduler_step_size'] * num_batches_per_epoch_train
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=hyperparams['scheduler_gamma'])
         logging.info(f"Scheduler: StepLR(step_size={hyperparams['scheduler_step_size']}, gamma={hyperparams['scheduler_gamma']})")
+
+    elif hyperparams['scheduler'] == 'ReduceLROnPlateau':
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=hyperparams['scheduler_gamma'], patience=hyperparams['scheduler_patience'], 
+                                                               threshold=hyperparams['scheduler_threshold'], threshold_mode='abs')
+        logging.info(f"Scheduler: ReduceLROnPlateau(mode='min', factor={hyperparams['scheduler_gamma']}, patience={hyperparams['scheduler_patience']}, threshold={hyperparams['scheduler_threshold']}, threshold_mode='abs')")
     
     logging.info(' ')
     

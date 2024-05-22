@@ -1,27 +1,41 @@
 ---
-#Training
+#Training params
  batch_size: 64
  epochs: 300
- batchesPerVal: 10
- updateVal: 20
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
  cvPart: 'HeldOutBlocks'
  outputDelay: 50
- directionality: 'unidirectional'
+
+ # Optimizer and scheduler
+ optimizer: 'Adam'
  learning_rate: 0.01
+ weight_decay: 0.00001
+ epsilon: 0.1
  scheduler: 'LambdaLR'
  scheduler_gamma: 0.9
  scheduler_step_size: 500
- dropout: 0.0
- weight_decay: 0.00001
- noisy_threshold: 0.0
+ scheduler_patience: 20
+ scheduler_threshold: 0.01
+ 
 
+
+ dropout: 0.0
+ noisy_threshold: 0.0
  var_dropout_s: 0
  var_dropout_t: 0
  zoneout: False
- 
+
+
+# RNN
+ directionality: 'unidirectional'
+
+# Inf iter approach
+ batchesPerVal: 10
+ updateVal: 20
+
+
 
 # Data augmentation
  constantOffsetSD: 0.3
@@ -87,21 +101,13 @@
  rpr_step_epochs: 3
 
 #Reporting
- experiment_name: 'baseline_fp_run'
- loss_steps: 100 #how often to report the loss
  output_report: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Report.txt'
  output_plots: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Plots/'
  output_csv: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/CSV/'
  results_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/trainOutputs/'
- if_plot: False
 
 #General
  seed: 'random' #use 'random' for a non-deterministic seed
  device: cuda:0
  early_stopping: False
- dataset_file: 
-#save and load model
- save_model: True
  save_model_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Model/'
- load_model: False 
- load_model_dir: 
