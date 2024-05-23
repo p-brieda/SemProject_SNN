@@ -32,6 +32,8 @@ def main():
     EXPERIMENT_NAME = "asha_combo"
     hyperparams = getDefaultHyperparams()
 
+    #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
     # torch.set_num_threads = 3
     config_name = "ASHA_combined"
     ray_config = ray_config_dict(hyperparams, config_name)

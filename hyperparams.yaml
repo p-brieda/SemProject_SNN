@@ -1,7 +1,7 @@
 ---
 #Training params
  batch_size: 64
- epochs: 1000
+ epochs: 500
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
@@ -110,6 +110,6 @@
 
 #General
  seed: 'random' #use 'random' for a non-deterministic seed
- device: cuda:0
+ device: cuda
  early_stopping: False
  save_model_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Model/'
