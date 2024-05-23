@@ -1,7 +1,7 @@
 ---
 #Training params
  batch_size: 64
- epochs: 300
+ epochs: 1000
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
@@ -10,14 +10,16 @@
 
  # Optimizer and scheduler
  optimizer: 'Adam'
- learning_rate: 0.01
+ lr: 0.01
  weight_decay: 0.00001
- epsilon: 0.1
+ eps: 0.1
  scheduler: 'LambdaLR'
- scheduler_gamma: 0.9
- scheduler_step_size: 500
- scheduler_patience: 20
- scheduler_threshold: 0.01
+ # step lr scheduler
+ gamma: 0.9
+ step_size: 500
+ # Reduce lr on pleateau scheduler
+ patience: 20
+ threshold: 0.01
  
 
 

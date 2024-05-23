@@ -425,6 +425,7 @@ def spikeplot(spike, hyperparam):
         ax.set_xlabel('Spike Rate')
         ax.set_title('layer '+str(i+1))
     plt.savefig(hyperparam['output_plots']+'Spikerate_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+    plt.close()
 
 
 
@@ -444,6 +445,7 @@ def neuron_hist_plot(net, hyperparam):
         axs[i*2+1].set_ylabel('Count of Neurons')
         axs[i*2+1].set_xlabel('Layer '+str(i)+' tau')
     plt.savefig(hyperparam['output_plots']+'Neuron_distribution_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+    plt.close()
 
 
 
@@ -473,6 +475,7 @@ def TrainPlot(metrics, hyperparam):
     axs[1,1].set_xlabel('Epoch')
     axs[1,1].set_title('Validation Accuracy per Epoch')
     plt.savefig(hyperparam['output_plots']+'Train_plot_'+str(hyperparam['id'])+'.png', transparent= False, dpi=600,bbox_inches='tight' )
+    plt.close()
 
 
 
@@ -496,8 +499,7 @@ def trainModel(model, train_loader, optimizer, scheduler, criterion, hyperparams
             output = model(data)
         loss = criterion(output, targets, errWeights)
         loss.backward()
-        # gradient clipping
-        nn.utils.clip_grad_norm_(model.parameters(), 10)
+        nn.utils.clip_grad_norm_(model.parameters(), 10) # gradient clipping
         optimizer.step()
         if hyperparams['scheduler'] == 'LambdaLR' or hyperparams['scheduler'] == 'StepLR':
             scheduler.step()

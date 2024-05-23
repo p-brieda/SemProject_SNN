@@ -29,15 +29,16 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "RSNN_Baseline"
+    EXPERIMENT_NAME = "asha_combo"
     hyperparams = getDefaultHyperparams()
 
     # torch.set_num_threads = 3
-    config_name = "baseline"
+    config_name = "ASHA_combined"
     ray_config = ray_config_dict(hyperparams, config_name)
 
+
     #optuna_search = OptunaSearch()
-    #ashas_scheduler = ASHAScheduler(grace_period=5, reduction_factor=5)
+    asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=150, reduction_factor=2)
 
     # CONFIGURE RAY TUNE
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
@@ -51,17 +52,18 @@ def main():
         max_report_frequency=45
     )
 
+    # if using ASHA, please uncomment the scheduler parameter and comment the metric and mode parameters
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':1}, 
+                        resources_per_trial={'cpu': 2, 'gpu':0.5}, 
                         max_concurrent_trials = 2,
                         num_samples = 1,
                         progress_reporter=reporter,
                         # search_alg=optuna_search,
-                        #scheduler=ashas_scheduler, 
-                        metric='val_acc',
+                        scheduler=asha_scheduler, 
+                        #metric='val_acc',
                         local_dir = local_dir_path + 'log',
-                        mode='max',
+                        #mode='max',
                         name=EXPERIMENT_NAME + '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
                         )
     
@@ -170,16 +172,16 @@ def train_tune_parallel(config):
 
     # Optimizer
     if hyperparams['optimizer'] == 'AdamW':
-        optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
-                                    betas= (0.9, 0.999), eps=hyperparams['epsilon'], 
+        optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['lr'], 
+                                    betas= (0.9, 0.999), eps=hyperparams['eps'], 
                                     weight_decay=hyperparams['weight_decay'], amsgrad=False)
-        logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps={hyperparams['epsilon']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+        logging.info(f"Optimizer: AdamW(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
     elif hyperparams['optimizer'] == 'Adam':
-        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['learning_rate'], 
-                                     betas=(0.9, 0.999), eps=hyperparams['epsilon'], 
+        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['lr'], 
+                                     betas=(0.9, 0.999), eps=hyperparams['eps'], 
                                      weight_decay=hyperparams['weight_decay'], amsgrad=False)
-        logging.info(f"Optimizer: Adam(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps={hyperparams['epsilon']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+        logging.info(f"Optimizer: Adam(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
 
     # Scheduler 
@@ -189,14 +191,14 @@ def train_tune_parallel(config):
 
     elif hyperparams['scheduler'] == 'StepLR':
         # since the scheduler is inside the epoch loop, the actual step_size is in terms of batches
-        step_size = hyperparams['scheduler_step_size'] * num_batches_per_epoch_train
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=hyperparams['scheduler_gamma'])
-        logging.info(f"Scheduler: StepLR(step_size={hyperparams['scheduler_step_size']}, gamma={hyperparams['scheduler_gamma']})")
+        step_size = hyperparams['step_size'] * num_batches_per_epoch_train
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=hyperparams['gamma'])
+        logging.info(f"Scheduler: StepLR(step_size={hyperparams['step_size']}, gamma={hyperparams['gamma']})")
 
     elif hyperparams['scheduler'] == 'ReduceLROnPlateau':
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=hyperparams['scheduler_gamma'], patience=hyperparams['scheduler_patience'], 
-                                                               threshold=hyperparams['scheduler_threshold'], threshold_mode='abs')
-        logging.info(f"Scheduler: ReduceLROnPlateau(mode='min', factor={hyperparams['scheduler_gamma']}, patience={hyperparams['scheduler_patience']}, threshold={hyperparams['scheduler_threshold']}, threshold_mode='abs')")
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=hyperparams['gamma'], patience=hyperparams['patience'], 
+                                                               threshold=hyperparams['threshold'], threshold_mode='abs')
+        logging.info(f"Scheduler: ReduceLROnPlateau(mode='min', factor={hyperparams['gamma']}, patience={hyperparams['patience']}, threshold={hyperparams['threshold']}, threshold_mode='abs')")
     
     logging.info(' ')
     
@@ -257,7 +259,7 @@ def train_tune_parallel(config):
         #logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
 
-        if epoch % 270 == 0:
+        if epoch % 20 == 0:
             # Save the metrics
             metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
                         'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,

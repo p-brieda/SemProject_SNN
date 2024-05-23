@@ -11,16 +11,19 @@ import numpy as np
 
 def ray_config_dict(hyperparam, config_name):
     case = {
+
         "baseline": {
             "seed": tune.randint(1,10000),
             "hyperparam": hyperparam,
         },
 
+
+
         "RNN_baseline": {
             "seed": tune.randint(1,10000),
             "network_type": "RNN",
             "optimizer": "Adam",
-            "learning_rate": 0.01,
+            "lr": 0.01,
             "weight_decay": 0.00001,
             "epochs": 2400,
             "scheduler": "LambdaLR",
@@ -30,20 +33,43 @@ def ray_config_dict(hyperparam, config_name):
             "hyperparam": hyperparam
         },
 
+
+
         "RSNN_combined": {
             "seed": tune.randint(1,10000),
             "network_type": "RSNN",
             "optimizer": "Adam",
-            "learning_rate": tune.grid_search([0.01, 0.005, 0.001, 0.0001]),
-            "epsilon": 0.1,
+            "lr": tune.grid_search([0.01, 0.005, 0.001, 0.0001]),
+            "eps": 0.1,
             "weight_decay": 0.00001,
             "epochs": 600,
-            "scheduler": "'ReduceLROnPlateau",
+            "scheduler": "ReduceLROnPlateau",
             "constantOffsetSD": 0.6,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.2,
             "hyperparam": hyperparam
         },
+
+
+
+        "ASHA_combined": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RSNN",
+            "optimizer": "Adam",
+            "lr": 0.01,
+            #'lr': tune.grid_search([0.01, 0.008, 0.05]),
+            "eps": 0.1,
+            #"weight_decay": tune.grid_search([0.00001, 0.0001, 0.001]),
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.9,
+            "threshold": tune.grid_search([0.01, 0.02, 0.03]),
+            "patience": tune.grid_search([50, 30, 15]),
+            "constantOffsetSD": 0.6,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.2,
+            "hyperparam": hyperparam
+        },
+
 
 
         "neuron_count_search": {
@@ -73,7 +99,7 @@ def ray_config_dict(hyperparam, config_name):
 
         "learning_rate_search": {
             "seed": tune.randint(1,10000),
-            "learning_rate": tune.grid_search([1e-4, 1e-3, 5e-3, 1e-2]),
+            "lr": tune.grid_search([1e-4, 1e-3, 5e-3, 1e-2]),
             "hyperparam": hyperparam
         },
 
@@ -118,9 +144,9 @@ def ray_config_dict(hyperparam, config_name):
         "scheduler_lambdaLR_search": {
             "seed": tune.randint(1,10000),
             "scheduler": "LambdaLR",
-            "learning_rate": tune.loguniform(1e-4, 1e-1),
-            "scheduler_step_size": tune.grid_search([10, 20, 30]),
-            "scheduler_gamma": tune.uniform(0.1, 0.9),
+            "lr": tune.loguniform(1e-4, 1e-1),
+            "step_size": tune.grid_search([10, 20, 30]),
+            "gamma": tune.uniform(0.1, 0.9),
             "hyperparam": hyperparam
         },
 
@@ -129,14 +155,6 @@ def ray_config_dict(hyperparam, config_name):
             "surrogate_gradient": tune.grid_search(["square","multi_gaussian"]),
             "hyperparam": hyperparam
         },
-
-        "combined_search": {
-            "seed": tune.randint(1,10000),
-            "scheduler": tune.grid_search(["LambdaLR", "StepLR"]),
-            "learning_rate": tune.grid_search([1e-4, 5e-4,1e-3, 5e-3, 1e-2]),
-            "hyperparam": hyperparam
-        }
-
 
         }
 
