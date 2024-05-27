@@ -200,7 +200,7 @@ class RSNNet(nn.Module):
             if self.hyperparam['layers'] == 2:
                 spikes2 = spikes1
             if self.hyperparam['inner_layer'] == 'fc': x_ = self.fc3(spikes2)
-            elif self.hyperparam['inner_layer'] == 'conv':x_ = self.conv3(spikes2.unsqueeze(1)).squeeze(1)
+            elif self.hyperparam['inner_layer'] == 'conv': x_ = self.conv3(spikes2.unsqueeze(1)).squeeze(1)
             xr = self.frc3(self.sp3.sp)
             x_ = self.dr3(x_)
             if(self.hyperparam['batchnorm'] != 'none'):
@@ -231,7 +231,7 @@ class RSNNet(nn.Module):
         
         spikeCount1 /= steps
         spikeCount2 /= steps
-        spikeCount3 /= steps
+        spikeCount3 = spikeCount3 / steps * self.hyperparam['skipLen'] 
 
         if self.hyperparam['layers'] == 2:
             return out,(spikeCount1,spikeCount3)

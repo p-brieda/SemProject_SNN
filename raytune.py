@@ -29,7 +29,7 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "asha_combo"
+    EXPERIMENT_NAME = "Comps_test"
     hyperparams = getDefaultHyperparams()
 
     #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
@@ -57,8 +57,8 @@ def main():
     # if using ASHA, please uncomment the scheduler parameter and comment the metric and mode parameters
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':0.5}, 
-                        max_concurrent_trials = 2,
+                        resources_per_trial={'cpu': 2, 'gpu':1}, 
+                        max_concurrent_trials = 1,
                         num_samples = 1,
                         progress_reporter=reporter,
                         # search_alg=optuna_search,

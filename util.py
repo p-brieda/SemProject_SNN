@@ -342,6 +342,19 @@ def computeFrameAccuracy(snnOutput, targets, errWeight, outputDelay):
 
 
 
+def computeTransSignalAccuracy(snnOutput, targets, errWeight, outputDelay):
+    transSignal = snnOutput[:, -1, outputDelay:]
+    targetSignal = targets[:, -1, 0:-outputDelay]
+    bw = errWeight[:,0:-outputDelay]
+
+    acc = np.sum(bw*np.equal(np.squeeze(transSignal > 0.3), np.squeeze(targetSignal)))/np.sum(bw)
+    rmse = np.sqrt(np.mean((transSignal - targetSignal)**2))
+
+    return acc, rmse
+
+
+
+
 def modelComplexity(hyperparam):
     # Computets the number of MACs and ACs operations of the model, accounting for neuron firing rates
 
@@ -352,6 +365,10 @@ def modelComplexity(hyperparam):
     ACs = 0
     num_layers = hyperparam['layers']
 
+    if hyperparam['use_bias']: bias = 1
+    else: bias = 0
+        
+
     for layer in range(num_layers + 1):
         if layer == 0:
             # Input layer -- inputs are analog
@@ -360,7 +377,7 @@ def modelComplexity(hyperparam):
             Fin = 1
             Fr= neuron_rates[layer]
             MACs += (1 + M)*N
-            ACs += (3 + Fr + N*Fr)*N
+            ACs += (3 + Fr + N*Fr + 2*bias)*N
         
         elif layer == num_layers:
             # Output layer -- nospike
@@ -368,7 +385,7 @@ def modelComplexity(hyperparam):
             N = hyperparam['n_outputs']
             Fin = neuron_rates[layer-1]
             MACs += N
-            ACs += (1 + M*Fin)*N
+            ACs += (1 + M*Fin + bias)*N
 
         else:
             # Hidden layers
@@ -377,7 +394,7 @@ def modelComplexity(hyperparam):
             Fin = neuron_rates[layer-1]
             Fr = neuron_rates[layer]
             MACs += N
-            ACs += (3 + Fr + M*Fin + N*Fr)*N
+            ACs += (3 + Fr + M*Fin + N*Fr + 2*bias)*N
 
     return MACs, ACs
 
@@ -407,11 +424,11 @@ def spikeplot(spike, hyperparam):
         logging.info(f"Layer {str(i+1)}| Spikes: {tot_spikes:.3f} | Never spiked: {tot_neurons - np.count_nonzero(spikes[i])} neurons out of {tot_neurons} [BxN]")
         # taking into consideration the slower layer
         if i == layers - 1:
-            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'] * 1000:.3f} * 10-3")
-            spike_rates.append(tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * hyperparam['skipLen'])
+            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons:.3f}")
+            spike_rates.append(tot_spikes/tot_neurons)
         else:
-            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'] * 1000:.3f} * 10-3")
-            spike_rates.append(tot_spikes/tot_neurons / hyperparam['train_val_timeSteps'])
+            logging.info(f"---Avg spike count of a single neuron per time step: {tot_spikes/tot_neurons:.3f}")
+            spike_rates.append(tot_spikes/tot_neurons)
     
     torch.save(spike_rates, f"{hyperparam['results_dir']}SNN_spike_rate_{hyperparam['id']}.pth")
         
@@ -686,11 +703,18 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
         trial_iter = train_iterators.getNextIter(random_day)
         data, targets, errWeights = extractBatch(trial_iter, hyperparams, device)
         optimizer.zero_grad()
-        output, spikecounts = model(data)
+        if hyperparams['network_type'] != 'RNN':
+            output, spikecounts = model(data)
+        else:
+            output = model(data)
         loss = criterion(output, targets, errWeights)
         loss.backward()
+        nn.utils.clip_grad_norm_(model.parameters(), 10) # gradient clipping
         optimizer.step()
-        scheduler.step()
+        if hyperparams['scheduler'] == 'LambdaLR' or hyperparams['scheduler'] == 'StepLR':
+            scheduler.step()
+        else:
+            scheduler.step()
 
         running_train_loss.append(loss.item())
         output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
