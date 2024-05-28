@@ -40,7 +40,7 @@ def main():
 
 
     #optuna_search = OptunaSearch()
-    asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=250, reduction_factor=2)
+    asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=500, reduction_factor=2)
 
     # CONFIGURE RAY TUNE
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
