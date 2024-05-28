@@ -222,6 +222,8 @@ def train_tune_parallel(config):
     valacc_per_batch = []
     valacc_per_epoch = []
 
+    lr_per_epoch = []
+
     for epoch in range(epochs):
         # Start epoch timer
         epoch_start = time.time()
@@ -255,6 +257,8 @@ def train_tune_parallel(config):
         valloss_per_epoch.append(avg_val_loss_epoch)
         valacc_per_epoch.append(avg_val_acc_epoch)
 
+        lr_per_epoch.append(scheduler.get_last_lr()[0])
+
     
         # Print results of the epoch
         #print(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
@@ -266,7 +270,9 @@ def train_tune_parallel(config):
             metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
                         'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
                         'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
-                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
+                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch,
+                        'lr': lr_per_epoch}
+            
             torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
             print('Metrics saved')
             logging.info('Metrics saved')
@@ -308,9 +314,10 @@ def train_tune_parallel(config):
 
     # Save the metrics
     metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
-                'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
-                'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
-                'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
+                        'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
+                        'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
+                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch,
+                        'lr': lr_per_epoch}
     torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
     print('Final metrics saved')
     logging.info('Final metrics saved')
