@@ -29,7 +29,7 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Comps_test"
+    EXPERIMENT_NAME = "ASHA_combo"
     hyperparams = getDefaultHyperparams()
 
     #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
@@ -40,7 +40,7 @@ def main():
 
 
     #optuna_search = OptunaSearch()
-    asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=150, reduction_factor=2)
+    asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=250, reduction_factor=2)
 
     # CONFIGURE RAY TUNE
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
@@ -51,14 +51,14 @@ def main():
     
     reporter = tune.CLIReporter(
         metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],
-        max_report_frequency=45
+        max_report_frequency=60
     )
 
     # if using ASHA, please uncomment the scheduler parameter and comment the metric and mode parameters
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':1}, 
-                        max_concurrent_trials = 1,
+                        resources_per_trial={'cpu': 2, 'gpu':0.25}, 
+                        max_concurrent_trials = 4,
                         num_samples = 1,
                         progress_reporter=reporter,
                         # search_alg=optuna_search,

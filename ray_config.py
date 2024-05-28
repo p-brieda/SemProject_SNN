@@ -86,7 +86,7 @@ def ray_config_dict(hyperparam, config_name):
             "gamma": 0.8,
             "threshold": 0.01,
             "patience": 100,
-            "constantOffsetSD": tune.grid_search([0.2, 0.3, 0.4, 0.5]),
+            "constantOffsetSD": tune.grid_search([0.1, 0.2, 0.3, 0.5]),
             "randomWalkSD": tune.grid_search([0.0, 0.02]),
             "whiteNoiseSD": tune.grid_search([0.5, 1.0]),
             "hyperparam": hyperparam
