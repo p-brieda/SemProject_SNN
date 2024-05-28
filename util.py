@@ -31,10 +31,10 @@ def getDefaultHyperparams():
         rootDir = os.path.expanduser('~') + '/Semester_project/handwritingBCIData/'
         hyperparams['system'] = 'Linux'
         hyperparams['output_report'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Report.txt'
-        hyperparams['results_dir'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/trainOutputs/'
-        hyperparams['output_plots'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Plots/'
-        hyperparams['output_csv'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/CSV/'
-        hyperparams['save_model_dir'] = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Model/'
+        hyperparams['results_dir'] = '/home/sem24f8/Semester_project/SNN_Project/Files/trainOutputs/'
+        hyperparams['output_plots'] = '/home/sem24f8/Semester_project/SNN_Project/Files/Plots/'
+        hyperparams['output_csv'] = '/home/sem24f8/Semester_project/SNN_Project/Files/CSV/'
+        hyperparams['save_model_dir'] = '/home/sem24f8/Semester_project/SNN_Project/Files/Model/'
         hyperparams['prepared_data_dir'] = '/scratch/sem24f8/dataset/'
 
 

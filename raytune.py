@@ -45,9 +45,9 @@ def main():
     # CONFIGURE RAY TUNE
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
     #              When there is only random function for tune.choice, it indicates the samples into the space.
-    local_dir_path = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Raytune/'
+    local_dir_path = 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/Files/Raytune/'
     if hyperparams['system'] == 'Linux':
-        local_dir_path = '/home/sem24f8/Semester_project/SNN_Project/SemProject_SNN/Raytune/'
+        local_dir_path = '/home/sem24f8/Semester_project/SNN_Project/Files/Raytune/'
     
     reporter = tune.CLIReporter(
         metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],

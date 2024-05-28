@@ -1,7 +1,7 @@
 ---
 #Training params
  batch_size: 64
- epochs: 500
+ epochs: 1500
  rnnBinSize: 2
  skipLen: 5
  smoothInputs: 1
@@ -104,12 +104,12 @@
 
 #Reporting
  output_report: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Report.txt'
- output_plots: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Plots/'
- output_csv: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/CSV/'
- results_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/trainOutputs/'
+ output_plots: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/Files/Plots/'
+ output_csv: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/Files/CSV/'
+ results_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/Files/trainOutputs/'
 
 #General
  seed: 'random' #use 'random' for a non-deterministic seed
  device: cuda
  early_stopping: False
- save_model_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/SNN_project/Model/'
+ save_model_dir: 'C:/Users/pietr/OneDrive/Documenti/PIETRO/ETH/SS24/Semester_project/Files/Model/'
