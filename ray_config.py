@@ -83,12 +83,13 @@ def ray_config_dict(hyperparam, config_name):
             "weight_decay": 0.00001,
             "dropout": 0.0,
             "scheduler": "ReduceLROnPlateau",
-            "gamma": 0.8,
+            "gamma": 0.9,
             "threshold": 0.01,
-            "patience": 100,
-            "constantOffsetSD": tune.grid_search([0.1, 0.2, 0.3, 0.5]),
-            "randomWalkSD": tune.grid_search([0.0, 0.02]),
-            "whiteNoiseSD": tune.grid_search([0.5, 1.0]),
+            "patience": 50,
+            "constantOffsetSD": tune.grid_search([0.5]),
+            "randomWalkSD": 0.02,
+            #"randomWalkSD": tune.grid_search([0.02]),
+            "whiteNoiseSD": tune.grid_search([1.0]),
             "hyperparam": hyperparam
         },
 
@@ -112,6 +113,79 @@ def ray_config_dict(hyperparam, config_name):
             "whiteNoiseSD": 1.0,
             "hyperparam": hyperparam
         },
+
+
+        "nospike_search": {
+            "seed": tune.randint(1,10000),
+            "epochs": 1200,
+            "network_type": "RSNN",
+            "layers": 3,
+            "last_nospike": tune.grid_search([False]),
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "eps": 0.1,
+            "weight_decay": 0.00001,
+            "dropout": 0.0,
+            #"batchnorm": tune.grid_search(['none', 'tdBN']),
+            #"recurrent_batchnorm": True,
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.8,
+            "threshold": 0.01,
+            "patience": 75,
+            "constantOffsetSD": 0.3,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.0,
+            "hyperparam": hyperparam
+        },
+
+
+        "GaussSmooth_search": {
+            "seed": tune.randint(1,10000),
+            "epochs": 800,
+            "network_type": "RSNN",
+            "layers": 3,
+            "smoothInputs": tune.grid_search([False, True]),
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "eps": 0.1,
+            "weight_decay": 0.00001,
+            "dropout": 0.0,
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.8,
+            "threshold": 0.01,
+            "patience": 75,
+            "constantOffsetSD": 0.3,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.0,
+            "hyperparam": hyperparam
+        },
+
+
+        "SNN_hyper_search": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RSNN",
+            "layers": 3,
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "eps": 0.1,
+            "weight_decay": 0.00001,
+            "dropout": 0.0,
+            "noisy_threshold": tune.grid_search([0.0, 0.2]),
+            "batch_norm": tune.grid_search(['none', 'tdBN']),
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.8,
+            "threshold": 0.01,
+            "patience": 100,
+            "constantOffsetSD": 0.3,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.0,
+            "hyperparam": hyperparam
+        },
+
+
+
+
+
 
 
 

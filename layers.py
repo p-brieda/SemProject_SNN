@@ -765,7 +765,7 @@ class tdBatchNorm0dSeq(nn.BatchNorm1d):
         self.alpha = alpha
         self.Vth = Vth
         self.deactivated = False
-        self.step_memory = torch.zeros((hyperparam['batch_size'], num_features, hyperparam['steps']), device = hyperparam['device'])
+        self.step_memory = torch.zeros((hyperparam['batch_size'], num_features, hyperparam['train_val_timeSteps']), device = hyperparam['device'])
         self.current_step = 0
         self.batch_size = hyperparam['batch_size']
         self.use_batch_stats = use_batch_stats

@@ -50,6 +50,7 @@
  n_channels: 192
  n_outputs: 32 
  batchnorm: 'none'
+ recurrent_batchnorm: False
  last_nospike: True
  inner_layer: 'fc'
  conv_ker_size: 51
