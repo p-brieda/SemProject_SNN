@@ -2,12 +2,13 @@
 
 from PrepareData import PrepareData
 from transforms import extractSentenceSnippet, addMeanNoise, addWhiteNoise
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
+from torch.utils.data import Dataset, DataLoader, Sampler
 import os
 import torch
 import time
 import logging
+import  numpy as np
+import math
 
 # Class for preparing the single-day dataset for one of the three modes: training, validation or testing
 
@@ -69,8 +70,87 @@ class DayDataProcessing(Dataset):
 
 
 
-# Class for creating the infinite iterators for the dataloaders (one for each day)
+class DaySampler(Sampler):
+    def __init__(self, len_dataset, batch_size, shuffle, fill_batch=True):
+        self.Indeces = np.arange(len_dataset)
+        self.batch_size = batch_size
+        self.fill_batch = fill_batch
+        self.shuffle = shuffle
+        
+    def __iter__(self):
+        if self.shuffle:
+            shuffled_indeces = np.random.permutation(self.Indeces)
+        else: 
+            shuffled_indeces = self.Indeces
+        for i in range(0, len(shuffled_indeces), self.batch_size):
+            batch = shuffled_indeces[i:i+self.batch_size]
+            if self.fill_batch and len(batch) < self.batch_size:
+                #batch = np.concatenate((batch, shuffled_indeces[:self.batch_size-len(batch)]))
+                batch = np.concatenate([batch, np.random.choice(shuffled_indeces, self.batch_size-len(batch), replace=True)])
+            yield batch
 
+    def __len__(self):
+        return math.ceil(len(self.Indeces)/self.batch_size)
+
+
+
+
+# Class for creating the dataloaders for the training, validation and testing datasets for all the days
+class create_Dataloaders:
+    def __init__(self, manual, hyperparam, days, mode):
+        self.datasets = []
+        self.samplers = []
+        prepared_data_dir = hyperparam['prepared_data_dir']
+
+        if mode == 'training':
+            shuffle = True
+            fill_batch = True
+        else: # mode == 'validation' or mode == 'testing'
+            shuffle = False
+            fill_batch = False
+
+        if not os.path.exists(prepared_data_dir + 'prepared_data_days.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+            print('Preparing data')
+            self.prepared_datasets = []
+            for day in days:
+                prepared_data = PrepareData(hyperparam, days=[day])
+                self.prepared_datasets.append(prepared_data)
+                self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
+                self.samplers.append(DaySampler(len(self.datasets[day]), hyperparam['batch_size'], shuffle=shuffle, fill_batch=fill_batch))
+                
+            torch.save(self.prepared_datasets, prepared_data_dir + 'prepared_data_days.pth')
+            print('Data saved')
+            
+        else:
+            print(f"Loading prepared data from dir")
+            logging.info(f"Loading prepared data from dir")
+            self.prepared_datasets = torch.load(prepared_data_dir + 'prepared_data_days.pth')
+            for day in days:
+                self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
+                self.samplers.append(DaySampler(len(self.datasets[day]), hyperparam['batch_size'], shuffle=shuffle, fill_batch=fill_batch))
+            print(f"Data loaded")
+
+        self.dataloaders = []
+        self.viabledays = []
+        
+
+        for day in days:
+            if self.datasets[day].isViableDay():
+                self.viabledays.append(day)
+                self.dataloaders.append(DataLoader(self.datasets[day], num_workers=0, batch_sampler=self.samplers[day]))
+                
+
+    
+    def getDataloaders(self):
+        return self.dataloaders
+    
+    def getViableDays(self):
+        return self.viabledays
+    
+
+
+
+# Class for creating the infinite iterators for the dataloaders (one for each day)
 class DayInfiniteIterators:
 
     def __init__(self, dataloaders):
@@ -89,55 +169,5 @@ class DayInfiniteIterators:
         except StopIteration:
             self.iterators[dayIdx] = iter(self.dataloaders[dayIdx])
             return next(self.iterators[dayIdx])
-        
-
-
-
-# Class for creating the dataloaders for the training, validation and testing datasets for all the days
-
-class create_Dataloaders:
-    def __init__(self, manual, hyperparam, days, mode):
-        self.datasets = []
-        prepared_data_dir = hyperparam['prepared_data_dir']
-
-        if not os.path.exists(prepared_data_dir + 'prepared_data_days.pth') or (manual and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
-            print('Preparing data')
-            self.prepared_datasets = []
-            for day in days:
-                prepared_data = PrepareData(hyperparam, days=[day])
-                self.prepared_datasets.append(prepared_data)
-                self.datasets.append(DayDataProcessing(hyperparam, prepared_data, mode))
-            torch.save(self.prepared_datasets, prepared_data_dir + 'prepared_data_days.pth')
-            print('Data saved')
-            
-        else:
-            print(f"Loading prepared data from dir")
-            logging.info(f"Loading prepared data from dir")
-            self.prepared_datasets = torch.load(prepared_data_dir + 'prepared_data_days.pth')
-            for day in days:
-                self.datasets.append(DayDataProcessing(hyperparam, self.prepared_datasets[day], mode))
-            print(f"Data loaded")
-
-        self.dataloaders = []
-        self.viabledays = []
-        
-
-        if mode == 'training' or mode == 'validation':
-            Shuffle = True
-        else: Shuffle = False
-
-        for day in days:
-            if self.datasets[day].isViableDay():
-                self.viabledays.append(day)
-                self.dataloaders.append(DataLoader(self.datasets[day], batch_size=hyperparam['batch_size'], shuffle=Shuffle, num_workers=0))
-
-    
-    def getDataloaders(self):
-        return self.dataloaders
-    
-    def getViableDays(self):
-        return self.viabledays
-    
-    
         
         

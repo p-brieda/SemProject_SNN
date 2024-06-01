@@ -18,23 +18,6 @@ def ray_config_dict(hyperparam, config_name):
         },
 
 
-
-        "RNN_baseline": {
-            "seed": tune.randint(1,10000),
-            "network_type": "RNN",
-            "optimizer": "Adam",
-            "lr": 0.01,
-            "weight_decay": 0.00001,
-            "epochs": 2400,
-            "scheduler": "LambdaLR",
-            "constantOffsetSD": 0.6,
-            "randomWalkSD": 0.02,
-            "whiteNoiseSD": 1.2,
-            "hyperparam": hyperparam
-        },
-
-
-
         "RSNN_combined": {
             "seed": tune.randint(1,10000),
             "network_type": "RSNN",
@@ -44,6 +27,23 @@ def ray_config_dict(hyperparam, config_name):
             "weight_decay": 0.00001,
             "epochs": 600,
             "scheduler": "ReduceLROnPlateau",
+            "constantOffsetSD": 0.6,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.2,
+            "hyperparam": hyperparam
+        },
+
+
+
+        
+        "RNN_baseline": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RNN",
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "weight_decay": 0.00001,
+            "epochs": 2400,
+            "scheduler": "LambdaLR",
             "constantOffsetSD": 0.6,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.2,
@@ -105,14 +105,34 @@ def ray_config_dict(hyperparam, config_name):
             "weight_decay": 0.00001,
             "dropout": tune.grid_search([0.0, 0.2, 0.3, 0.4]),
             "scheduler": "ReduceLROnPlateau",
-            "gamma": 0.8,
+            "gamma": 0.9,
             "threshold": 0.01,
-            "patience": 100,
+            "patience": 50,
             "constantOffsetSD": 0.3,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.0,
             "hyperparam": hyperparam
         },
+
+
+        "PBT_combined": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RSNN",
+            "layers": 3,
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "eps": 0.1,
+            "dropout": 0.0,
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.9,
+            "threshold": 0.01,
+            "patience": 50,
+            "constantOffsetSD": tune.grid_search([0.3, 0.5]),
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.0,
+            "hyperparam": hyperparam
+        },
+        
 
 
         "nospike_search": {
@@ -129,9 +149,9 @@ def ray_config_dict(hyperparam, config_name):
             #"batchnorm": tune.grid_search(['none', 'tdBN']),
             #"recurrent_batchnorm": True,
             "scheduler": "ReduceLROnPlateau",
-            "gamma": 0.8,
+            "gamma": 0.9,
             "threshold": 0.01,
-            "patience": 75,
+            "patience": 50,
             "constantOffsetSD": 0.3,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.0,
@@ -151,9 +171,9 @@ def ray_config_dict(hyperparam, config_name):
             "weight_decay": 0.00001,
             "dropout": 0.0,
             "scheduler": "ReduceLROnPlateau",
-            "gamma": 0.8,
+            "gamma": 0.9,
             "threshold": 0.01,
-            "patience": 75,
+            "patience": 50,
             "constantOffsetSD": 0.3,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.0,
@@ -173,9 +193,9 @@ def ray_config_dict(hyperparam, config_name):
             "noisy_threshold": tune.grid_search([0.0, 0.2]),
             "batch_norm": tune.grid_search(['none', 'tdBN']),
             "scheduler": "ReduceLROnPlateau",
-            "gamma": 0.8,
+            "gamma": 0.9,
             "threshold": 0.01,
-            "patience": 100,
+            "patience": 50,
             "constantOffsetSD": 0.3,
             "randomWalkSD": 0.02,
             "whiteNoiseSD": 1.0,

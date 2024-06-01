@@ -5,12 +5,13 @@ import os
 import logging
 import sys
 import time
-from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, trainModel_Inf
+from util import getDefaultHyperparams, extractBatch, trainModel_Inf, validateModel, neuron_hist_plot, TrainPlot, modelComplexity
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
 from torch.utils.data import DataLoader
 from network import Net, RSNNet
+from RNN_network import RNN
 from SequenceLoss import SequenceLoss
 import torch.nn as nn
 
@@ -43,7 +44,8 @@ if __name__ == '__main__':
 
     # ---------- DATASET PREPARATION ----------
     # Check if the data has already been prepared
-    manual_prep = input('Do you want to manual control over data preparation? (y/n) ') == 'y'
+    #manual_prep = input('Do you want to manual control over data preparation? (y/n) ') == 'y'
+    manual_prep = False
 
     if hyperparams['system'] == 'Linux':
         prepared_data_dir = '/scratch/sem24f8/dataset/'
@@ -75,17 +77,7 @@ if __name__ == '__main__':
     val_inf_iterators = DayInfiniteIterators(val_loaders)
     print('Validation dataloaders ready')
     logging.info(f"Validation dataloaders ready")
-    logging.info(' ')
-
-
-    # loading the testing dataset and creating a DataLoader for each day
-    Test_finite_loader = create_Dataloaders(manual_prep, hyperparams, days=np.arange(10), mode='testing')
-    test_loaders = Test_finite_loader.getDataloaders()
-    viable_test_days = Test_finite_loader.getViableDays()
-    print('Testing dataloaders ready')
-    logging.info(f"Testing dataloaders ready")
-    logging.info(' ')
-
+    logging.info('')
 
 
 
@@ -99,13 +91,13 @@ if __name__ == '__main__':
     logging.info(f"Using {device}")
 
     # Model creation
-    model = Net(hyperparams)
-    #if torch.cuda.device_count() > 1:
-    #    print(f"Using {torch.cuda.device_count()} GPUs")
-    #    model = nn.DataParallel(model)
+    if hyperparams['network_type'] == 'RSNN':
+        model = RSNNet(hyperparams)
+    elif hyperparams['network_type'] == 'RNN':
+        model = RNN(hyperparams)
     model.to(device)
 
-    tot_train_batches = 550
+    tot_train_batches = 55
     logging.info(f"Total training batches: {tot_train_batches}")
     logging.info(f"Batch size: {hyperparams['batch_size']}")
     logging.info(f"Time steps: {hyperparams['train_val_timeSteps']}")
@@ -115,17 +107,35 @@ if __name__ == '__main__':
     criterion = SequenceLoss(hyperparams)
 
     # Optimizer
-    optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], 
-                                betas= (0.9, 0.999), eps=1e-08, 
-                                weight_decay=hyperparams['weight_decay'], amsgrad=False)
-    logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+    if hyperparams['optimizer'] == 'AdamW':
+        optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['lr'], 
+                                    betas= (0.9, 0.999), eps=hyperparams['eps'], 
+                                    weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: AdamW(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
-    
+    elif hyperparams['optimizer'] == 'Adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['lr'], 
+                                     betas=(0.9, 0.999), eps=hyperparams['eps'], 
+                                     weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: Adam(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
+
 
     # Scheduler 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/100000))
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-    logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/100000))")
+    if hyperparams['scheduler'] == 'LambdaLR':
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/20000))
+        logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{20000}))")
+
+    elif hyperparams['scheduler'] == 'StepLR':
+        # since the scheduler is inside the epoch loop, the actual step_size is in terms of batches
+        step_size = hyperparams['step_size']
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=hyperparams['gamma'])
+        logging.info(f"Scheduler: StepLR(step_size={hyperparams['step_size']}, gamma={hyperparams['gamma']})")
+
+    elif hyperparams['scheduler'] == 'ReduceLROnPlateau':
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=hyperparams['gamma'], patience=hyperparams['patience'], 
+                                                               threshold=hyperparams['threshold'], threshold_mode='abs')
+        logging.info(f"Scheduler: ReduceLROnPlateau(mode='min', factor={hyperparams['gamma']}, patience={hyperparams['patience']}, threshold={hyperparams['threshold']}, threshold_mode='abs')")
+    
     logging.info(' ')
     
     

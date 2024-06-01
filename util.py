@@ -693,7 +693,7 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
     running_train_acc = []
     running_val_loss = []
     running_val_acc = []
-    update_freq = 10 # number of batches before updating the progress bar
+    update_freq = 11 # number of batches before updating the progress bar
     progress = "Batch progress: |"
 
     for i in range(num_batches):
@@ -713,8 +713,6 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
         optimizer.step()
         if hyperparams['scheduler'] == 'LambdaLR' or hyperparams['scheduler'] == 'StepLR':
             scheduler.step()
-        else:
-            scheduler.step()
 
         running_train_loss.append(loss.item())
         output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
@@ -730,7 +728,7 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
             print(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
             logging.info(f"Batch {i+1}/{num_batches} | Training loss: {loss.item():.4f} | Training accuracy: {train_acc:.4f}")
 
-        if i % hyperparams['updateVal'] == 0:
+        if i % hyperparams['updateVal'] == 0 and i > 0:
             model.eval()
             with torch.no_grad():
                 for i in range(hyperparams['batchesPerVal']):
@@ -738,7 +736,10 @@ def trainModel_Inf(num_batches, model, train_iterators, viable_train_days, val_i
                     random_val_day = np.random.choice(np.arange(len(viable_val_days)))
                     val_iter = val_iterators.getNextIter(random_val_day)
                     data, targets, errWeights = extractBatch(val_iter, hyperparams, device)
-                    output, spikecounts = model(data)
+                    if hyperparams['network_type'] != 'RNN':
+                        output, spikecounts = model(data)
+                    else:
+                        output = model(data)
                     val_loss = criterion(output, targets, errWeights)
                     output, targets, errWeights = tensors_to_numpy(output, targets, errWeights)
                     val_acc = computeFrameAccuracy(output, targets, errWeights, hyperparams['outputDelay'])

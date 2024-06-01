@@ -21,7 +21,7 @@ import torch.nn as nn
 
 # RayTune imports
 from ray import tune
-from ray.tune.schedulers import ASHAScheduler
+from ray.tune.schedulers import ASHAScheduler, PopulationBasedTraining
 from ray.tune.search.optuna import OptunaSearch
 from ray_config import ray_config_dict
 
@@ -29,18 +29,32 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "ASHA_combo"
+    EXPERIMENT_NAME = "Transp_test"
     hyperparams = getDefaultHyperparams()
 
     #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
     # torch.set_num_threads = 3
-    config_name = "ASHA_combined"
+    config_name = "ASHA_noise"
     ray_config = ray_config_dict(hyperparams, config_name)
 
 
     #optuna_search = OptunaSearch()
     asha_scheduler = ASHAScheduler(time_attr='training_iteration', metric='val_acc', mode='max', max_t=hyperparams['epochs'], grace_period=500, reduction_factor=2)
+    pbt_scheduler = PopulationBasedTraining(
+        time_attr='training_iteration',
+        metric='metric',
+        mode='max',
+        burn_in_period=4,
+        perturbation_interval=2,
+        hyperparam_mutations={
+            "whiteNoiseSD": tune.uniform(0.5, 1.2),
+            "constantOffsetSD": tune.uniform(0.3, 0.5),
+            "dropout": [0.0, 0.2, 0.3, 0.4]
+        },
+        quantile_fraction=0.5,
+        synch=True
+    )
 
     # CONFIGURE RAY TUNE
     # num_samples: when there is grid search, the number of samples is the number of full exploration of the space
@@ -50,23 +64,23 @@ def main():
         local_dir_path = '/home/sem24f8/Semester_project/SNN_Project/Files/Raytune/'
     
     reporter = tune.CLIReporter(
-        metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr"],
+        metric_columns=["ID","epoch", "t_epoch", "train_loss", "train_acc", "val_loss", "val_acc", "lr", "metric"],
         max_report_frequency=60
     )
 
     # if using ASHA, please uncomment the scheduler parameter and comment the metric and mode parameters
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
-                        resources_per_trial={'cpu': 2, 'gpu':0.25}, 
-                        max_concurrent_trials = 4,
+                        resources_per_trial={'cpu': 2, 'gpu':1}, 
+                        max_concurrent_trials = 1,
                         num_samples = 1,
                         progress_reporter=reporter,
                         # search_alg=optuna_search,
-                        scheduler=asha_scheduler, 
-                        #metric='val_acc',
+                        #scheduler=pbt_scheduler, 
+                        metric='val_acc',
                         local_dir = local_dir_path + 'log',
-                        #mode='max',
-                        name=EXPERIMENT_NAME + '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
+                        mode='max',
+                        name=EXPERIMENT_NAME #+ '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
                         )
     
     results_filename = local_dir_path + 'Trial_' + str(round(time.time())) + '.pickle'
@@ -265,7 +279,7 @@ def train_tune_parallel(config):
         #logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
 
-        if epoch % 20 == 0:
+        if epoch % 20 == 0 and epoch > 0:
             # Save the metrics
             metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
                         'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
@@ -291,6 +305,7 @@ def train_tune_parallel(config):
             train_acc=avg_train_acc_epoch,
             val_loss=avg_val_loss_epoch,
             val_acc=avg_val_acc_epoch,
+            metric=2*avg_val_acc_epoch-avg_train_acc_epoch,
             lr=scheduler.get_last_lr()[0]
             )
 

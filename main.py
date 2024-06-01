@@ -2,24 +2,29 @@ import torch
 import numpy as np
 import scipy.io
 import os
-import logging
 import sys
 import time
-from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot
+from datetime import datetime
+import logging
+import pickle
+
+# Custom imports and torch imports
+from util import getDefaultHyperparams, extractBatch, trainModel, validateModel, neuron_hist_plot, TrainPlot, modelComplexity
 from SingleDataloader import DataProcessing, CustomBatchSampler, TestBatchSampler
 from DayDataloaders import create_Dataloaders, DayInfiniteIterators
 from PrepareData import PrepareData
 from torch.utils.data import DataLoader
 from network import Net, RSNNet
+from RNN_network import RNN
 from SequenceLoss import SequenceLoss
 import torch.nn as nn
 
 
 if __name__ == '__main__':
     hyperparams = getDefaultHyperparams()
-    
-    hyperparams['n_channels'] = 192
-    hyperparams['n_outputs'] = 32
+
+    # ---------- LOGGING ----------
+    hyperparams['id'] = np.random.randint(100000,1000000)
 
     #prepare logger
     logging.basicConfig(filename=hyperparams['output_report'],
@@ -28,8 +33,6 @@ if __name__ == '__main__':
                                 datefmt='%H:%M:%S',
                                 level=15)
     
-
-    hyperparams['id'] = np.random.randint(100000,1000000)
     logging.info(' ')
     logging.info("=========================================================================")
     logging.info(f"New run started with id {hyperparams['id']}")
@@ -40,17 +43,11 @@ if __name__ == '__main__':
 
 
     # ---------- DATASET PREPARATION ----------
-    # Check if the data has already been prepared
-    manual_prep = input('Do you want to manual control over data preparation? (y/n) ') == 'y'
-
-    if hyperparams['system'] == 'Linux':
-        prepared_data_dir = '/scratch/sem24f8/dataset/'
-    else:
-        prepared_data_dir = 'dataset/'
-
-    hyperparams['prepared_data_dir'] = prepared_data_dir
-
+    manual_prep = False
+    prepared_data_dir = hyperparams['prepared_data_dir']
+    
     if not os.path.exists(prepared_data_dir + 'prepared_data.pth') or (manual_prep and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
+        print('Preparing data')
         dataprep_start = time.time()
         prepared_data = PrepareData(hyperparams)
         dataprep_end = time.time()
@@ -77,7 +74,7 @@ if __name__ == '__main__':
 
     # loading the validation dataset and creating a DataLoader
     Val_dataset = DataProcessing(hyperparams, prepared_data, mode='validation')
-    valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'])
+    valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'], fill_batch = False)
     val_loader = DataLoader(Val_dataset, batch_sampler = valDayBatch_Sampler, num_workers=0)
     print('Validation dataloader ready')
     logging.info(f"Validation dataloaders ready")
@@ -94,8 +91,12 @@ if __name__ == '__main__':
     logging.info(f"Using {device}")
 
     # Model creation
-    model = RSNNet(hyperparams)
+    if hyperparams['network_type'] == 'RSNN':
+        model = RSNNet(hyperparams)
+    elif hyperparams['network_type'] == 'RNN':
+        model = RNN(hyperparams)
     model.to(device)
+
 
     # Loss function
     criterion = SequenceLoss(hyperparams)
@@ -103,103 +104,134 @@ if __name__ == '__main__':
     
     num_batches_per_epoch_train = len(train_loader)
     num_batches_per_epoch_val = len(val_loader)
-    epochs = hyperparams['epochs']
+    #epochs = hyperparams['epochs']
+    epochs = 5
     tot_train_batches = num_batches_per_epoch_train * epochs
-    logging.info(f"Number of training batches: {num_batches_per_epoch_train}")
-    logging.info(f"Number of validation batches: {num_batches_per_epoch_val}")
+    logging.info(f"Number of training batches / epoch: {num_batches_per_epoch_train}")
+    logging.info(f"Number of validation batches / epoch: {num_batches_per_epoch_val}")
     logging.info(f"Number of epochs: {epochs}")
     logging.info(f"Total training batches: {tot_train_batches}")
-    logging.info(f"Batch size: {hyperparams['batch_size']}")    
-    logging.info(f"Time steps: {hyperparams['train_val_timeSteps']}")
-    logging.info(f"White noise: {hyperparams['whiteNoiseSD']}")
-    if hyperparams['smoothInputs']: logging.info(f"Smoothing inputs")
 
 
     # Optimizer
-    optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['learning_rate'], betas= (0.9, 0.999), eps=1e-08, weight_decay=hyperparams['weight_decay'], amsgrad=False)
-    #optimizer = torch.optim.SGD(model.parameters(), lr=hyperparams['learning_rate'], momentum=0.9, weight_decay=hyperparams['weight_decay'])
-    logging.info(f"Optimizer: AdamW(lr={hyperparams['learning_rate']}, betas=(0.9, 0.999), eps=1e-08, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
-    #logging.info(f"Optimizer: SGD(lr={hyperparams['learning_rate']}, momentum=0.9, weight_decay={hyperparams['weight_decay']})")
+    if hyperparams['optimizer'] == 'AdamW':
+        optimizer = torch.optim.AdamW(model.parameters(), lr=hyperparams['lr'], 
+                                    betas= (0.9, 0.999), eps=hyperparams['eps'], 
+                                    weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: AdamW(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
+    elif hyperparams['optimizer'] == 'Adam':
+        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['lr'], 
+                                     betas=(0.9, 0.999), eps=hyperparams['eps'], 
+                                     weight_decay=hyperparams['weight_decay'], amsgrad=False)
+        logging.info(f"Optimizer: Adam(lr={hyperparams['lr']}, betas=(0.9, 0.999), eps={hyperparams['eps']}, weight_decay={hyperparams['weight_decay']}, amsgrad=False)")
 
 
     # Scheduler 
-    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/tot_train_batches))
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
-    logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{tot_train_batches}))")
+    if hyperparams['scheduler'] == 'LambdaLR':
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda i: (1 - i/20000))
+        logging.info(f"Scheduler: LambdaLR(lr_lambda=lambda i: (1 - i/{20000}))")
+
+    elif hyperparams['scheduler'] == 'StepLR':
+        # since the scheduler is inside the epoch loop, the actual step_size is in terms of batches
+        step_size = hyperparams['step_size'] * num_batches_per_epoch_train
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=hyperparams['gamma'])
+        logging.info(f"Scheduler: StepLR(step_size={hyperparams['step_size']}, gamma={hyperparams['gamma']})")
+
+    elif hyperparams['scheduler'] == 'ReduceLROnPlateau':
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=hyperparams['gamma'], patience=hyperparams['patience'], 
+                                                               threshold=hyperparams['threshold'], threshold_mode='abs')
+        logging.info(f"Scheduler: ReduceLROnPlateau(mode='min', factor={hyperparams['gamma']}, patience={hyperparams['patience']}, threshold={hyperparams['threshold']}, threshold_mode='abs')")
+    
     logging.info(' ')
     
     
 
     # ---------- TRAINING AND VALIDATION ----------
-    # Start timer
-    training_start = time.time()
-    print(f"Number of training batches/epoch: {num_batches_per_epoch_train}")
 
     trainloss_per_batch = []
     trainloss_per_epoch = []
+
     valloss_per_batch = []
     valloss_per_epoch = []
 
     trainacc_per_batch = []
     trainacc_per_epoch = []
+
     valacc_per_batch = []
     valacc_per_epoch = []
 
-    train_sc_per_batch = []
-    train_sc_per_epoch = []
-    val_sc_per_batch = []
-    val_sc_per_epoch = []
+    lr_per_epoch = []
 
+    # Start timer
+    training_start = time.time()
+
+
+    for epoch in range(epochs):
+        print(f"\nEpoch {epoch+1}")
+        train_loss, train_acc = trainModel(model, train_loader , optimizer, scheduler, criterion, hyperparams, device)
+
+    '''
     for epoch in range(epochs):
         # Start epoch timer
         epoch_start = time.time()
         print(f"\nEpoch {epoch+1}")
-        logging.info(f"Epoch: {epoch+1}")
+        logging.info(f"{hyperparams['id']} - Epoch: {epoch+1}")
 
         # Training epoch
         train_loss, train_acc = trainModel(model, train_loader , optimizer, scheduler, criterion, hyperparams, device)
         # Validation epoch
         val_loss, val_acc = validateModel(model, val_loader, criterion, hyperparams, device)
 
-
         epoch_end = time.time()
-        print(f"Epoch time: {epoch_end - epoch_start:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
-        logging.info(f"Epoch time: {epoch_end - epoch_start:.2f} s")
+        epoch_time = epoch_end - epoch_start
+        print(f"Epoch time: {epoch_time:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
+        
+
+        logging.info(f"Epoch time: {epoch_time:.2f} s ; Learning rate: {scheduler.get_last_lr()[0]:.6f}")
 
         # Metrics saving
         trainloss_per_batch.append(train_loss)
         trainacc_per_batch.append(train_acc)
         valloss_per_batch.append(val_loss)
         valacc_per_batch.append(val_acc)
-        
 
         avg_train_loss_epoch = np.sum(train_loss)/num_batches_per_epoch_train
         avg_train_acc_epoch = np.sum(train_acc)/num_batches_per_epoch_train
         avg_val_loss_epoch = np.sum(val_loss)/num_batches_per_epoch_val
         avg_val_acc_epoch = np.sum(val_acc)/num_batches_per_epoch_val
 
-
         trainloss_per_epoch.append(avg_train_loss_epoch)
         trainacc_per_epoch.append(avg_train_acc_epoch)
         valloss_per_epoch.append(avg_val_loss_epoch)
         valacc_per_epoch.append(avg_val_acc_epoch)
-        
 
+        lr_per_epoch.append(scheduler.get_last_lr()[0])
+
+    
         # Print results of the epoch
-        print(f"Train loss: {avg_train_loss_epoch:.4f} | Train accuracy: {avg_train_acc_epoch:.4f} | Val loss: {avg_val_loss_epoch:.4f} | Val accuracy: {avg_val_acc_epoch:.4f}")
-        logging.info(f"Train loss: {avg_train_loss_epoch:.4f} | Train accuracy: {avg_train_acc_epoch:.4f} | Val loss: {avg_val_loss_epoch:.4f} | Val accuracy: {avg_val_acc_epoch:.4f}")
+        print(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
+        logging.info(f"Training loss: {avg_train_loss_epoch:.4f} | Training accuracy: {avg_train_acc_epoch:.4f} | Validation loss: {avg_val_loss_epoch:.4f} | Validation accuracy: {avg_val_acc_epoch:.4f}")
         logging.info(' ')
 
-        if epoch % 10 == 0:
+        if epoch % 20 == 0 and epoch > 0:
             # Save the metrics
             metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
                         'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
                         'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
-                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
-            torch.save(metrics, f"trainOutputs/metrics_{hyperparams['id']}.pth")
+                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch,
+                        'lr': lr_per_epoch}
+            
+            torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
             print('Metrics saved')
             logging.info('Metrics saved')
+
+            # Save the model
+            torch.save(model, f"{hyperparams['save_model_dir']}model_{hyperparams['id']}.pth")
+            print('Model saved')
+            logging.info('Model saved')
+
+    '''
 
 
     training_end = time.time()
@@ -208,25 +240,36 @@ if __name__ == '__main__':
 
 
     # ---------- NEURON HISTOGRAM PLOT ----------
-    neuron_hist_plot(model, hyperparams)
+    if hyperparams['network_type'] !='RNN':
+        neuron_hist_plot(model, hyperparams)
+    
 
-    # ---------- SAVE THE MODEL AND METRICS ----------
+    # ---------- SAVE MODEL AND METRICS ----------
     # Save the model
-    torch.save(model, f"Model/model_{hyperparams['id']}.pth")
-    print('Model saved')
-    logging.info('Model saved')
+    torch.save(model, f"{hyperparams['save_model_dir']}model_{hyperparams['id']}.pth")
+    print('Final model saved')
+    logging.info('Final model saved')
 
     # Save the metrics
     metrics = {'trainloss_per_batch': trainloss_per_batch, 'trainloss_per_epoch': trainloss_per_epoch,
-                'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
-                'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
-                'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch}
-    torch.save(metrics, f"trainOutputs/metrics_{hyperparams['id']}.pth")
+                        'trainacc_per_batch': trainacc_per_batch, 'trainacc_per_epoch': trainacc_per_epoch,
+                        'valloss_per_batch': valloss_per_batch, 'valloss_per_epoch': valloss_per_epoch,
+                        'valacc_per_batch': valacc_per_batch, 'valacc_per_epoch': valacc_per_epoch,
+                        'lr': lr_per_epoch}
+    torch.save(metrics, f"{hyperparams['results_dir']}metrics_{hyperparams['id']}.pth")
     print('Final metrics saved')
     logging.info('Final metrics saved')
+
 
 
     # ---------- TRAINING PLOT ----------
     TrainPlot(metrics, hyperparams)
 
+    # ----------MODEL COMPLEXITY ----------
+    if hyperparams['network_type'] != 'RNN':
+        MACs, ACs = modelComplexity(hyperparams)
+        print(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+        logging.info(f"{hyperparams['id']} --- MACs: {np.ceil(MACs)} ; ACs: {np.ceil(ACs)}")
+
+    torch.cuda.empty_cache()
     

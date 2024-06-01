@@ -55,7 +55,7 @@
  inner_layer: 'fc'
  conv_ker_size: 51
  neuron_count: 512
- layers: 2
+ layers: 3
  use_bias: True
  network_type: 'RSNN'
  reset_by_subtraction: True
