@@ -384,8 +384,8 @@ def modelComplexity(hyperparam):
             M = hyperparam['neuron_count']
             N = hyperparam['n_outputs']
             Fin = neuron_rates[layer-1]
-            MACs += N
-            ACs += (1 + M*Fin + bias)*N
+            MACs += N / hyperparam['skipLen']
+            ACs += (1 + M*Fin + bias) * N / hyperparam['skipLen']
 
         else:
             # Hidden layers
@@ -393,8 +393,9 @@ def modelComplexity(hyperparam):
             N = hyperparam['neuron_count']
             Fin = neuron_rates[layer-1]
             Fr = neuron_rates[layer]
-            MACs += N
-            ACs += (3 + Fr + M*Fin + N*Fr + 2*bias)*N
+            divisor = hyperparam['skipLen'] if layer == num_layers-1 else 1
+            MACs += N / divisor
+            ACs += (3 + Fr + M*Fin + N*Fr + 2*bias)* N / divisor
 
     return MACs, ACs
 

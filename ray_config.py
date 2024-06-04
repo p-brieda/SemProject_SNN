@@ -203,23 +203,30 @@ def ray_config_dict(hyperparam, config_name):
         },
 
 
-
-
-
-
-
-
+        "architecture_search": {
+            "seed": tune.randint(1,10000),
+            "network_type": "RSNN",
+            "layers": 4,
+            "neuron_count": 256,
+            "optimizer": "Adam",
+            "lr": 0.01,
+            "eps": 0.1,
+            "weight_decay": 0.00001,
+            "dropout": 0.0,
+            "scheduler": "ReduceLROnPlateau",
+            "gamma": 0.9,
+            "threshold": 0.01,
+            "patience": 50,
+            "constantOffsetSD": 0.3,
+            "randomWalkSD": 0.02,
+            "whiteNoiseSD": 1.0,
+            "hyperparam": hyperparam
+        },
 
 
         "neuron_count_search": {
             "seed": tune.randint(1,10000),
             "neuron_count": tune.grid_search([256, 512]),
-            "hyperparam": hyperparam
-        },
-
-        "network_search": {
-            "seed": tune.randint(1,10000),
-            "layers": tune.grid_search([2, 3]),
             "hyperparam": hyperparam
         },
 
