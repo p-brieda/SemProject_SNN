@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 # Loss function
-# The channels dimension and the temporal dimension are here swapped (B x C x T)
+# The channels dimension and the temporal dimension are (B x C x T)
 # L2 regularization is not included in the loss class since it will be added in the optimizer
 
 class SequenceLoss(nn.Module):
@@ -29,7 +29,6 @@ class SequenceLoss(nn.Module):
 
         # Character start signal loss
         sqErrLoss = torch.square(torch.sigmoid(transOut)-transLabel)
-        #sqErrLoss = nn.BCEWithLogitsLoss(reduction='none')(transOut,transLabel)
         totalErr += 5*torch.mean(torch.sum(sqErrLoss,dim=1)/self.hyperparams['train_val_timeSteps'])
 
         return totalErr

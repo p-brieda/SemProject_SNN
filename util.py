@@ -217,9 +217,9 @@ def unfoldDataCube(trials_train, trials_val, neuralData, targets, errWeights, bi
 
 def normalizeSentenceDataCube(sentenceDat, singleLetterDat):
     """
-    Normalizes the neural data cube by subtracting means and dividing by the standard deviation. 
-    Important: we use means and standard deviations from the single letter data. This is needed since we 
-    initialize the HMM parameters using the single letter data, so the sentence data needs to be normalized in the same way. 
+    Normalizes the neural data cube by subtracting the mean and dividing by the standard deviation. 
+    Important: we use means and standard deviations from the single letter data. This is needed since the HMMs were initialized 
+    using the single letter data, so the sentence data needs to be normalized in the same way. 
     """
     neuralCube = sentenceDat['neuralActivityCube'].astype(np.float64)
 
@@ -436,9 +436,9 @@ def spikeplot(spike, hyperparam):
     
     fig, axs = plt.subplots(1,layers,figsize = (21,7))
     for i in range(layers):
-        save_to_csv(spikes[i][0], hyperparam['output_csv'] + "SNN_spike_layer_{}.csv".format(i))
+        save_to_csv(np.mean(spikes[i], axis=0), hyperparam['output_csv'] + "SNN_spike_layer_{}.csv".format(i))
     for i, ax in enumerate(axs):
-        ax.hist(spikes[i][0], density=False, bins=40)  
+        ax.hist(np.mean(spikes[i], axis=0), density=False, bins=40)  
         ax.set_ylabel('Count of Neurons')
         ax.set_xlabel('Spike Rate')
         ax.set_title('layer '+str(i+1))

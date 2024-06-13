@@ -29,13 +29,13 @@ from ray_config import ray_config_dict
 def main():
 
     # SET AN EXPERIMENT NAME
-    EXPERIMENT_NAME = "Transp_test"
+    EXPERIMENT_NAME = "ResRSNN"
     hyperparams = getDefaultHyperparams()
 
     #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
     # torch.set_num_threads = 3
-    config_name = "ASHA_noise"
+    config_name = "architecture_search"
     ray_config = ray_config_dict(hyperparams, config_name)
 
 
@@ -72,7 +72,7 @@ def main():
     analysis = tune.run(train_tune_parallel,
                         config=ray_config,
                         resources_per_trial={'cpu': 2, 'gpu':1}, 
-                        max_concurrent_trials = 1,
+                        max_concurrent_trials = 2,
                         num_samples = 1,
                         progress_reporter=reporter,
                         # search_alg=optuna_search,
@@ -80,7 +80,7 @@ def main():
                         metric='val_acc',
                         local_dir = local_dir_path + 'log',
                         mode='max',
-                        name=EXPERIMENT_NAME #+ '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
+                        name=EXPERIMENT_NAME + '_' + datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H-%M-%S')
                         )
     
     results_filename = local_dir_path + 'Trial_' + str(round(time.time())) + '.pickle'
@@ -142,6 +142,7 @@ def train_tune_parallel(config):
     Train_dataset = DataProcessing(hyperparams, prepared_data, mode='training')
     trainDayBatch_Sampler = CustomBatchSampler(Train_dataset.getDaysIdx(), hyperparams['batch_size'])
     train_loader = DataLoader(Train_dataset, batch_sampler = trainDayBatch_Sampler , num_workers=1)
+    #train_loader = DataLoader(Train_dataset, batch_size= hyperparams['batch_size'], shuffle=True, num_workers=1, drop_last=True)
     print('Training dataloader ready')
     logging.info(f"Training dataloaders ready")
 
@@ -150,6 +151,7 @@ def train_tune_parallel(config):
     Val_dataset = DataProcessing(hyperparams, prepared_data, mode='validation')
     valDayBatch_Sampler = CustomBatchSampler(Val_dataset.getDaysIdx(), hyperparams['batch_size'], fill_batch = False)
     val_loader = DataLoader(Val_dataset, batch_sampler = valDayBatch_Sampler, num_workers=1)
+    #val_loader = DataLoader(Val_dataset, batch_size= hyperparams['batch_size'], shuffle=True, num_workers=1, drop_last=True)
     print('Validation dataloader ready')
     logging.info(f"Validation dataloaders ready")
 
@@ -167,6 +169,8 @@ def train_tune_parallel(config):
     # Model creation
     if hyperparams['network_type'] == 'RSNN':
         model = RSNNet(hyperparams)
+    if hyperparams['network_type'] == 'SNN':
+        model = Net(hyperparams)
     elif hyperparams['network_type'] == 'RNN':
         model = RNN(hyperparams)
     model.to(device)

@@ -3,13 +3,12 @@ import torch
 import scipy.io
 import copy
 
-# Module containing functions for data augmentation and transformation for the the model -- to use in the DataProcessing class
-
+# Module containing functions for data augmentation and noise addition -- to use in the DataProcessing class
 
 def extractSentenceSnippet(trial, nSteps, directionality='unidirectional'):
     """
     Extracts a random snippet of data from the full sentence to use for the mini-batch.
-    CHANGE: the input 'trial' is now a dictionary representing all information for a single trial.
+    The input 'trial' is a dictionary representing all information for a single trial.
     """
     inputs = trial['neuralData']
     targets = trial['targets']
@@ -63,7 +62,7 @@ def addMeanNoise(trial, constantOffsetSD, randomWalkSD, nSteps):
     """
     Applies mean drift noise to each time step of the data in the form of constant offsets (sd=sdConstant)
     and random walk noise (sd=sdRandomWalk)
-    CHANGE: the input 'trial' is now a dictionary representing all information for a single trial.
+    The input 'trial' is a dictionary representing all information for a single trial.
     """  
     inputs = trial['neuralData']
     meanDriftNoise = torch.randn(1, inputs.shape[1]) * constantOffsetSD
@@ -79,7 +78,7 @@ def addMeanNoise(trial, constantOffsetSD, randomWalkSD, nSteps):
 def addWhiteNoise(trial, whiteNoiseSD, nSteps):
     """
     Applies white noise to each time step of the data (sd=whiteNoiseSD)
-    CHANGE: the input 'trial' is now a dictionary representing all information for a single trial.
+    The input 'trial' is a dictionary representing all information for a single trial.
     """
     inputs = trial['neuralData']
     whiteNoise = torch.randn(nSteps, int(inputs.shape[1])) * whiteNoiseSD

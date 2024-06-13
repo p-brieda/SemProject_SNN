@@ -76,7 +76,7 @@ class PrepareData:
             valIdx_perDay.append(np.arange(tot_val_trials, tot_val_trials+num_valTrials))
             tot_val_trials += num_valTrials
             
-            # unfoling the data cubes and adding the trials data to the dictionaries
+            # unfolding the data cubes and adding the trials data to the dictionaries
             unfoldDataCube(trials_train, trials_val, neuralData, targets, errWeights, binsPerTrial, cvIdx, dayIdx)
 
         return trials_train, trials_val, trainIdx_perDay, valIdx_perDay

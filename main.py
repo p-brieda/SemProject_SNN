@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
 
     # ---------- DATASET PREPARATION ----------
-    manual_prep = False
+    manual_prep = True
     prepared_data_dir = hyperparams['prepared_data_dir']
     
     if not os.path.exists(prepared_data_dir + 'prepared_data.pth') or (manual_prep and input('Do you want to recompute the prepared data? (y/n) ') == 'y'):
@@ -61,7 +61,9 @@ if __name__ == '__main__':
         prepared_data = torch.load(prepared_data_dir + 'prepared_data.pth')
         print('Data loaded')
         
-
+    
+    if input('Do you want to continue? (y/n) ') == 'n':
+        sys.exit()
 
   
     # loading the training dataset and creating a DataLoader

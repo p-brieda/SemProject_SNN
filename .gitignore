@@ -1,1 +1,10 @@
 /PROVA.py
+dataset/prepared_data_days.pth
+dataset/prepared_data.pth
+__pycache__/
+inferOutputs/
+Model/
+Plots/
+Raytune/
+trainOutputs/
+Varie/

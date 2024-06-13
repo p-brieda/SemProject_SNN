@@ -77,7 +77,7 @@ class DataProcessing(Dataset):
 # TRAINING AND VALIDATION SAMPLER
 # DayBatchSampler is a custom sampler that samples batches of trials from the dataset in order to have
 # trials from the same day in the same batch. If the number of trials is not divisible by the batch size, the last
-# batch will have fewer trials. The trials for each day are shuffled once before starting batch generation.
+# batch will be filled with randomly selected trials of the day. The trials for each day are shuffled once before starting batch generation.
 #
 # For every batch creation a random day is selected with a probability proportional to its number of trials (relative
 # to the total number of trials across all days). The sampler keeps track of the start index for each day and generates batches 
@@ -118,7 +118,6 @@ class CustomBatchSampler(Sampler):
             if len(batch) < self.batch_size and self.fill_batch:
                 # If the last batch is smaller than the batch size fill it with additional random trials from the same day
                 remaining = self.batch_size - len(batch)
-                #batch = np.concatenate((batch, day_indices[:remaining]))
                 batch = np.concatenate([batch, np.random.choice(day_indices, remaining, replace=True)])
             
             yield batch
@@ -128,7 +127,7 @@ class CustomBatchSampler(Sampler):
 
 
     def __len__(self):
-        # the last batch may have fewer trials but it is taken into account into the length of the sampler
+        # the last batch may have fewer trials (before being filled) but it is taken into account into the length of the sampler
         total_batches = sum( (math.ceil(len(indices)/self.batch_size) for indices in self.Idx_perDay) )
         return total_batches
     
